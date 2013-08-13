@@ -1,0 +1,25 @@
+{
+  "name": "Account-JavaScriptSDK",
+  "version": "0.0.1",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-copy": "latest",
+    "grunt-contrib-concat": "latest",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-clean": "latest",
+    "grunt-contrib-requirejs": "latest",
+    "grunt-rev": "latest",
+    "grunt-autoprefixer": "latest",
+    "grunt-usemin": "latest",
+    "grunt-jslint": "latest",
+    "grunt-concurrent": "latest",
+    "grunt-mocha":"latest",
+    "matchdep": "latest"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test --verbose;"
+  }
+}
