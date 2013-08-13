@@ -2,6 +2,12 @@
     var Deferred = $.Deferred;
     var ajax = $.ajax;
 
+    $.ajaxSetup({
+        xhrFields : {
+            withCredentials : true
+        }
+    });
+
     var getCookie = function (name) {
         var arr = global.document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
         if (arr) {
@@ -13,7 +19,8 @@
     var PREFIX = 'https://account.wandoujia.com';
 
     var CONFIG = {
-        login : PREFIX + '/v4/api/login'
+        login : PREFIX + '/v4/api/login',
+        logout : PREFIX + '/v4/api/logout'
     };
 
     var WDJ_AUTH = getCookie('wdj_auth');
@@ -62,6 +69,36 @@
                 }
             });
         }
+
+        return deferred.promise();
+    };
+
+    Account.isLogined = function () {
+        return IS_LOGINED;
+    };
+
+    Account.logoutAsync = function () {
+        var deferred = new Deferred();
+
+        ajax({
+            type : 'POST',
+            url : CONFIG.logout,
+            success : function (resp) {
+                if (resp.error === 0) {
+                    IS_LOGINED = false;
+                    USER_INFO = undefined;
+                    deferred.resolve(resp);
+                } else {
+                    deferred.reject(resp);
+                }
+            },
+            error : function () {
+                deferred.reject({
+                    error : -1,
+                    msg : '请求失败，请检查网络连接状况。'
+                });
+            }
+        });
 
         return deferred.promise();
     };
