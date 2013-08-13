@@ -1,24 +1,24 @@
 describe('Account', function () {
+    var Account = window.SnapPea.Account;
+
+    var userInfo = {
+    };
+    var userInfo2 = {
+        username : 'a'
+    };
+    var userInfo3 = {
+        password : 'b'
+    };
+    var userInfo4 = {
+        username : 'a',
+        password : 'b'
+    };
+    var userInfo5 = {
+        username : 'test@gmail.com',
+        password : 'testgmail'
+    };
+
     describe('Account.loginAsync()', function () {
-        var Account = window.SnapPea.Account;
-
-        var userInfo = {
-        };
-        var userInfo2 = {
-            username : 'a'
-        };
-        var userInfo3 = {
-            password : 'b'
-        };
-        var userInfo4 = {
-            username : 'a',
-            password : 'b'
-        };
-        var userInfo5 = {
-            username : 'test@gmail.com',
-            password : 'testgmail'
-        };
-
         it('Should faild when misssing params. ', function (done) {
             Account.loginAsync(userInfo).done(function () {
                 done('Should faild when misssing params. ');
@@ -64,6 +64,38 @@ describe('Account', function () {
                 done();
             }).fail(function (resp) {
                 done('Should faild when username or password are correct. ');
+            });
+        });
+    });
+
+    describe('Account.logoutAsync()', function () {
+        it('Should pass anyway. ', function (done) {
+            Account.logoutAsync().done(function () {
+                done();
+            }).fail(function (resp) {
+                done('Should pass anyway. ');
+            });
+        });
+    });
+
+    describe('Account.isLogined()', function () {
+        it('Should return true when login. ', function (done) {
+            Account.loginAsync(userInfo5).done(function () {
+                if (Account.isLogined()) {
+                    done();
+                } else {
+                    done('Should return true when logined. ');
+                }
+            });
+        });
+
+        it('Should return false when logout. ', function (done) {
+            Account.logoutAsync().done(function () {
+                if (Account.isLogined()) {
+                    done('Should return false when logout. ');
+                } else {
+                    done();
+                }
             });
         });
     });

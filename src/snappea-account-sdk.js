@@ -1,28 +1,28 @@
+/*global $*/
 (function (global) {
     var Deferred = $.Deferred;
     var ajax = $.ajax;
 
-    var getCookie = function (name) {
-        var arr = global.document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
-        if (arr) {
-            return unescape(arr[2]);
+    $.ajaxSetup({
+        xhrFields : {
+            withCredentials : true
         }
-        return undefined;
-    };
+    });
 
-    var PREFIX = 'https://account.wandoujia.com';
+    var PREFIX = 'https://account.wandoujia.com/v4/api';
 
     var CONFIG = {
-        login : PREFIX + '/v4/api/login'
+        login : PREFIX + '/login',
+        logout : PREFIX + '/logout',
+        captcha : PREFIX + '/seccode'
     };
 
-    var WDJ_AUTH = getCookie('wdj_auth');
-    var USER_INFO = undefined;
+    var USER_INFO;
     var IS_LOGINED = false;
 
-    var Account = function () {
+    var Account = {};
 
-    };
+    Account.captcha = CONFIG.captcha;
 
     Account.loginAsync = function (data, options) {
         var deferred = new Deferred();
@@ -31,11 +31,9 @@
         options = options || {};
 
         if (!data.username || !data.password) {
-            setTimeout(function () {
-                deferred.reject({
-                    error : -2,
-                    msg : '参数不全'
-                });
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
             });
         } else {
             ajax({
@@ -66,9 +64,49 @@
         return deferred.promise();
     };
 
+    Account.isLogined = function () {
+        return IS_LOGINED;
+    };
+
+    Account.getUserInfo = function () {
+        return USER_INFO;
+    };
+
+    Account.logoutAsync = function () {
+        var deferred = new Deferred();
+
+        ajax({
+            type : 'POST',
+            url : CONFIG.logout,
+            success : function (resp) {
+                if (resp.error === 0) {
+                    IS_LOGINED = false;
+                    USER_INFO = undefined;
+                    deferred.resolve(resp);
+                } else {
+                    deferred.reject(resp);
+                }
+            },
+            error : function () {
+                deferred.reject({
+                    error : -1,
+                    msg : '请求失败，请检查网络连接状况。'
+                });
+            }
+        });
+
+        return deferred.promise();
+    };
+
+    Account.regAsync = function (data, options) {
+        data = data || {};
+        options = options || {};
+
+    };
+
     var SnapPea = global.SnapPea || {};
     SnapPea.Account = Account;
     global.SnapPea = SnapPea;
 
     return Account;
-})(this);
+}(this));
