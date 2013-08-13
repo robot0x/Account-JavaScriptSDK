@@ -1,3 +1,4 @@
+/*global $*/
 (function (global) {
     var Deferred = $.Deferred;
     var ajax = $.ajax;
@@ -8,28 +9,20 @@
         }
     });
 
-    var getCookie = function (name) {
-        var arr = global.document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
-        if (arr) {
-            return unescape(arr[2]);
-        }
-        return undefined;
-    };
-
-    var PREFIX = 'https://account.wandoujia.com';
+    var PREFIX = 'https://account.wandoujia.com/v4/api';
 
     var CONFIG = {
-        login : PREFIX + '/v4/api/login',
-        logout : PREFIX + '/v4/api/logout'
+        login : PREFIX + '/login',
+        logout : PREFIX + '/logout',
+        captcha : PREFIX + '/seccode'
     };
 
-    var WDJ_AUTH = getCookie('wdj_auth');
-    var USER_INFO = undefined;
+    var USER_INFO;
     var IS_LOGINED = false;
 
-    var Account = function () {
+    var Account = {};
 
-    };
+    Account.captcha = CONFIG.captcha;
 
     Account.loginAsync = function (data, options) {
         var deferred = new Deferred();
@@ -38,11 +31,9 @@
         options = options || {};
 
         if (!data.username || !data.password) {
-            setTimeout(function () {
-                deferred.reject({
-                    error : -2,
-                    msg : '参数不全'
-                });
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
             });
         } else {
             ajax({
@@ -77,6 +68,10 @@
         return IS_LOGINED;
     };
 
+    Account.getUserInfo = function () {
+        return USER_INFO;
+    };
+
     Account.logoutAsync = function () {
         var deferred = new Deferred();
 
@@ -103,9 +98,15 @@
         return deferred.promise();
     };
 
+    Account.regAsync = function (data, options) {
+        data = data || {};
+        options = options || {};
+
+    };
+
     var SnapPea = global.SnapPea || {};
     SnapPea.Account = Account;
     global.SnapPea = SnapPea;
 
     return Account;
-})(this);
+}(this));
