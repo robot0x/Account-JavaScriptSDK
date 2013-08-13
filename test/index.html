@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>QUnit Test Suite</title>
+    <link rel="stylesheet" type="text/css" href="stylesheet/quint.css">
+    <script type="text/javascript" src="lib/qunit.js"></script>
+    <script type="text/javascript" src="lib/qunit-reporter-junit.js"></script>
+    <script type="text/javascript" src="../libs/jquery.js"></script>
+    <script type="text/javascript" src="../src/snappea-account-sdk.js"></script>
+    <script type="text/javascript">
+        QUnit.config.reorder = false;
+
+        QUnit.jUnitReport = function(data) {
+            var console = window.console;
+            if (console) {
+                console.log(data.xml);
+            }
+        };
+    </script>
+    <!-- test case below -->
+    <script type="text/javascript" src="test.js"></script>
+</head>
+<body>
+    <h1 id="qunit-header">Wandoujia Test Suite</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture"><!-- test markup --></div>
+</body>
+</html>
