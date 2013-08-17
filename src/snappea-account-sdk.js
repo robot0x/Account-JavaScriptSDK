@@ -15,7 +15,7 @@
         login : PREFIX + '/login',
         logout : PREFIX + '/logout',
         captcha : PREFIX + '/seccode',
-        reg :　PREFIX + '/register',
+        reg : PREFIX + '/register',
         checkUsername : PREFIX + '/isUsernameExisted'
     };
 
