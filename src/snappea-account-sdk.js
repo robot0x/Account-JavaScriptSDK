@@ -178,7 +178,7 @@
         return EMAIL_PATTREN.test(input);
     };
 
-    Account.isPhoneNumer = function (input) {
+    Account.isPhoneNumber = function (input) {
         var PHONE_PATTERN = /(^[0-9]{3,4}\-[0-9]{7,8}$)|(^[0-9]{7,8}$)|(^\([0-9]{3,4}\)[0-9]{3,8}$)|(^0{0,1}13[0-9]{9}$)|(13\d{9}$)|(15[0135-9]\d{8}$)|(18[267]\d{8}$)/;
         return PHONE_PATTERN.test(input);
     };

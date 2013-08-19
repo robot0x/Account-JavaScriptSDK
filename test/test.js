@@ -151,9 +151,9 @@ describe('Account', function () {
         });
     });
 
-    describe('Account.isPhoneNumer()', function () {
+    describe('Account.isPhoneNubmer()', function () {
         it('Should return false: 1234567890', function (done) {
-            if (Account.isPhoneNumer('1234567890') === false) {
+            if (Account.isPhoneNubmer('1234567890') === false) {
                 done();
             } else {
                 done('Should return false: 1234567890');
@@ -161,7 +161,7 @@ describe('Account', function () {
         });
 
         it('Should return true: 13466770014', function (done) {
-            if (Account.isPhoneNumer('13466770014') === true) {
+            if (Account.isPhoneNubmer('13466770014') === true) {
                 done();
             } else {
                 done('Should return true: 13466770014');
@@ -169,7 +169,7 @@ describe('Account', function () {
         });
 
         it('Should return false: 一三四六六七七零零一四', function (done) {
-            if (Account.isPhoneNumer('一三四六六七七零零一四') === false) {
+            if (Account.isPhoneNubmer('一三四六六七七零零一四') === false) {
                 done();
             } else {
                 done('Should return false: 一三四六六七七零零一四');
