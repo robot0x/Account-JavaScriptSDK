@@ -28,9 +28,9 @@ SnapPea.Account.isEmail(email);
 ```
 ## Validaet phone number
 ```JavaScript
-SnapPea.Account.isEmail(email);
+SnapPea.Account.isPhoneNumber(email);
 ```
-## Check whether an username is already exist
+## Check whether an username is exist
 ```JavaScript
 SnapPea.Account.checkUsernameAsync(username);
 ```
@@ -41,4 +41,20 @@ SnapPea.Account.isLogined();
 ## Get user info
 ```JavaScript
 SnapPea.Account.getUserInfo();
+```
+## Ask server whether an user is logined
+```JavaScript
+SnapPea.Account.checkUserLoginAsync();
+```
+## Request server to reset password
+```JavaScript
+SnapPea.Account.findPwdAsync(username);
+```
+## Request server to reset password
+```JavaScript
+SnapPea.Account.resetPwdAsync({
+    username : 'username',
+    passcode : 'passcode',
+    password : 'password'
+});
 ```
