@@ -50,7 +50,7 @@ SnapPea.Account.checkUserLoginAsync();
 ```JavaScript
 SnapPea.Account.findPwdAsync(username);
 ```
-## Request server to reset password
+## Reset password
 ```JavaScript
 SnapPea.Account.resetPwdAsync({
     username : 'username',
