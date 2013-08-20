@@ -151,9 +151,9 @@ describe('Account', function () {
         });
     });
 
-    describe('Account.isPhoneNubmer()', function () {
+    describe('Account.isPhoneNumber()', function () {
         it('Should return false: 1234567890', function (done) {
-            if (Account.isPhoneNubmer('1234567890') === false) {
+            if (Account.isPhoneNumber('1234567890') === false) {
                 done();
             } else {
                 done('Should return false: 1234567890');
@@ -161,7 +161,7 @@ describe('Account', function () {
         });
 
         it('Should return true: 13466770014', function (done) {
-            if (Account.isPhoneNubmer('13466770014') === true) {
+            if (Account.isPhoneNumber('13466770014') === true) {
                 done();
             } else {
                 done('Should return true: 13466770014');
@@ -169,7 +169,7 @@ describe('Account', function () {
         });
 
         it('Should return false: 一三四六六七七零零一四', function (done) {
-            if (Account.isPhoneNubmer('一三四六六七七零零一四') === false) {
+            if (Account.isPhoneNumber('一三四六六七七零零一四') === false) {
                 done();
             } else {
                 done('Should return false: 一三四六六七七零零一四');
@@ -205,6 +205,14 @@ describe('Account', function () {
                 if (resp.error === -2) {
                     done();
                 }
+            });
+        });
+
+        it('Should faild when user exist. ', function (done) {
+            Account.regAsync(userInfo5).done(function (resp) {
+                done('Should faild when user exist. ');
+            }).fail(function (resp) {
+                done();
             });
         });
 
@@ -261,6 +269,36 @@ describe('Account', function () {
                 }
             }).fail(function (resp) {
                 done('Should faild when username already exist. ');
+            });
+        });
+    });
+
+    describe('Account.checkUserLoginAsync()', function () {
+        it('Should return true when logined. ', function (done) {
+            Account.loginAsync(userInfo5).done(function () {
+                Account.checkUserLoginAsync().done(function (resp) {
+                    if (resp) {
+                        done();
+                    } else {
+                        done('Should return true when logined. ');
+                    }
+                }).fail(function () {
+                    done('Should return true when logined. ');
+                });
+            });
+        });
+
+        it('Should return false when logout. ', function (done) {
+            Account.logoutAsync(userInfo5).done(function () {
+                Account.checkUserLoginAsync().done(function (resp) {
+                    if (!resp) {
+                        done();
+                    } else {
+                        done('Should return true when logined. ');
+                    }
+                }).fail(function () {
+                    done();
+                });
             });
         });
     });

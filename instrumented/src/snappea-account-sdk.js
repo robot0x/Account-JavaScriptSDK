@@ -12,8 +12,8 @@ var __$coverInitRange = function(name, range){
 var __$coverCall = function(name, range){
 	__$coverObject[name][range]++;
 };
-__$coverInit("src/snappea-account-sdk.js", "/*global $*/\n(function (global) {\n    var Deferred = $.Deferred;\n    var ajax = $.ajax;\n\n    $.ajaxSetup({\n        xhrFields : {\n            withCredentials : true\n        }\n    });\n\n    var PREFIX = 'https://account.wandoujia.com/v4/api';\n\n    var CONFIG = {\n        login : PREFIX + '/login',\n        logout : PREFIX + '/logout',\n        captcha : PREFIX + '/seccode',\n        reg : PREFIX + '/register',\n        checkUsername : PREFIX + '/isUsernameExisted',\n        checkUserLogin : PREFIX + '/profile'\n    };\n\n    var USER_INFO;\n    var IS_LOGINED = false;\n\n    var Account = {};\n\n    Account.CAPTCHA = CONFIG.captcha;\n\n    Account.loginAsync = function (data, options) {\n        var deferred = new Deferred();\n\n        data = data || {};\n        options = options || {};\n\n        if (!data.username || !data.password) {\n            deferred.reject({\n                error : -2,\n                msg : '参数不全'\n            });\n        } else {\n            ajax({\n                type : 'POST',\n                url : CONFIG.login,\n                data : {\n                    username : data.username,\n                    password : data.password,\n                    seccode : data.seccode || ''\n                },\n                success : function (resp) {\n                    if (resp.error === 0) {\n                        IS_LOGINED = true;\n                        USER_INFO = resp.member;\n                        deferred.resolve(resp.member);\n                    } else {\n                        deferred.reject(resp);\n                    }\n                },\n                error : function () {\n                    deferred.reject({\n                        error : -1,\n                        msg : '请求失败，请检查网络连接状况'\n                    });\n                }\n            });\n        }\n\n        return deferred.promise();\n    };\n\n    Account.isLogined = function () {\n        return IS_LOGINED;\n    };\n\n    Account.getUserInfo = function () {\n        return USER_INFO;\n    };\n\n    Account.logoutAsync = function () {\n        var deferred = new Deferred();\n\n        ajax({\n            type : 'POST',\n            url : CONFIG.logout,\n            success : function (resp) {\n                if (resp.error === 0) {\n                    IS_LOGINED = false;\n                    USER_INFO = undefined;\n                    deferred.resolve(resp);\n                } else {\n                    deferred.reject(resp);\n                }\n            },\n            error : function () {\n                deferred.reject({\n                    error : -1,\n                    msg : '请求失败，请检查网络连接状况。'\n                });\n            }\n        });\n\n        return deferred.promise();\n    };\n\n    Account.regAsync = function (data, options) {\n        var deferred = new Deferred();\n\n        data = data || {};\n        options = options || {};\n\n        if (!data.username || !data.password) {\n            deferred.reject({\n                error : -2,\n                msg : '参数不全'\n            });\n        } else {\n            ajax({\n                type : 'POST',\n                url : CONFIG.reg,\n                data : {\n                    username : data.username,\n                    password : data.password,\n                    nikename : data.nikename || '',\n                    seccode : data.seccode || ''\n                },\n                success : function (resp) {\n                    if (resp.error === 0) {\n                        IS_LOGINED = true;\n                        USER_INFO = resp.member;\n                        deferred.resolve(resp);\n                    } else {\n                        deferred.reject(resp);\n                    }\n                },\n                error : function () {\n                    deferred.reject({\n                        error : -1,\n                        msg : '请求失败，请检查网络连接状况。'\n                    });\n                }\n            });\n        }\n\n        return deferred.promise();\n    };\n\n    Account.checkUsernameAsync = function (username, options) {\n        var deferred = new Deferred();\n\n        if (username === undefined) {\n            deferred.reject({\n                error : -2,\n                msg : '参数不全'\n            });\n        } else {\n            ajax({\n                type : 'POST',\n                url : CONFIG.checkUsername,\n                data : {\n                    username : username\n                },\n                success : function (resp) {\n                    deferred.resolve(resp);\n                },\n                error : function () {\n                    deferred.reject({\n                        error : -1,\n                        msg : '请求失败，请检查网络连接状况。'\n                    });\n                }\n            });\n        }\n\n        return deferred.promise();\n    };\n\n    Account.checkUserLoginAsync = function (options) {\n        var deferred = new Deferred();\n\n        options = options || {};\n\n        ajax({\n            type : 'GET',\n            url : CONFIG.checkUserLogin,\n            success : function (resp) {\n                if (resp.error === 0) {\n                    IS_LOGINED = true;\n                    USER_INFO = resp.member;\n                    deferred.resolve(true);\n                } else {\n                    IS_LOGINED = false;\n                    USER_INFO = undefined;\n                    deferred.reject(false);\n                }\n            },\n            error : function () {\n                deferred.reject(false);\n            }\n        });\n\n        return deferred.promise();\n    };\n\n    Account.isEmail = function (input) {\n        var EMAIL_PATTREN = /^[A-Za-z0-9](([_\\.\\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\\.\\-]?[a-zA-Z0-9]+)*)\\.([A-Za-z]{2,})$/;\n        return EMAIL_PATTREN.test(input);\n    };\n\n    Account.isPhoneNumber = function (input) {\n        var PHONE_PATTERN = /(^[0-9]{3,4}\\-[0-9]{7,8}$)|(^[0-9]{7,8}$)|(^\\([0-9]{3,4}\\)[0-9]{3,8}$)|(^0{0,1}13[0-9]{9}$)|(13\\d{9}$)|(15[0135-9]\\d{8}$)|(18[267]\\d{8}$)/;\n        return PHONE_PATTERN.test(input);\n    };\n\n    var SnapPea = global.SnapPea || {};\n    SnapPea.Account = Account;\n    global.SnapPea = SnapPea;\n\n    return Account;\n}(this));\n");
-__$coverInitRange("src/snappea-account-sdk.js", "13:6120");
+__$coverInit("src/snappea-account-sdk.js", "/*global $*/\n(function (global) {\n    var Deferred = $.Deferred;\n    var ajax = $.ajax;\n\n    $.ajaxSetup({\n        xhrFields : {\n            withCredentials : true\n        }\n    });\n\n    var PREFIX = 'https://account.wandoujia.com/v4/api';\n\n    var CONFIG = {\n        login : PREFIX + '/login',\n        logout : PREFIX + '/logout',\n        captcha : PREFIX + '/seccode',\n        reg : PREFIX + '/register',\n        checkUsername : PREFIX + '/isUsernameExisted',\n        checkUserLogin : PREFIX + '/profile'\n    };\n\n    var USER_INFO;\n    var IS_LOGINED = false;\n\n    var Account = {};\n\n    Account.CAPTCHA = CONFIG.captcha;\n\n    Account.loginAsync = function (data, options) {\n        var deferred = new Deferred();\n\n        data = data || {};\n        options = options || {};\n\n        if (!data.username || !data.password) {\n            deferred.reject({\n                error : -2,\n                msg : '参数不全'\n            });\n        } else {\n            ajax({\n                type : 'POST',\n                url : CONFIG.login,\n                data : {\n                    username : data.username,\n                    password : data.password,\n                    seccode : data.seccode || ''\n                },\n                success : function (resp) {\n                    if (resp.error === 0) {\n                        IS_LOGINED = true;\n                        USER_INFO = resp.member;\n                        deferred.resolve(resp.member);\n                    } else {\n                        deferred.reject(resp);\n                    }\n                },\n                error : function () {\n                    deferred.reject({\n                        error : -1,\n                        msg : '请求失败，请检查网络连接状况'\n                    });\n                }\n            });\n        }\n\n        return deferred.promise();\n    };\n\n    Account.isLogined = function () {\n        return IS_LOGINED;\n    };\n\n    Account.getUserInfo = function () {\n        return USER_INFO;\n    };\n\n    Account.logoutAsync = function () {\n        var deferred = new Deferred();\n\n        ajax({\n            type : 'POST',\n            url : CONFIG.logout,\n            success : function (resp) {\n                if (resp.error === 0) {\n                    IS_LOGINED = false;\n                    USER_INFO = undefined;\n                    deferred.resolve(resp);\n                } else {\n                    deferred.reject(resp);\n                }\n            },\n            error : function () {\n                deferred.reject({\n                    error : -1,\n                    msg : '请求失败，请检查网络连接状况。'\n                });\n            }\n        });\n\n        return deferred.promise();\n    };\n\n    Account.regAsync = function (data, options) {\n        var deferred = new Deferred();\n\n        data = data || {};\n        options = options || {};\n\n        if (!data.username || !data.password) {\n            deferred.reject({\n                error : -2,\n                msg : '参数不全'\n            });\n        } else {\n            ajax({\n                type : 'POST',\n                url : CONFIG.reg,\n                data : {\n                    username : data.username,\n                    password : data.password,\n                    nikename : data.nikename || '',\n                    seccode : data.seccode || ''\n                },\n                success : function (resp) {\n                    if (resp.error === 0) {\n                        IS_LOGINED = true;\n                        USER_INFO = resp.member;\n                        deferred.resolve(resp);\n                    } else {\n                        deferred.reject(resp);\n                    }\n                },\n                error : function () {\n                    deferred.reject({\n                        error : -1,\n                        msg : '请求失败，请检查网络连接状况。'\n                    });\n                }\n            });\n        }\n\n        return deferred.promise();\n    };\n\n    Account.checkUsernameAsync = function (username, options) {\n        var deferred = new Deferred();\n\n        if (username === undefined) {\n            deferred.reject({\n                error : -2,\n                msg : '参数不全'\n            });\n        } else {\n            ajax({\n                type : 'POST',\n                url : CONFIG.checkUsername,\n                data : {\n                    username : username\n                },\n                success : function (resp) {\n                    deferred.resolve(resp);\n                },\n                error : function () {\n                    deferred.reject({\n                        error : -1,\n                        msg : '请求失败，请检查网络连接状况。'\n                    });\n                }\n            });\n        }\n\n        return deferred.promise();\n    };\n\n    Account.checkUserLoginAsync = function (options) {\n        var deferred = new Deferred();\n\n        options = options || {};\n\n        ajax({\n            type : 'GET',\n            url : CONFIG.checkUserLogin,\n            success : function (resp) {\n                if (resp.error === 0) {\n                    IS_LOGINED = true;\n                    USER_INFO = resp.member;\n                    deferred.reject(true);\n                } else {\n                    IS_LOGINED = false;\n                    USER_INFO = undefined;\n                    deferred.reject(false);\n                }\n            },\n            error : function () {\n                deferred.reject(false);\n            }\n        });\n\n        return deferred.promise();\n    };\n\n    Account.isEmail = function (input) {\n        var EMAIL_PATTREN = /^[A-Za-z0-9](([_\\.\\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\\.\\-]?[a-zA-Z0-9]+)*)\\.([A-Za-z]{2,})$/;\n        return EMAIL_PATTREN.test(input);\n    };\n\n    Account.isPhoneNumber = function (input) {\n        var PHONE_PATTERN = /(^[0-9]{3,4}\\-[0-9]{7,8}$)|(^[0-9]{7,8}$)|(^\\([0-9]{3,4}\\)[0-9]{3,8}$)|(^0{0,1}13[0-9]{9}$)|(13\\d{9}$)|(15[0135-9]\\d{8}$)|(18[267]\\d{8}$)/;\n        return PHONE_PATTERN.test(input);\n    };\n\n    var SnapPea = global.SnapPea || {};\n    SnapPea.Account = Account;\n    global.SnapPea = SnapPea;\n\n    return Account;\n}(this));\n");
+__$coverInitRange("src/snappea-account-sdk.js", "13:6119");
 __$coverInitRange("src/snappea-account-sdk.js", "38:63");
 __$coverInitRange("src/snappea-account-sdk.js", "69:86");
 __$coverInitRange("src/snappea-account-sdk.js", "93:180");
@@ -29,13 +29,13 @@ __$coverInitRange("src/snappea-account-sdk.js", "1917:1984");
 __$coverInitRange("src/snappea-account-sdk.js", "1991:2681");
 __$coverInitRange("src/snappea-account-sdk.js", "2688:3938");
 __$coverInitRange("src/snappea-account-sdk.js", "3945:4757");
-__$coverInitRange("src/snappea-account-sdk.js", "4764:5505");
-__$coverInitRange("src/snappea-account-sdk.js", "5512:5721");
-__$coverInitRange("src/snappea-account-sdk.js", "5728:5987");
-__$coverInitRange("src/snappea-account-sdk.js", "5994:6028");
-__$coverInitRange("src/snappea-account-sdk.js", "6034:6059");
-__$coverInitRange("src/snappea-account-sdk.js", "6065:6089");
-__$coverInitRange("src/snappea-account-sdk.js", "6096:6110");
+__$coverInitRange("src/snappea-account-sdk.js", "4764:5504");
+__$coverInitRange("src/snappea-account-sdk.js", "5511:5720");
+__$coverInitRange("src/snappea-account-sdk.js", "5727:5986");
+__$coverInitRange("src/snappea-account-sdk.js", "5993:6027");
+__$coverInitRange("src/snappea-account-sdk.js", "6033:6058");
+__$coverInitRange("src/snappea-account-sdk.js", "6064:6088");
+__$coverInitRange("src/snappea-account-sdk.js", "6095:6109");
 __$coverInitRange("src/snappea-account-sdk.js", "685:714");
 __$coverInitRange("src/snappea-account-sdk.js", "725:742");
 __$coverInitRange("src/snappea-account-sdk.js", "752:775");
@@ -82,21 +82,21 @@ __$coverInitRange("src/snappea-account-sdk.js", "4445:4467");
 __$coverInitRange("src/snappea-account-sdk.js", "4546:4670");
 __$coverInitRange("src/snappea-account-sdk.js", "4823:4852");
 __$coverInitRange("src/snappea-account-sdk.js", "4863:4886");
-__$coverInitRange("src/snappea-account-sdk.js", "4897:5462");
-__$coverInitRange("src/snappea-account-sdk.js", "5473:5498");
-__$coverInitRange("src/snappea-account-sdk.js", "5027:5347");
+__$coverInitRange("src/snappea-account-sdk.js", "4897:5461");
+__$coverInitRange("src/snappea-account-sdk.js", "5472:5497");
+__$coverInitRange("src/snappea-account-sdk.js", "5027:5346");
 __$coverInitRange("src/snappea-account-sdk.js", "5071:5088");
 __$coverInitRange("src/snappea-account-sdk.js", "5110:5133");
-__$coverInitRange("src/snappea-account-sdk.js", "5155:5177");
-__$coverInitRange("src/snappea-account-sdk.js", "5224:5242");
-__$coverInitRange("src/snappea-account-sdk.js", "5264:5285");
-__$coverInitRange("src/snappea-account-sdk.js", "5307:5329");
-__$coverInitRange("src/snappea-account-sdk.js", "5414:5436");
-__$coverInitRange("src/snappea-account-sdk.js", "5557:5672");
-__$coverInitRange("src/snappea-account-sdk.js", "5682:5714");
-__$coverInitRange("src/snappea-account-sdk.js", "5779:5938");
-__$coverInitRange("src/snappea-account-sdk.js", "5948:5980");
-__$coverCall('src/snappea-account-sdk.js', '13:6120');
+__$coverInitRange("src/snappea-account-sdk.js", "5155:5176");
+__$coverInitRange("src/snappea-account-sdk.js", "5223:5241");
+__$coverInitRange("src/snappea-account-sdk.js", "5263:5284");
+__$coverInitRange("src/snappea-account-sdk.js", "5306:5328");
+__$coverInitRange("src/snappea-account-sdk.js", "5413:5435");
+__$coverInitRange("src/snappea-account-sdk.js", "5556:5671");
+__$coverInitRange("src/snappea-account-sdk.js", "5681:5713");
+__$coverInitRange("src/snappea-account-sdk.js", "5778:5937");
+__$coverInitRange("src/snappea-account-sdk.js", "5947:5979");
+__$coverCall('src/snappea-account-sdk.js', '13:6119');
 (function (global) {
     __$coverCall('src/snappea-account-sdk.js', '38:63');
     var Deferred = $.Deferred;
@@ -302,62 +302,62 @@ __$coverCall('src/snappea-account-sdk.js', '13:6120');
         __$coverCall('src/snappea-account-sdk.js', '4725:4750');
         return deferred.promise();
     };
-    __$coverCall('src/snappea-account-sdk.js', '4764:5505');
+    __$coverCall('src/snappea-account-sdk.js', '4764:5504');
     Account.checkUserLoginAsync = function (options) {
         __$coverCall('src/snappea-account-sdk.js', '4823:4852');
         var deferred = new Deferred();
         __$coverCall('src/snappea-account-sdk.js', '4863:4886');
         options = options || {};
-        __$coverCall('src/snappea-account-sdk.js', '4897:5462');
+        __$coverCall('src/snappea-account-sdk.js', '4897:5461');
         ajax({
             type: 'GET',
             url: CONFIG.checkUserLogin,
             success: function (resp) {
-                __$coverCall('src/snappea-account-sdk.js', '5027:5347');
+                __$coverCall('src/snappea-account-sdk.js', '5027:5346');
                 if (resp.error === 0) {
                     __$coverCall('src/snappea-account-sdk.js', '5071:5088');
                     IS_LOGINED = true;
                     __$coverCall('src/snappea-account-sdk.js', '5110:5133');
                     USER_INFO = resp.member;
-                    __$coverCall('src/snappea-account-sdk.js', '5155:5177');
-                    deferred.resolve(true);
+                    __$coverCall('src/snappea-account-sdk.js', '5155:5176');
+                    deferred.reject(true);
                 } else {
-                    __$coverCall('src/snappea-account-sdk.js', '5224:5242');
+                    __$coverCall('src/snappea-account-sdk.js', '5223:5241');
                     IS_LOGINED = false;
-                    __$coverCall('src/snappea-account-sdk.js', '5264:5285');
+                    __$coverCall('src/snappea-account-sdk.js', '5263:5284');
                     USER_INFO = undefined;
-                    __$coverCall('src/snappea-account-sdk.js', '5307:5329');
+                    __$coverCall('src/snappea-account-sdk.js', '5306:5328');
                     deferred.reject(false);
                 }
             },
             error: function () {
-                __$coverCall('src/snappea-account-sdk.js', '5414:5436');
+                __$coverCall('src/snappea-account-sdk.js', '5413:5435');
                 deferred.reject(false);
             }
         });
-        __$coverCall('src/snappea-account-sdk.js', '5473:5498');
+        __$coverCall('src/snappea-account-sdk.js', '5472:5497');
         return deferred.promise();
     };
-    __$coverCall('src/snappea-account-sdk.js', '5512:5721');
+    __$coverCall('src/snappea-account-sdk.js', '5511:5720');
     Account.isEmail = function (input) {
-        __$coverCall('src/snappea-account-sdk.js', '5557:5672');
+        __$coverCall('src/snappea-account-sdk.js', '5556:5671');
         var EMAIL_PATTREN = /^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$/;
-        __$coverCall('src/snappea-account-sdk.js', '5682:5714');
+        __$coverCall('src/snappea-account-sdk.js', '5681:5713');
         return EMAIL_PATTREN.test(input);
     };
-    __$coverCall('src/snappea-account-sdk.js', '5728:5987');
+    __$coverCall('src/snappea-account-sdk.js', '5727:5986');
     Account.isPhoneNumber = function (input) {
-        __$coverCall('src/snappea-account-sdk.js', '5779:5938');
+        __$coverCall('src/snappea-account-sdk.js', '5778:5937');
         var PHONE_PATTERN = /(^[0-9]{3,4}\-[0-9]{7,8}$)|(^[0-9]{7,8}$)|(^\([0-9]{3,4}\)[0-9]{3,8}$)|(^0{0,1}13[0-9]{9}$)|(13\d{9}$)|(15[0135-9]\d{8}$)|(18[267]\d{8}$)/;
-        __$coverCall('src/snappea-account-sdk.js', '5948:5980');
+        __$coverCall('src/snappea-account-sdk.js', '5947:5979');
         return PHONE_PATTERN.test(input);
     };
-    __$coverCall('src/snappea-account-sdk.js', '5994:6028');
+    __$coverCall('src/snappea-account-sdk.js', '5993:6027');
     var SnapPea = global.SnapPea || {};
-    __$coverCall('src/snappea-account-sdk.js', '6034:6059');
+    __$coverCall('src/snappea-account-sdk.js', '6033:6058');
     SnapPea.Account = Account;
-    __$coverCall('src/snappea-account-sdk.js', '6065:6089');
+    __$coverCall('src/snappea-account-sdk.js', '6064:6088');
     global.SnapPea = SnapPea;
-    __$coverCall('src/snappea-account-sdk.js', '6096:6110');
+    __$coverCall('src/snappea-account-sdk.js', '6095:6109');
     return Account;
 }(this));

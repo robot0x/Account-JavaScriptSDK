@@ -16,7 +16,10 @@
         logout : PREFIX + '/logout',
         captcha : PREFIX + '/seccode',
         reg : PREFIX + '/register',
-        checkUsername : PREFIX + '/isUsernameExisted'
+        checkUsername : PREFIX + '/isUsernameExisted',
+        checkUserLogin : PREFIX + '/profile',
+        findPwd : PREFIX + '/findpassword',
+        resetPwd : PREFIX + 'resetpassword'
     };
 
     var USER_INFO;
@@ -160,6 +163,105 @@
                 },
                 success : function (resp) {
                     deferred.resolve(resp);
+                },
+                error : function () {
+                    deferred.reject({
+                        error : -1,
+                        msg : '请求失败，请检查网络连接状况。'
+                    });
+                }
+            });
+        }
+
+        return deferred.promise();
+    };
+
+    Account.checkUserLoginAsync = function (options) {
+        var deferred = new Deferred();
+
+        options = options || {};
+
+        ajax({
+            type : 'GET',
+            url : CONFIG.checkUserLogin,
+            success : function (resp) {
+                if (resp.error === 0) {
+                    IS_LOGINED = true;
+                    USER_INFO = resp.member;
+                    deferred.resolve(true);
+                } else {
+                    IS_LOGINED = false;
+                    USER_INFO = undefined;
+                    deferred.reject(false);
+                }
+            },
+            error : function () {
+                deferred.reject(false);
+            }
+        });
+
+        return deferred.promise();
+    };
+
+    Account.findPwdAsync = function (username, options) {
+        var deferred = new Deferred();
+
+        if (username === undefined) {
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
+            });
+        } else {
+            ajax({
+                type : 'POST',
+                url : CONFIG.findPwd,
+                data : {
+                    username : username
+                },
+                success : function (resp) {
+                    deferred.resolve(resp);
+                },
+                error : function () {
+                    deferred.reject({
+                        error : -1,
+                        msg : '请求失败，请检查网络连接状况。'
+                    });
+                }
+            });
+        }
+
+        return deferred.promise();
+    };
+
+    Account.resetPwdAsync = function (data, options) {
+        var deferred = new Deferred();
+
+        data = data || {};
+        options = options || {};
+
+        if (data.username === undefined ||
+                data.passcode === undefined ||
+                data.password === undefined) {
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
+            });
+        } else {
+            ajax({
+                type : 'POST',
+                url : CONFIG.resetPwd,
+                data : {
+                    username : data.username,
+                    passcode : data.passcode,
+                    password : data.password,
+                    repeatedpassword : data.password
+                },
+                success : function (resp) {
+                    if (resp.error === 0) {
+                        deferred.resolve(resp);
+                    } else {
+                        deferred.reject(resp);
+                    }
                 },
                 error : function () {
                     deferred.reject({
