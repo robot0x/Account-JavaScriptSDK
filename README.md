@@ -50,11 +50,18 @@ SnapPea.Account.checkUserLoginAsync();
 ```JavaScript
 SnapPea.Account.findPwdAsync(username);
 ```
-## Request server to reset password
+## Reset password
 ```JavaScript
 SnapPea.Account.resetPwdAsync({
     username : 'username',
     passcode : 'passcode',
     password : 'password'
+});
+```
+## Login with thirdpart platform
+```JavaScript
+SnapPea.Account.loginWithThirdParty({
+    platform : 'weibo',
+    callback : 'http://www.wandoujia.com/'
 });
 ```
