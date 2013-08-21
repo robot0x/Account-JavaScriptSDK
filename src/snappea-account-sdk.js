@@ -9,7 +9,11 @@
         }
     });
 
-    var PREFIX = 'https://account.wandoujia.com/v4/api';
+    var HOST = 'https://account.wandoujia.com';
+    var API_VERSION_4 = '/v4/api';
+    var API_VERSION_1 = '/v1';
+
+    var PREFIX = HOST + API_VERSION_4;
 
     var CONFIG = {
         login : PREFIX + '/login',
@@ -19,7 +23,11 @@
         checkUsername : PREFIX + '/isUsernameExisted',
         checkUserLogin : PREFIX + '/profile',
         findPwd : PREFIX + '/findpassword',
-        resetPwd : PREFIX + 'resetpassword'
+        resetPwd : PREFIX + '/resetpassword'
+    };
+
+    var CONFIG_V1 = {
+        loginWithThirdParty : HOST + API_VERSION_1 + '/user/?do=login'
     };
 
     var USER_INFO;
@@ -283,6 +291,38 @@
     Account.isPhoneNumber = function (input) {
         var PHONE_PATTERN = /(^[0-9]{3,4}\-[0-9]{7,8}$)|(^[0-9]{7,8}$)|(^\([0-9]{3,4}\)[0-9]{3,8}$)|(^0{0,1}13[0-9]{9}$)|(13\d{9}$)|(15[0135-9]\d{8}$)|(18[267]\d{8}$)/;
         return PHONE_PATTERN.test(input);
+    };
+
+    /* `platform` could be one of `weibo`, `qq`, `renren` */
+    Account.loginWithThirdParty = function (options) {
+        options = options || {};
+
+        options.callback = options.callback || 'http://www.wandoujia.com/';
+
+        var platforms = {
+            weibo : 'sina',
+            sina : 'sina',
+            renren : 'renren',
+            qq : 'qq'
+        };
+
+        target = platforms[options.platform];
+
+        var datas = [];
+        var d;
+        for (d in options) {
+            if (options.hasOwnProperty(d)) {
+                datas.push(d + '=' + window.encodeURIComponent(options[d]));
+            }
+        }
+
+        var targeURL = CONFIG_V1.loginWithThirdParty;
+
+        if (datas.length > 0) {
+            targeURL = targeURL + '&' + datas.join('&');
+        }
+
+        location.href = targeURL;
     };
 
     var SnapPea = global.SnapPea || {};
