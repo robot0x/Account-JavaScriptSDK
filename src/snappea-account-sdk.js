@@ -279,7 +279,7 @@
         }
 
         return deferred.promise();
-    }
+    };
 
     Account.resetPwdAsync = function (data, options) {
         var deferred = new Deferred();
@@ -346,7 +346,7 @@
             qq : 'qq'
         };
 
-        target = platforms[options.platform];
+        options.platform = platforms[options.platform];
 
         var datas = [];
         var d;
