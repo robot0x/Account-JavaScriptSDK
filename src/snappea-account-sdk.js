@@ -23,6 +23,7 @@
         checkUsername : PREFIX + '/isUsernameExisted',
         checkUserLogin : PREFIX + '/profile',
         findPwd : PREFIX + '/findpassword',
+        checkCode : PREFIX + '/checkcode',
         resetPwd : PREFIX + '/resetpassword'
     };
 
@@ -240,6 +241,45 @@
 
         return deferred.promise();
     };
+
+    Account.checkCodeAsync = function (data, options) {
+        var deferred = new Deferred();
+
+        data = data || {};
+        options = options || {};
+
+        if (data.username === undefined ||
+                data.passcode === undefined) {
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
+            });
+        } else {
+            ajax({
+                type : 'POST',
+                url : CONFIG.checkCode,
+                data : {
+                    username : data.username,
+                    passcode : data.passcode
+                },
+                success : function (resp) {
+                    if (resp.error === 0) {
+                        deferred.resolve(resp);
+                    } else {
+                        deferred.reject(resp);
+                    }
+                },
+                error : function () {
+                    deferred.reject({
+                        error : -1,
+                        msg : '请求失败，请检查网络连接状况。'
+                    });
+                }
+            });
+        }
+
+        return deferred.promise();
+    }
 
     Account.resetPwdAsync = function (data, options) {
         var deferred = new Deferred();
