@@ -1,13 +1,19 @@
-/*global $*/
+/*global $, Q*/
 (function (global) {
-    var Deferred = $.Deferred;
+    //@@ lib/q/q.js
+    var Deferred = Q.defer;
     var ajax = $.ajax;
 
-    $.ajaxSetup({
-        xhrFields : {
-            withCredentials : true
-        }
-    });
+    if ($.ajaxSetup) {
+        $.ajaxSetup({
+            xhrFields : {
+                withCredentials : true
+            }
+        });
+    } else {
+        // $.ajaxSettings;
+    }
+
 
     var HOST = 'https://account.wandoujia.com';
     var API_VERSION_4 = '/v4/api';
@@ -51,6 +57,7 @@
         } else {
             ajax({
                 type : 'POST',
+                dataType : 'json',
                 url : CONFIG.login,
                 data : {
                     username : data.username,
@@ -75,7 +82,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.isLogined = function () {
@@ -91,6 +98,7 @@
 
         ajax({
             type : 'POST',
+            dataType : 'json',
             url : CONFIG.logout,
             success : function (resp) {
                 if (resp.error === 0) {
@@ -109,7 +117,7 @@
             }
         });
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.regAsync = function (data, options) {
@@ -126,6 +134,7 @@
         } else {
             ajax({
                 type : 'POST',
+                dataType : 'json',
                 url : CONFIG.reg,
                 data : {
                     username : data.username,
@@ -151,7 +160,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.checkUsernameAsync = function (username, options) {
@@ -165,6 +174,7 @@
         } else {
             ajax({
                 type : 'POST',
+                dataType : 'json',
                 url : CONFIG.checkUsername,
                 data : {
                     username : username
@@ -181,7 +191,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.checkUserLoginAsync = function (options) {
@@ -191,6 +201,7 @@
 
         ajax({
             type : 'GET',
+            dataType : 'json',
             url : CONFIG.checkUserLogin,
             success : function (resp) {
                 if (resp.error === 0) {
@@ -208,7 +219,7 @@
             }
         });
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.findPwdAsync = function (username, options) {
@@ -222,6 +233,7 @@
         } else {
             ajax({
                 type : 'POST',
+                dataType : 'json',
                 url : CONFIG.findPwd,
                 data : {
                     username : username
@@ -238,7 +250,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.resetPwdAsync = function (data, options) {
@@ -257,6 +269,7 @@
         } else {
             ajax({
                 type : 'POST',
+                dataType : 'json',
                 url : CONFIG.resetPwd,
                 data : {
                     username : data.username,
@@ -280,7 +293,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.isEmail = function (input) {
@@ -306,13 +319,13 @@
             qq : 'qq'
         };
 
-        target = platforms[options.platform];
+        options.platform = platforms[options.platform];
 
         var datas = [];
         var d;
         for (d in options) {
             if (options.hasOwnProperty(d)) {
-                datas.push(d + '=' + window.encodeURIComponent(options[d]));
+                datas.push(d + '=' + global.encodeURIComponent(options[d]));
             }
         }
 
@@ -322,12 +335,10 @@
             targeURL = targeURL + '&' + datas.join('&');
         }
 
-        location.href = targeURL;
+        global.location.href = targeURL;
     };
 
     var SnapPea = global.SnapPea || {};
     SnapPea.Account = Account;
     global.SnapPea = SnapPea;
-
-    return Account;
 }(this));
