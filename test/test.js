@@ -14,13 +14,13 @@ describe('Account', function () {
         password : 'b'
     };
     var userInfo5 = {
-        username : 'test@gmail.com',
-        password : 'testgmail'
+        username : 'testtesttest@gmail.com',
+        password : 'testtest123'
     };
 
     describe('Account.loginAsync()', function () {
         it('Should faild when misssing params. ', function (done) {
-            Account.loginAsync(userInfo).done(function () {
+            Account.loginAsync(userInfo).then(function () {
                 done('Should faild when misssing params. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
@@ -30,7 +30,7 @@ describe('Account', function () {
         });
 
         it('Should faild when misssing password. ', function (done) {
-            Account.loginAsync(userInfo2).done(function () {
+            Account.loginAsync(userInfo2).then(function () {
                 done('Should faild when misssing password. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
@@ -40,7 +40,7 @@ describe('Account', function () {
         });
 
         it('Should faild when misssing username. ', function (done) {
-            Account.loginAsync(userInfo3).done(function () {
+            Account.loginAsync(userInfo3).then(function () {
                 done('Should faild when misssing username. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
@@ -50,7 +50,7 @@ describe('Account', function () {
         });
 
         it('Should faild when username or password is incorrect. ', function (done) {
-            Account.loginAsync(userInfo4).done(function () {
+            Account.loginAsync(userInfo4).then(function () {
                 done('Should faild when username or password is wrong. ');
             }).fail(function (resp) {
                 if (resp.error === 1010) {
@@ -60,25 +60,25 @@ describe('Account', function () {
         });
 
         it('Should pass when username and password are correct. ', function (done) {
-            Account.loginAsync(userInfo5).done(function () {
+            Account.loginAsync(userInfo5).then(function () {
                 done();
             }).fail(function (resp) {
                 done('Should faild when username or password are correct. ');
             });
         });
 
-        it('Should have the username "test@gmail.com". ', function (done) {
-            if (Account.getUserInfo().username === 'test@gmail.com') {
+        it('Should have the username "testtesttest@gmail.com". ', function (done) {
+            if (Account.getUserInfo().username === 'testtesttest@gmail.com') {
                 done();
             } else {
-                done('Should have the username "test@gmail.com". ');
+                done('Should have the username "testtesttest@gmail.com". ');
             }
         });
     });
 
     describe('Account.logoutAsync()', function () {
         it('Should pass anyway. ', function (done) {
-            Account.logoutAsync().done(function () {
+            Account.logoutAsync().then(function () {
                 done();
             }).fail(function (resp) {
                 done('Should pass anyway. ');
@@ -96,7 +96,7 @@ describe('Account', function () {
 
     describe('Account.isLogined()', function () {
         it('Should return true when login. ', function (done) {
-            Account.loginAsync(userInfo5).done(function () {
+            Account.loginAsync(userInfo5).then(function () {
                 if (Account.isLogined()) {
                     done();
                 } else {
@@ -106,7 +106,7 @@ describe('Account', function () {
         });
 
         it('Should return false when logout. ', function (done) {
-            Account.logoutAsync().done(function () {
+            Account.logoutAsync().then(function () {
                 if (Account.isLogined()) {
                     done('Should return false when logout. ');
                 } else {
@@ -179,7 +179,7 @@ describe('Account', function () {
 
     describe('Account.regAsync()', function () {
         it('Should faild when misssing params. ', function (done) {
-            Account.regAsync(userInfo).done(function () {
+            Account.regAsync(userInfo).then(function () {
                 done('Should faild when misssing params. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
@@ -189,7 +189,7 @@ describe('Account', function () {
         });
 
         it('Should faild when misssing password. ', function (done) {
-            Account.regAsync(userInfo2).done(function () {
+            Account.regAsync(userInfo2).then(function () {
                 done('Should faild when misssing password. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
@@ -199,7 +199,7 @@ describe('Account', function () {
         });
 
         it('Should faild when misssing username. ', function (done) {
-            Account.regAsync(userInfo3).done(function () {
+            Account.regAsync(userInfo3).then(function () {
                 done('Should faild when misssing username. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
@@ -209,7 +209,7 @@ describe('Account', function () {
         });
 
         it('Should faild when user exist. ', function (done) {
-            Account.regAsync(userInfo5).done(function (resp) {
+            Account.regAsync(userInfo5).then(function (resp) {
                 done('Should faild when user exist. ');
             }).fail(function (resp) {
                 done();
@@ -220,8 +220,8 @@ describe('Account', function () {
         it('Should pass when have username and password. ', function (done) {
             Account.regAsync({
                 username : username,
-                password : new Date().getTime()
-            }).done(function () {
+                password : new Date().getTime() + 'abcd'
+            }).then(function () {
                 done();
             }).fail(function (resp) {
                 done('Should pass when have username and password. ');
@@ -239,7 +239,7 @@ describe('Account', function () {
 
     describe('Account.checkUsernameAsync()', function () {
         it('Should faild when misssing params. ', function (done) {
-            Account.checkUsernameAsync().done(function () {
+            Account.checkUsernameAsync().then(function () {
                 done('Should faild when misssing params. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
@@ -249,8 +249,8 @@ describe('Account', function () {
         });
 
         it('Should faild when username already exist. ', function (done) {
-            Account.checkUsernameAsync('test@gmail.com').done(function (resp) {
-                if (resp === 'true') {
+            Account.checkUsernameAsync('testtesttest@gmail.com').then(function (resp) {
+                if (resp) {
                     done();
                 } else {
                     done('Should faild when username already exist. ');
@@ -261,8 +261,8 @@ describe('Account', function () {
         });
 
         it('Should pass when username is fucking new. ', function (done) {
-            Account.checkUsernameAsync(new Date().getTime() + '@gmail.com').done(function (resp) {
-                if (resp === 'false') {
+            Account.checkUsernameAsync(new Date().getTime() + '@gmail.com').then(function (resp) {
+                if (!resp) {
                     done();
                 } else {
                     done('Should pass when username is fucking new. ');
@@ -275,8 +275,8 @@ describe('Account', function () {
 
     describe('Account.checkUserLoginAsync()', function () {
         it('Should return true when logined. ', function (done) {
-            Account.loginAsync(userInfo5).done(function () {
-                Account.checkUserLoginAsync().done(function (resp) {
+            Account.loginAsync(userInfo5).then(function () {
+                Account.checkUserLoginAsync().then(function (resp) {
                     if (resp) {
                         done();
                     } else {
@@ -289,8 +289,8 @@ describe('Account', function () {
         });
 
         it('Should return false when logout. ', function (done) {
-            Account.logoutAsync(userInfo5).done(function () {
-                Account.checkUserLoginAsync().done(function (resp) {
+            Account.logoutAsync(userInfo5).then(function () {
+                Account.checkUserLoginAsync().then(function (resp) {
                     if (!resp) {
                         done();
                     } else {
@@ -299,6 +299,43 @@ describe('Account', function () {
                 }).fail(function () {
                     done();
                 });
+            });
+        });
+    });
+
+    describe('Account.findPwdAsync()', function () {
+        it('Should fail when username is empty. ', function (done) {
+            Account.findPwdAsync().then(function () {
+                done('Should fail when user info is empty. ');
+            }).fail(function () {
+                done();
+            });
+        });
+
+        it('Should success when username is not empty. ', function (done) {
+            Account.findPwdAsync('testtesttest@gmail').then(function () {
+                done();
+            }).fail(function () {
+                done('Should success when user info is empty. ');
+            });
+        });
+    });
+
+    describe('Account.resetPwdAsync()', function () {
+        it('Should fail when data is not enough. ', function (done) {
+            Account.resetPwdAsync(userInfo5).then(function () {
+                done('Should fail when data is not enough. ');
+            }).fail(function () {
+                done();
+            });
+        });
+
+        it('Should fail when passcode is not correct. ', function (done) {
+            userInfo5.passcode = 123455;
+            Account.resetPwdAsync(userInfo5).then(function () {
+                done('Should fail when passcode is not correct. ');
+            }).fail(function () {
+                done();
             });
         });
     });
