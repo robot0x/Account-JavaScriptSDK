@@ -290,7 +290,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.resetPwdAsync = function (data, options) {
