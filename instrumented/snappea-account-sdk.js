@@ -12,141 +12,149 @@ var __$coverInitRange = function(name, range){
 var __$coverCall = function(name, range){
 	__$coverObject[name][range]++;
 };
-__$coverInit("src/snappea-account-sdk.js", "/*global $, Q*/\n(function (global) {\n    //@@ lib/q/q.js\n    var Deferred = Q.defer;\n    var ajax = $.ajax;\n\n    // if ($.ajaxSetup) {\n    //     $.ajaxSetup({\n    //         xhrFields : {\n    //             withCredentials : true\n    //         }\n    //     });\n    // } else {\n    //     $.ajaxSettings;\n    // }\n\n\n    var HOST = 'https://account.wandoujia.com';\n    var API_VERSION_4 = '/v4/api';\n    var API_VERSION_1 = '/v1';\n\n    var PREFIX = HOST + API_VERSION_4;\n\n    var CONFIG = {\n        login : PREFIX + '/login',\n        logout : PREFIX + '/logout',\n        captcha : PREFIX + '/seccode',\n        reg : PREFIX + '/register',\n        checkUsername : PREFIX + '/isUsernameExisted',\n        checkUserLogin : PREFIX + '/profile',\n        findPwd : PREFIX + '/findpassword',\n        resetPwd : PREFIX + '/resetpassword'\n    };\n\n    var CONFIG_V1 = {\n        loginWithThirdParty : HOST + API_VERSION_1 + '/user/?do=login'\n    };\n\n    var USER_INFO;\n    var IS_LOGINED = false;\n\n    var Account = {};\n\n    Account.CAPTCHA = CONFIG.captcha;\n\n    Account.loginAsync = function (data, options) {\n        var deferred = new Deferred();\n\n        data = data || {};\n        options = options || {};\n\n        if (!data.username || !data.password) {\n            deferred.reject({\n                error : -2,\n                msg : '参数不全'\n            });\n        } else {\n            ajax({\n                type : 'POST',\n                dataType : 'json',\n                url : CONFIG.login,\n                data : {\n                    username : data.username,\n                    password : data.password,\n                    seccode : data.seccode || ''\n                },\n                success : function (resp) {\n                    if (resp.error === 0) {\n                        IS_LOGINED = true;\n                        USER_INFO = resp.member;\n                        deferred.resolve(resp.member);\n                    } else {\n                        deferred.reject(resp);\n                    }\n                },\n                error : function () {\n                    deferred.reject({\n                        error : -1,\n                        msg : '请求失败，请检查网络连接状况'\n                    });\n                }\n            });\n        }\n\n        return deferred.promise;\n    };\n\n    Account.isLogined = function () {\n        return IS_LOGINED;\n    };\n\n    Account.getUserInfo = function () {\n        return USER_INFO;\n    };\n\n    Account.logoutAsync = function () {\n        var deferred = new Deferred();\n\n        ajax({\n            type : 'POST',\n            dataType : 'json',\n            url : CONFIG.logout,\n            success : function (resp) {\n                if (resp.error === 0) {\n                    IS_LOGINED = false;\n                    USER_INFO = undefined;\n                    deferred.resolve(resp);\n                } else {\n                    deferred.reject(resp);\n                }\n            },\n            error : function () {\n                deferred.reject({\n                    error : -1,\n                    msg : '请求失败，请检查网络连接状况。'\n                });\n            }\n        });\n\n        return deferred.promise;\n    };\n\n    Account.regAsync = function (data, options) {\n        var deferred = new Deferred();\n\n        data = data || {};\n        options = options || {};\n\n        if (!data.username || !data.password) {\n            deferred.reject({\n                error : -2,\n                msg : '参数不全'\n            });\n        } else {\n            ajax({\n                type : 'POST',\n                dataType : 'json',\n                url : CONFIG.reg,\n                data : {\n                    username : data.username,\n                    password : data.password,\n                    nikename : data.nikename || '',\n                    seccode : data.seccode || ''\n                },\n                success : function (resp) {\n                    if (resp.error === 0) {\n                        IS_LOGINED = true;\n                        USER_INFO = resp.member;\n                        deferred.resolve(resp);\n                    } else {\n                        deferred.reject(resp);\n                    }\n                },\n                error : function () {\n                    deferred.reject({\n                        error : -1,\n                        msg : '请求失败，请检查网络连接状况。'\n                    });\n                }\n            });\n        }\n\n        return deferred.promise;\n    };\n\n    Account.checkUsernameAsync = function (username, options) {\n        var deferred = new Deferred();\n\n        if (username === undefined) {\n            deferred.reject({\n                error : -2,\n                msg : '参数不全'\n            });\n        } else {\n            ajax({\n                type : 'POST',\n                dataType : 'json',\n                url : CONFIG.checkUsername,\n                data : {\n                    username : username\n                },\n                success : function (resp) {\n                    deferred.resolve(resp);\n                },\n                error : function () {\n                    deferred.reject({\n                        error : -1,\n                        msg : '请求失败，请检查网络连接状况。'\n                    });\n                }\n            });\n        }\n\n        return deferred.promise;\n    };\n\n    Account.checkUserLoginAsync = function (options) {\n        var deferred = new Deferred();\n\n        options = options || {};\n\n        ajax({\n            type : 'GET',\n            dataType : 'json',\n            url : CONFIG.checkUserLogin,\n            success : function (resp) {\n                if (resp.error === 0) {\n                    IS_LOGINED = true;\n                    USER_INFO = resp.member;\n                    deferred.resolve(true);\n                } else {\n                    IS_LOGINED = false;\n                    USER_INFO = undefined;\n                    deferred.reject(false);\n                }\n            },\n            error : function () {\n                deferred.reject(false);\n            }\n        });\n\n        return deferred.promise;\n    };\n\n    Account.findPwdAsync = function (username, options) {\n        var deferred = new Deferred();\n\n        if (username === undefined) {\n            deferred.reject({\n                error : -2,\n                msg : '参数不全'\n            });\n        } else {\n            ajax({\n                type : 'POST',\n                dataType : 'json',\n                url : CONFIG.findPwd,\n                data : {\n                    username : username\n                },\n                success : function (resp) {\n                    deferred.resolve(resp);\n                },\n                error : function () {\n                    deferred.reject({\n                        error : -1,\n                        msg : '请求失败，请检查网络连接状况。'\n                    });\n                }\n            });\n        }\n\n        return deferred.promise;\n    };\n\n    Account.resetPwdAsync = function (data, options) {\n        var deferred = new Deferred();\n\n        data = data || {};\n        options = options || {};\n\n        if (data.username === undefined ||\n                data.passcode === undefined ||\n                data.password === undefined) {\n            deferred.reject({\n                error : -2,\n                msg : '参数不全'\n            });\n        } else {\n            ajax({\n                type : 'POST',\n                dataType : 'json',\n                url : CONFIG.resetPwd,\n                data : {\n                    username : data.username,\n                    passcode : data.passcode,\n                    password : data.password,\n                    repeatedpassword : data.password\n                },\n                success : function (resp) {\n                    if (resp.error === 0) {\n                        deferred.resolve(resp);\n                    } else {\n                        deferred.reject(resp);\n                    }\n                },\n                error : function () {\n                    deferred.reject({\n                        error : -1,\n                        msg : '请求失败，请检查网络连接状况。'\n                    });\n                }\n            });\n        }\n\n        return deferred.promise;\n    };\n\n    Account.isEmail = function (input) {\n        var EMAIL_PATTREN = /^[A-Za-z0-9](([_\\.\\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\\.\\-]?[a-zA-Z0-9]+)*)\\.([A-Za-z]{2,})$/;\n        return EMAIL_PATTREN.test(input);\n    };\n\n    Account.isPhoneNumber = function (input) {\n        var PHONE_PATTERN = /(^[0-9]{3,4}\\-[0-9]{7,8}$)|(^[0-9]{7,8}$)|(^\\([0-9]{3,4}\\)[0-9]{3,8}$)|(^0{0,1}13[0-9]{9}$)|(13\\d{9}$)|(15[0135-9]\\d{8}$)|(18[267]\\d{8}$)/;\n        return PHONE_PATTERN.test(input);\n    };\n\n    /* `platform` could be one of `weibo`, `qq`, `renren` */\n    Account.loginWithThirdParty = function (options) {\n        options = options || {};\n\n        options.callback = options.callback || 'http://www.wandoujia.com/';\n\n        var platforms = {\n            weibo : 'sina',\n            sina : 'sina',\n            renren : 'renren',\n            qq : 'qq'\n        };\n\n        options.platform = platforms[options.platform];\n\n        var datas = [];\n        var d;\n        for (d in options) {\n            if (options.hasOwnProperty(d)) {\n                datas.push(d + '=' + global.encodeURIComponent(options[d]));\n            }\n        }\n\n        var targeURL = CONFIG_V1.loginWithThirdParty;\n\n        if (datas.length > 0) {\n            targeURL = targeURL + '&' + datas.join('&');\n        }\n\n        global.location.href = targeURL;\n    };\n\n    var SnapPea = global.SnapPea || {};\n    SnapPea.Account = Account;\n    global.SnapPea = SnapPea;\n}(this));\n");
-__$coverInitRange("src/snappea-account-sdk.js", "16:9662");
+__$coverInit("src/snappea-account-sdk.js", "/*global $, Q*/\n(function (global) {\n    //@@ lib/q/q.js\n    var Deferred = Q.defer;\n    var ajax = $.ajax;\n\n    if ($.ajaxSetup) {\n        $.ajaxSetup({\n            xhrFields : {\n                withCredentials : true\n            }\n        });\n    } else {\n        // $.ajaxSettings;\n    }\n\n\n    var HOST = 'https://account.wandoujia.com';\n    var API_VERSION_4 = '/v4/api';\n    var API_VERSION_1 = '/v1';\n\n    var PREFIX = HOST + API_VERSION_4;\n\n    var CONFIG = {\n        login : PREFIX + '/login',\n        logout : PREFIX + '/logout',\n        captcha : PREFIX + '/seccode',\n        reg : PREFIX + '/register',\n        checkUsername : PREFIX + '/isUsernameExisted',\n        checkUserLogin : PREFIX + '/profile',\n        findPwd : PREFIX + '/findpassword',\n        resetPwd : PREFIX + '/resetpassword'\n    };\n\n    var CONFIG_V1 = {\n        loginWithThirdParty : HOST + API_VERSION_1 + '/user/?do=login'\n    };\n\n    var USER_INFO;\n    var IS_LOGINED = false;\n\n    var Account = {};\n\n    Account.CAPTCHA = CONFIG.captcha;\n\n    Account.loginAsync = function (data, options) {\n        var deferred = new Deferred();\n\n        data = data || {};\n        options = options || {};\n\n        if (!data.username || !data.password) {\n            deferred.reject({\n                error : -2,\n                msg : '参数不全'\n            });\n        } else {\n            ajax({\n                type : 'POST',\n                dataType : 'json',\n                url : CONFIG.login,\n                data : {\n                    username : data.username,\n                    password : data.password,\n                    seccode : data.seccode || ''\n                },\n                success : function (resp) {\n                    if (resp.error === 0) {\n                        IS_LOGINED = true;\n                        USER_INFO = resp.member;\n                        deferred.resolve(resp.member);\n                    } else {\n                        deferred.reject(resp);\n                    }\n                },\n                error : function () {\n                    deferred.reject({\n                        error : -1,\n                        msg : '请求失败，请检查网络连接状况'\n                    });\n                }\n            });\n        }\n\n        return deferred.promise;\n    };\n\n    Account.isLogined = function () {\n        return IS_LOGINED;\n    };\n\n    Account.getUserInfo = function () {\n        return USER_INFO;\n    };\n\n    Account.logoutAsync = function () {\n        var deferred = new Deferred();\n\n        ajax({\n            type : 'POST',\n            dataType : 'json',\n            url : CONFIG.logout,\n            success : function (resp) {\n                if (resp.error === 0) {\n                    IS_LOGINED = false;\n                    USER_INFO = undefined;\n                    deferred.resolve(resp);\n                } else {\n                    deferred.reject(resp);\n                }\n            },\n            error : function () {\n                deferred.reject({\n                    error : -1,\n                    msg : '请求失败，请检查网络连接状况。'\n                });\n            }\n        });\n\n        return deferred.promise;\n    };\n\n    Account.regAsync = function (data, options) {\n        var deferred = new Deferred();\n\n        data = data || {};\n        options = options || {};\n\n        if (!data.username || !data.password) {\n            deferred.reject({\n                error : -2,\n                msg : '参数不全'\n            });\n        } else {\n            ajax({\n                type : 'POST',\n                dataType : 'json',\n                url : CONFIG.reg,\n                data : {\n                    username : data.username,\n                    password : data.password,\n                    nikename : data.nikename || '',\n                    seccode : data.seccode || ''\n                },\n                success : function (resp) {\n                    if (resp.error === 0) {\n                        IS_LOGINED = true;\n                        USER_INFO = resp.member;\n                        deferred.resolve(resp);\n                    } else {\n                        deferred.reject(resp);\n                    }\n                },\n                error : function () {\n                    deferred.reject({\n                        error : -1,\n                        msg : '请求失败，请检查网络连接状况。'\n                    });\n                }\n            });\n        }\n\n        return deferred.promise;\n    };\n\n    Account.checkUsernameAsync = function (username, options) {\n        var deferred = new Deferred();\n\n        if (username === undefined) {\n            deferred.reject({\n                error : -2,\n                msg : '参数不全'\n            });\n        } else {\n            ajax({\n                type : 'POST',\n                dataType : 'json',\n                url : CONFIG.checkUsername,\n                data : {\n                    username : username\n                },\n                success : function (resp) {\n                    deferred.resolve(resp);\n                },\n                error : function () {\n                    deferred.reject({\n                        error : -1,\n                        msg : '请求失败，请检查网络连接状况。'\n                    });\n                }\n            });\n        }\n\n        return deferred.promise;\n    };\n\n    Account.checkUserLoginAsync = function (options) {\n        var deferred = new Deferred();\n\n        options = options || {};\n\n        ajax({\n            type : 'GET',\n            dataType : 'json',\n            url : CONFIG.checkUserLogin,\n            success : function (resp) {\n                if (resp.error === 0) {\n                    IS_LOGINED = true;\n                    USER_INFO = resp.member;\n                    deferred.resolve(true);\n                } else {\n                    IS_LOGINED = false;\n                    USER_INFO = undefined;\n                    deferred.reject(false);\n                }\n            },\n            error : function () {\n                deferred.reject(false);\n            }\n        });\n\n        return deferred.promise;\n    };\n\n    Account.findPwdAsync = function (username, options) {\n        var deferred = new Deferred();\n\n        if (username === undefined) {\n            deferred.reject({\n                error : -2,\n                msg : '参数不全'\n            });\n        } else {\n            ajax({\n                type : 'POST',\n                dataType : 'json',\n                url : CONFIG.findPwd,\n                data : {\n                    username : username\n                },\n                success : function (resp) {\n                    deferred.resolve(resp);\n                },\n                error : function () {\n                    deferred.reject({\n                        error : -1,\n                        msg : '请求失败，请检查网络连接状况。'\n                    });\n                }\n            });\n        }\n\n        return deferred.promise;\n    };\n\n    Account.resetPwdAsync = function (data, options) {\n        var deferred = new Deferred();\n\n        data = data || {};\n        options = options || {};\n\n        if (data.username === undefined ||\n                data.passcode === undefined ||\n                data.password === undefined) {\n            deferred.reject({\n                error : -2,\n                msg : '参数不全'\n            });\n        } else {\n            ajax({\n                type : 'POST',\n                dataType : 'json',\n                url : CONFIG.resetPwd,\n                data : {\n                    username : data.username,\n                    passcode : data.passcode,\n                    password : data.password,\n                    repeatedpassword : data.password\n                },\n                success : function (resp) {\n                    if (resp.error === 0) {\n                        deferred.resolve(resp);\n                    } else {\n                        deferred.reject(resp);\n                    }\n                },\n                error : function () {\n                    deferred.reject({\n                        error : -1,\n                        msg : '请求失败，请检查网络连接状况。'\n                    });\n                }\n            });\n        }\n\n        return deferred.promise;\n    };\n\n    Account.isEmail = function (input) {\n        var EMAIL_PATTREN = /^[A-Za-z0-9](([_\\.\\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\\.\\-]?[a-zA-Z0-9]+)*)\\.([A-Za-z]{2,})$/;\n        return EMAIL_PATTREN.test(input);\n    };\n\n    Account.isPhoneNumber = function (input) {\n        var PHONE_PATTERN = /^(1(([35][0-9])|(47)|[8][01236789]))\\d{8}$/;\n        return PHONE_PATTERN.test(input);\n    };\n\n    /* `platform` could be one of `weibo`, `qq`, `renren` */\n    Account.loginWithThirdParty = function (options) {\n        options = options || {};\n\n        options.callback = options.callback || 'http://www.wandoujia.com/';\n\n        var platforms = {\n            weibo : 'sina',\n            sina : 'sina',\n            renren : 'renren',\n            qq : 'qq'\n        };\n\n        options.platform = platforms[options.platform];\n\n        var datas = [];\n        var d;\n        for (d in options) {\n            if (options.hasOwnProperty(d)) {\n                datas.push(d + '=' + global.encodeURIComponent(options[d]));\n            }\n        }\n\n        var targeURL = CONFIG_V1.loginWithThirdParty;\n\n        if (datas.length > 0) {\n            targeURL = targeURL + '&' + datas.join('&');\n        }\n\n        global.location.href = targeURL;\n    };\n\n    var SnapPea = global.SnapPea || {};\n    SnapPea.Account = Account;\n    global.SnapPea = SnapPea;\n}(this));\n");
+__$coverInitRange("src/snappea-account-sdk.js", "16:9543");
 __$coverInitRange("src/snappea-account-sdk.js", "61:83");
 __$coverInitRange("src/snappea-account-sdk.js", "89:106");
-__$coverInitRange("src/snappea-account-sdk.js", "321:363");
-__$coverInitRange("src/snappea-account-sdk.js", "369:398");
-__$coverInitRange("src/snappea-account-sdk.js", "404:429");
-__$coverInitRange("src/snappea-account-sdk.js", "436:469");
-__$coverInitRange("src/snappea-account-sdk.js", "476:833");
-__$coverInitRange("src/snappea-account-sdk.js", "840:934");
-__$coverInitRange("src/snappea-account-sdk.js", "941:954");
-__$coverInitRange("src/snappea-account-sdk.js", "960:982");
-__$coverInitRange("src/snappea-account-sdk.js", "989:1005");
-__$coverInitRange("src/snappea-account-sdk.js", "1012:1044");
-__$coverInitRange("src/snappea-account-sdk.js", "1051:2292");
-__$coverInitRange("src/snappea-account-sdk.js", "2299:2365");
-__$coverInitRange("src/snappea-account-sdk.js", "2372:2439");
-__$coverInitRange("src/snappea-account-sdk.js", "2446:3165");
-__$coverInitRange("src/snappea-account-sdk.js", "3172:4455");
-__$coverInitRange("src/snappea-account-sdk.js", "4462:5307");
-__$coverInitRange("src/snappea-account-sdk.js", "5314:6084");
-__$coverInitRange("src/snappea-account-sdk.js", "6091:6924");
-__$coverInitRange("src/snappea-account-sdk.js", "6931:8219");
-__$coverInitRange("src/snappea-account-sdk.js", "8226:8435");
-__$coverInitRange("src/snappea-account-sdk.js", "8442:8701");
-__$coverInitRange("src/snappea-account-sdk.js", "8769:9550");
-__$coverInitRange("src/snappea-account-sdk.js", "9557:9591");
-__$coverInitRange("src/snappea-account-sdk.js", "9597:9622");
-__$coverInitRange("src/snappea-account-sdk.js", "9628:9652");
-__$coverInitRange("src/snappea-account-sdk.js", "1107:1136");
-__$coverInitRange("src/snappea-account-sdk.js", "1147:1164");
-__$coverInitRange("src/snappea-account-sdk.js", "1174:1197");
-__$coverInitRange("src/snappea-account-sdk.js", "1208:2251");
-__$coverInitRange("src/snappea-account-sdk.js", "2262:2285");
-__$coverInitRange("src/snappea-account-sdk.js", "1260:1349");
-__$coverInitRange("src/snappea-account-sdk.js", "1380:2241");
-__$coverInitRange("src/snappea-account-sdk.js", "1738:2005");
-__$coverInitRange("src/snappea-account-sdk.js", "1786:1803");
-__$coverInitRange("src/snappea-account-sdk.js", "1829:1852");
-__$coverInitRange("src/snappea-account-sdk.js", "1878:1907");
-__$coverInitRange("src/snappea-account-sdk.js", "1962:1983");
-__$coverInitRange("src/snappea-account-sdk.js", "2084:2207");
-__$coverInitRange("src/snappea-account-sdk.js", "2341:2358");
-__$coverInitRange("src/snappea-account-sdk.js", "2416:2432");
-__$coverInitRange("src/snappea-account-sdk.js", "2490:2519");
-__$coverInitRange("src/snappea-account-sdk.js", "2530:3124");
-__$coverInitRange("src/snappea-account-sdk.js", "3135:3158");
-__$coverInitRange("src/snappea-account-sdk.js", "2684:2919");
-__$coverInitRange("src/snappea-account-sdk.js", "2728:2746");
-__$coverInitRange("src/snappea-account-sdk.js", "2768:2789");
-__$coverInitRange("src/snappea-account-sdk.js", "2811:2833");
-__$coverInitRange("src/snappea-account-sdk.js", "2880:2901");
-__$coverInitRange("src/snappea-account-sdk.js", "2986:3098");
-__$coverInitRange("src/snappea-account-sdk.js", "3226:3255");
-__$coverInitRange("src/snappea-account-sdk.js", "3266:3283");
-__$coverInitRange("src/snappea-account-sdk.js", "3293:3316");
-__$coverInitRange("src/snappea-account-sdk.js", "3327:4414");
-__$coverInitRange("src/snappea-account-sdk.js", "4425:4448");
-__$coverInitRange("src/snappea-account-sdk.js", "3379:3468");
-__$coverInitRange("src/snappea-account-sdk.js", "3499:4404");
-__$coverInitRange("src/snappea-account-sdk.js", "3907:4167");
-__$coverInitRange("src/snappea-account-sdk.js", "3955:3972");
-__$coverInitRange("src/snappea-account-sdk.js", "3998:4021");
-__$coverInitRange("src/snappea-account-sdk.js", "4047:4069");
-__$coverInitRange("src/snappea-account-sdk.js", "4124:4145");
-__$coverInitRange("src/snappea-account-sdk.js", "4246:4370");
-__$coverInitRange("src/snappea-account-sdk.js", "4530:4559");
-__$coverInitRange("src/snappea-account-sdk.js", "4570:5266");
-__$coverInitRange("src/snappea-account-sdk.js", "5277:5300");
-__$coverInitRange("src/snappea-account-sdk.js", "4612:4701");
-__$coverInitRange("src/snappea-account-sdk.js", "4732:5256");
-__$coverInitRange("src/snappea-account-sdk.js", "4997:5019");
-__$coverInitRange("src/snappea-account-sdk.js", "5098:5222");
-__$coverInitRange("src/snappea-account-sdk.js", "5373:5402");
-__$coverInitRange("src/snappea-account-sdk.js", "5413:5436");
-__$coverInitRange("src/snappea-account-sdk.js", "5447:6043");
-__$coverInitRange("src/snappea-account-sdk.js", "6054:6077");
-__$coverInitRange("src/snappea-account-sdk.js", "5608:5928");
-__$coverInitRange("src/snappea-account-sdk.js", "5652:5669");
-__$coverInitRange("src/snappea-account-sdk.js", "5691:5714");
-__$coverInitRange("src/snappea-account-sdk.js", "5736:5758");
-__$coverInitRange("src/snappea-account-sdk.js", "5805:5823");
-__$coverInitRange("src/snappea-account-sdk.js", "5845:5866");
-__$coverInitRange("src/snappea-account-sdk.js", "5888:5910");
-__$coverInitRange("src/snappea-account-sdk.js", "5995:6017");
-__$coverInitRange("src/snappea-account-sdk.js", "6153:6182");
-__$coverInitRange("src/snappea-account-sdk.js", "6193:6883");
-__$coverInitRange("src/snappea-account-sdk.js", "6894:6917");
-__$coverInitRange("src/snappea-account-sdk.js", "6235:6324");
-__$coverInitRange("src/snappea-account-sdk.js", "6355:6873");
-__$coverInitRange("src/snappea-account-sdk.js", "6614:6636");
-__$coverInitRange("src/snappea-account-sdk.js", "6715:6839");
-__$coverInitRange("src/snappea-account-sdk.js", "6990:7019");
-__$coverInitRange("src/snappea-account-sdk.js", "7030:7047");
-__$coverInitRange("src/snappea-account-sdk.js", "7057:7080");
-__$coverInitRange("src/snappea-account-sdk.js", "7091:8178");
-__$coverInitRange("src/snappea-account-sdk.js", "8189:8212");
-__$coverInitRange("src/snappea-account-sdk.js", "7232:7321");
-__$coverInitRange("src/snappea-account-sdk.js", "7352:8168");
-__$coverInitRange("src/snappea-account-sdk.js", "7763:7931");
-__$coverInitRange("src/snappea-account-sdk.js", "7811:7833");
-__$coverInitRange("src/snappea-account-sdk.js", "7888:7909");
-__$coverInitRange("src/snappea-account-sdk.js", "8010:8134");
-__$coverInitRange("src/snappea-account-sdk.js", "8271:8386");
-__$coverInitRange("src/snappea-account-sdk.js", "8396:8428");
-__$coverInitRange("src/snappea-account-sdk.js", "8493:8652");
-__$coverInitRange("src/snappea-account-sdk.js", "8662:8694");
-__$coverInitRange("src/snappea-account-sdk.js", "8828:8851");
-__$coverInitRange("src/snappea-account-sdk.js", "8862:8928");
-__$coverInitRange("src/snappea-account-sdk.js", "8939:9074");
-__$coverInitRange("src/snappea-account-sdk.js", "9085:9131");
-__$coverInitRange("src/snappea-account-sdk.js", "9142:9156");
-__$coverInitRange("src/snappea-account-sdk.js", "9166:9171");
-__$coverInitRange("src/snappea-account-sdk.js", "9181:9346");
-__$coverInitRange("src/snappea-account-sdk.js", "9357:9401");
-__$coverInitRange("src/snappea-account-sdk.js", "9412:9501");
-__$coverInitRange("src/snappea-account-sdk.js", "9512:9543");
-__$coverInitRange("src/snappea-account-sdk.js", "9214:9336");
-__$coverInitRange("src/snappea-account-sdk.js", "9263:9322");
-__$coverInitRange("src/snappea-account-sdk.js", "9448:9491");
-__$coverCall('src/snappea-account-sdk.js', '16:9662');
+__$coverInitRange("src/snappea-account-sdk.js", "113:289");
+__$coverInitRange("src/snappea-account-sdk.js", "297:339");
+__$coverInitRange("src/snappea-account-sdk.js", "345:374");
+__$coverInitRange("src/snappea-account-sdk.js", "380:405");
+__$coverInitRange("src/snappea-account-sdk.js", "412:445");
+__$coverInitRange("src/snappea-account-sdk.js", "452:809");
+__$coverInitRange("src/snappea-account-sdk.js", "816:910");
+__$coverInitRange("src/snappea-account-sdk.js", "917:930");
+__$coverInitRange("src/snappea-account-sdk.js", "936:958");
+__$coverInitRange("src/snappea-account-sdk.js", "965:981");
+__$coverInitRange("src/snappea-account-sdk.js", "988:1020");
+__$coverInitRange("src/snappea-account-sdk.js", "1027:2268");
+__$coverInitRange("src/snappea-account-sdk.js", "2275:2341");
+__$coverInitRange("src/snappea-account-sdk.js", "2348:2415");
+__$coverInitRange("src/snappea-account-sdk.js", "2422:3141");
+__$coverInitRange("src/snappea-account-sdk.js", "3148:4431");
+__$coverInitRange("src/snappea-account-sdk.js", "4438:5283");
+__$coverInitRange("src/snappea-account-sdk.js", "5290:6060");
+__$coverInitRange("src/snappea-account-sdk.js", "6067:6900");
+__$coverInitRange("src/snappea-account-sdk.js", "6907:8195");
+__$coverInitRange("src/snappea-account-sdk.js", "8202:8411");
+__$coverInitRange("src/snappea-account-sdk.js", "8418:8582");
+__$coverInitRange("src/snappea-account-sdk.js", "8650:9431");
+__$coverInitRange("src/snappea-account-sdk.js", "9438:9472");
+__$coverInitRange("src/snappea-account-sdk.js", "9478:9503");
+__$coverInitRange("src/snappea-account-sdk.js", "9509:9533");
+__$coverInitRange("src/snappea-account-sdk.js", "140:243");
+__$coverInitRange("src/snappea-account-sdk.js", "1083:1112");
+__$coverInitRange("src/snappea-account-sdk.js", "1123:1140");
+__$coverInitRange("src/snappea-account-sdk.js", "1150:1173");
+__$coverInitRange("src/snappea-account-sdk.js", "1184:2227");
+__$coverInitRange("src/snappea-account-sdk.js", "2238:2261");
+__$coverInitRange("src/snappea-account-sdk.js", "1236:1325");
+__$coverInitRange("src/snappea-account-sdk.js", "1356:2217");
+__$coverInitRange("src/snappea-account-sdk.js", "1714:1981");
+__$coverInitRange("src/snappea-account-sdk.js", "1762:1779");
+__$coverInitRange("src/snappea-account-sdk.js", "1805:1828");
+__$coverInitRange("src/snappea-account-sdk.js", "1854:1883");
+__$coverInitRange("src/snappea-account-sdk.js", "1938:1959");
+__$coverInitRange("src/snappea-account-sdk.js", "2060:2183");
+__$coverInitRange("src/snappea-account-sdk.js", "2317:2334");
+__$coverInitRange("src/snappea-account-sdk.js", "2392:2408");
+__$coverInitRange("src/snappea-account-sdk.js", "2466:2495");
+__$coverInitRange("src/snappea-account-sdk.js", "2506:3100");
+__$coverInitRange("src/snappea-account-sdk.js", "3111:3134");
+__$coverInitRange("src/snappea-account-sdk.js", "2660:2895");
+__$coverInitRange("src/snappea-account-sdk.js", "2704:2722");
+__$coverInitRange("src/snappea-account-sdk.js", "2744:2765");
+__$coverInitRange("src/snappea-account-sdk.js", "2787:2809");
+__$coverInitRange("src/snappea-account-sdk.js", "2856:2877");
+__$coverInitRange("src/snappea-account-sdk.js", "2962:3074");
+__$coverInitRange("src/snappea-account-sdk.js", "3202:3231");
+__$coverInitRange("src/snappea-account-sdk.js", "3242:3259");
+__$coverInitRange("src/snappea-account-sdk.js", "3269:3292");
+__$coverInitRange("src/snappea-account-sdk.js", "3303:4390");
+__$coverInitRange("src/snappea-account-sdk.js", "4401:4424");
+__$coverInitRange("src/snappea-account-sdk.js", "3355:3444");
+__$coverInitRange("src/snappea-account-sdk.js", "3475:4380");
+__$coverInitRange("src/snappea-account-sdk.js", "3883:4143");
+__$coverInitRange("src/snappea-account-sdk.js", "3931:3948");
+__$coverInitRange("src/snappea-account-sdk.js", "3974:3997");
+__$coverInitRange("src/snappea-account-sdk.js", "4023:4045");
+__$coverInitRange("src/snappea-account-sdk.js", "4100:4121");
+__$coverInitRange("src/snappea-account-sdk.js", "4222:4346");
+__$coverInitRange("src/snappea-account-sdk.js", "4506:4535");
+__$coverInitRange("src/snappea-account-sdk.js", "4546:5242");
+__$coverInitRange("src/snappea-account-sdk.js", "5253:5276");
+__$coverInitRange("src/snappea-account-sdk.js", "4588:4677");
+__$coverInitRange("src/snappea-account-sdk.js", "4708:5232");
+__$coverInitRange("src/snappea-account-sdk.js", "4973:4995");
+__$coverInitRange("src/snappea-account-sdk.js", "5074:5198");
+__$coverInitRange("src/snappea-account-sdk.js", "5349:5378");
+__$coverInitRange("src/snappea-account-sdk.js", "5389:5412");
+__$coverInitRange("src/snappea-account-sdk.js", "5423:6019");
+__$coverInitRange("src/snappea-account-sdk.js", "6030:6053");
+__$coverInitRange("src/snappea-account-sdk.js", "5584:5904");
+__$coverInitRange("src/snappea-account-sdk.js", "5628:5645");
+__$coverInitRange("src/snappea-account-sdk.js", "5667:5690");
+__$coverInitRange("src/snappea-account-sdk.js", "5712:5734");
+__$coverInitRange("src/snappea-account-sdk.js", "5781:5799");
+__$coverInitRange("src/snappea-account-sdk.js", "5821:5842");
+__$coverInitRange("src/snappea-account-sdk.js", "5864:5886");
+__$coverInitRange("src/snappea-account-sdk.js", "5971:5993");
+__$coverInitRange("src/snappea-account-sdk.js", "6129:6158");
+__$coverInitRange("src/snappea-account-sdk.js", "6169:6859");
+__$coverInitRange("src/snappea-account-sdk.js", "6870:6893");
+__$coverInitRange("src/snappea-account-sdk.js", "6211:6300");
+__$coverInitRange("src/snappea-account-sdk.js", "6331:6849");
+__$coverInitRange("src/snappea-account-sdk.js", "6590:6612");
+__$coverInitRange("src/snappea-account-sdk.js", "6691:6815");
+__$coverInitRange("src/snappea-account-sdk.js", "6966:6995");
+__$coverInitRange("src/snappea-account-sdk.js", "7006:7023");
+__$coverInitRange("src/snappea-account-sdk.js", "7033:7056");
+__$coverInitRange("src/snappea-account-sdk.js", "7067:8154");
+__$coverInitRange("src/snappea-account-sdk.js", "8165:8188");
+__$coverInitRange("src/snappea-account-sdk.js", "7208:7297");
+__$coverInitRange("src/snappea-account-sdk.js", "7328:8144");
+__$coverInitRange("src/snappea-account-sdk.js", "7739:7907");
+__$coverInitRange("src/snappea-account-sdk.js", "7787:7809");
+__$coverInitRange("src/snappea-account-sdk.js", "7864:7885");
+__$coverInitRange("src/snappea-account-sdk.js", "7986:8110");
+__$coverInitRange("src/snappea-account-sdk.js", "8247:8362");
+__$coverInitRange("src/snappea-account-sdk.js", "8372:8404");
+__$coverInitRange("src/snappea-account-sdk.js", "8469:8533");
+__$coverInitRange("src/snappea-account-sdk.js", "8543:8575");
+__$coverInitRange("src/snappea-account-sdk.js", "8709:8732");
+__$coverInitRange("src/snappea-account-sdk.js", "8743:8809");
+__$coverInitRange("src/snappea-account-sdk.js", "8820:8955");
+__$coverInitRange("src/snappea-account-sdk.js", "8966:9012");
+__$coverInitRange("src/snappea-account-sdk.js", "9023:9037");
+__$coverInitRange("src/snappea-account-sdk.js", "9047:9052");
+__$coverInitRange("src/snappea-account-sdk.js", "9062:9227");
+__$coverInitRange("src/snappea-account-sdk.js", "9238:9282");
+__$coverInitRange("src/snappea-account-sdk.js", "9293:9382");
+__$coverInitRange("src/snappea-account-sdk.js", "9393:9424");
+__$coverInitRange("src/snappea-account-sdk.js", "9095:9217");
+__$coverInitRange("src/snappea-account-sdk.js", "9144:9203");
+__$coverInitRange("src/snappea-account-sdk.js", "9329:9372");
+__$coverCall('src/snappea-account-sdk.js', '16:9543');
 (function (global) {
     __$coverCall('src/snappea-account-sdk.js', '61:83');
     var Deferred = Q.defer;
     __$coverCall('src/snappea-account-sdk.js', '89:106');
     var ajax = $.ajax;
-    __$coverCall('src/snappea-account-sdk.js', '321:363');
+    __$coverCall('src/snappea-account-sdk.js', '113:289');
+    if ($.ajaxSetup) {
+        __$coverCall('src/snappea-account-sdk.js', '140:243');
+        $.ajaxSetup({ xhrFields: { withCredentials: true } });
+    } else {
+    }
+    __$coverCall('src/snappea-account-sdk.js', '297:339');
     var HOST = 'https://account.wandoujia.com';
-    __$coverCall('src/snappea-account-sdk.js', '369:398');
+    __$coverCall('src/snappea-account-sdk.js', '345:374');
     var API_VERSION_4 = '/v4/api';
-    __$coverCall('src/snappea-account-sdk.js', '404:429');
+    __$coverCall('src/snappea-account-sdk.js', '380:405');
     var API_VERSION_1 = '/v1';
-    __$coverCall('src/snappea-account-sdk.js', '436:469');
+    __$coverCall('src/snappea-account-sdk.js', '412:445');
     var PREFIX = HOST + API_VERSION_4;
-    __$coverCall('src/snappea-account-sdk.js', '476:833');
+    __$coverCall('src/snappea-account-sdk.js', '452:809');
     var CONFIG = {
             login: PREFIX + '/login',
             logout: PREFIX + '/logout',
@@ -157,33 +165,33 @@ __$coverCall('src/snappea-account-sdk.js', '16:9662');
             findPwd: PREFIX + '/findpassword',
             resetPwd: PREFIX + '/resetpassword'
         };
-    __$coverCall('src/snappea-account-sdk.js', '840:934');
+    __$coverCall('src/snappea-account-sdk.js', '816:910');
     var CONFIG_V1 = { loginWithThirdParty: HOST + API_VERSION_1 + '/user/?do=login' };
-    __$coverCall('src/snappea-account-sdk.js', '941:954');
+    __$coverCall('src/snappea-account-sdk.js', '917:930');
     var USER_INFO;
-    __$coverCall('src/snappea-account-sdk.js', '960:982');
+    __$coverCall('src/snappea-account-sdk.js', '936:958');
     var IS_LOGINED = false;
-    __$coverCall('src/snappea-account-sdk.js', '989:1005');
+    __$coverCall('src/snappea-account-sdk.js', '965:981');
     var Account = {};
-    __$coverCall('src/snappea-account-sdk.js', '1012:1044');
+    __$coverCall('src/snappea-account-sdk.js', '988:1020');
     Account.CAPTCHA = CONFIG.captcha;
-    __$coverCall('src/snappea-account-sdk.js', '1051:2292');
+    __$coverCall('src/snappea-account-sdk.js', '1027:2268');
     Account.loginAsync = function (data, options) {
-        __$coverCall('src/snappea-account-sdk.js', '1107:1136');
+        __$coverCall('src/snappea-account-sdk.js', '1083:1112');
         var deferred = new Deferred();
-        __$coverCall('src/snappea-account-sdk.js', '1147:1164');
+        __$coverCall('src/snappea-account-sdk.js', '1123:1140');
         data = data || {};
-        __$coverCall('src/snappea-account-sdk.js', '1174:1197');
+        __$coverCall('src/snappea-account-sdk.js', '1150:1173');
         options = options || {};
-        __$coverCall('src/snappea-account-sdk.js', '1208:2251');
+        __$coverCall('src/snappea-account-sdk.js', '1184:2227');
         if (!data.username || !data.password) {
-            __$coverCall('src/snappea-account-sdk.js', '1260:1349');
+            __$coverCall('src/snappea-account-sdk.js', '1236:1325');
             deferred.reject({
                 error: -2,
                 msg: '\u53c2\u6570\u4e0d\u5168'
             });
         } else {
-            __$coverCall('src/snappea-account-sdk.js', '1380:2241');
+            __$coverCall('src/snappea-account-sdk.js', '1356:2217');
             ajax({
                 type: 'POST',
                 dataType: 'json',
@@ -194,21 +202,21 @@ __$coverCall('src/snappea-account-sdk.js', '16:9662');
                     seccode: data.seccode || ''
                 },
                 success: function (resp) {
-                    __$coverCall('src/snappea-account-sdk.js', '1738:2005');
+                    __$coverCall('src/snappea-account-sdk.js', '1714:1981');
                     if (resp.error === 0) {
-                        __$coverCall('src/snappea-account-sdk.js', '1786:1803');
+                        __$coverCall('src/snappea-account-sdk.js', '1762:1779');
                         IS_LOGINED = true;
-                        __$coverCall('src/snappea-account-sdk.js', '1829:1852');
+                        __$coverCall('src/snappea-account-sdk.js', '1805:1828');
                         USER_INFO = resp.member;
-                        __$coverCall('src/snappea-account-sdk.js', '1878:1907');
+                        __$coverCall('src/snappea-account-sdk.js', '1854:1883');
                         deferred.resolve(resp.member);
                     } else {
-                        __$coverCall('src/snappea-account-sdk.js', '1962:1983');
+                        __$coverCall('src/snappea-account-sdk.js', '1938:1959');
                         deferred.reject(resp);
                     }
                 },
                 error: function () {
-                    __$coverCall('src/snappea-account-sdk.js', '2084:2207');
+                    __$coverCall('src/snappea-account-sdk.js', '2060:2183');
                     deferred.reject({
                         error: -1,
                         msg: '\u8bf7\u6c42\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc\u8fde\u63a5\u72b6\u51b5'
@@ -216,70 +224,70 @@ __$coverCall('src/snappea-account-sdk.js', '16:9662');
                 }
             });
         }
-        __$coverCall('src/snappea-account-sdk.js', '2262:2285');
+        __$coverCall('src/snappea-account-sdk.js', '2238:2261');
         return deferred.promise;
     };
-    __$coverCall('src/snappea-account-sdk.js', '2299:2365');
+    __$coverCall('src/snappea-account-sdk.js', '2275:2341');
     Account.isLogined = function () {
-        __$coverCall('src/snappea-account-sdk.js', '2341:2358');
+        __$coverCall('src/snappea-account-sdk.js', '2317:2334');
         return IS_LOGINED;
     };
-    __$coverCall('src/snappea-account-sdk.js', '2372:2439');
+    __$coverCall('src/snappea-account-sdk.js', '2348:2415');
     Account.getUserInfo = function () {
-        __$coverCall('src/snappea-account-sdk.js', '2416:2432');
+        __$coverCall('src/snappea-account-sdk.js', '2392:2408');
         return USER_INFO;
     };
-    __$coverCall('src/snappea-account-sdk.js', '2446:3165');
+    __$coverCall('src/snappea-account-sdk.js', '2422:3141');
     Account.logoutAsync = function () {
-        __$coverCall('src/snappea-account-sdk.js', '2490:2519');
+        __$coverCall('src/snappea-account-sdk.js', '2466:2495');
         var deferred = new Deferred();
-        __$coverCall('src/snappea-account-sdk.js', '2530:3124');
+        __$coverCall('src/snappea-account-sdk.js', '2506:3100');
         ajax({
             type: 'POST',
             dataType: 'json',
             url: CONFIG.logout,
             success: function (resp) {
-                __$coverCall('src/snappea-account-sdk.js', '2684:2919');
+                __$coverCall('src/snappea-account-sdk.js', '2660:2895');
                 if (resp.error === 0) {
-                    __$coverCall('src/snappea-account-sdk.js', '2728:2746');
+                    __$coverCall('src/snappea-account-sdk.js', '2704:2722');
                     IS_LOGINED = false;
-                    __$coverCall('src/snappea-account-sdk.js', '2768:2789');
+                    __$coverCall('src/snappea-account-sdk.js', '2744:2765');
                     USER_INFO = undefined;
-                    __$coverCall('src/snappea-account-sdk.js', '2811:2833');
+                    __$coverCall('src/snappea-account-sdk.js', '2787:2809');
                     deferred.resolve(resp);
                 } else {
-                    __$coverCall('src/snappea-account-sdk.js', '2880:2901');
+                    __$coverCall('src/snappea-account-sdk.js', '2856:2877');
                     deferred.reject(resp);
                 }
             },
             error: function () {
-                __$coverCall('src/snappea-account-sdk.js', '2986:3098');
+                __$coverCall('src/snappea-account-sdk.js', '2962:3074');
                 deferred.reject({
                     error: -1,
                     msg: '\u8bf7\u6c42\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc\u8fde\u63a5\u72b6\u51b5\u3002'
                 });
             }
         });
-        __$coverCall('src/snappea-account-sdk.js', '3135:3158');
+        __$coverCall('src/snappea-account-sdk.js', '3111:3134');
         return deferred.promise;
     };
-    __$coverCall('src/snappea-account-sdk.js', '3172:4455');
+    __$coverCall('src/snappea-account-sdk.js', '3148:4431');
     Account.regAsync = function (data, options) {
-        __$coverCall('src/snappea-account-sdk.js', '3226:3255');
+        __$coverCall('src/snappea-account-sdk.js', '3202:3231');
         var deferred = new Deferred();
-        __$coverCall('src/snappea-account-sdk.js', '3266:3283');
+        __$coverCall('src/snappea-account-sdk.js', '3242:3259');
         data = data || {};
-        __$coverCall('src/snappea-account-sdk.js', '3293:3316');
+        __$coverCall('src/snappea-account-sdk.js', '3269:3292');
         options = options || {};
-        __$coverCall('src/snappea-account-sdk.js', '3327:4414');
+        __$coverCall('src/snappea-account-sdk.js', '3303:4390');
         if (!data.username || !data.password) {
-            __$coverCall('src/snappea-account-sdk.js', '3379:3468');
+            __$coverCall('src/snappea-account-sdk.js', '3355:3444');
             deferred.reject({
                 error: -2,
                 msg: '\u53c2\u6570\u4e0d\u5168'
             });
         } else {
-            __$coverCall('src/snappea-account-sdk.js', '3499:4404');
+            __$coverCall('src/snappea-account-sdk.js', '3475:4380');
             ajax({
                 type: 'POST',
                 dataType: 'json',
@@ -291,21 +299,21 @@ __$coverCall('src/snappea-account-sdk.js', '16:9662');
                     seccode: data.seccode || ''
                 },
                 success: function (resp) {
-                    __$coverCall('src/snappea-account-sdk.js', '3907:4167');
+                    __$coverCall('src/snappea-account-sdk.js', '3883:4143');
                     if (resp.error === 0) {
-                        __$coverCall('src/snappea-account-sdk.js', '3955:3972');
+                        __$coverCall('src/snappea-account-sdk.js', '3931:3948');
                         IS_LOGINED = true;
-                        __$coverCall('src/snappea-account-sdk.js', '3998:4021');
+                        __$coverCall('src/snappea-account-sdk.js', '3974:3997');
                         USER_INFO = resp.member;
-                        __$coverCall('src/snappea-account-sdk.js', '4047:4069');
+                        __$coverCall('src/snappea-account-sdk.js', '4023:4045');
                         deferred.resolve(resp);
                     } else {
-                        __$coverCall('src/snappea-account-sdk.js', '4124:4145');
+                        __$coverCall('src/snappea-account-sdk.js', '4100:4121');
                         deferred.reject(resp);
                     }
                 },
                 error: function () {
-                    __$coverCall('src/snappea-account-sdk.js', '4246:4370');
+                    __$coverCall('src/snappea-account-sdk.js', '4222:4346');
                     deferred.reject({
                         error: -1,
                         msg: '\u8bf7\u6c42\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc\u8fde\u63a5\u72b6\u51b5\u3002'
@@ -313,33 +321,33 @@ __$coverCall('src/snappea-account-sdk.js', '16:9662');
                 }
             });
         }
-        __$coverCall('src/snappea-account-sdk.js', '4425:4448');
+        __$coverCall('src/snappea-account-sdk.js', '4401:4424');
         return deferred.promise;
     };
-    __$coverCall('src/snappea-account-sdk.js', '4462:5307');
+    __$coverCall('src/snappea-account-sdk.js', '4438:5283');
     Account.checkUsernameAsync = function (username, options) {
-        __$coverCall('src/snappea-account-sdk.js', '4530:4559');
+        __$coverCall('src/snappea-account-sdk.js', '4506:4535');
         var deferred = new Deferred();
-        __$coverCall('src/snappea-account-sdk.js', '4570:5266');
+        __$coverCall('src/snappea-account-sdk.js', '4546:5242');
         if (username === undefined) {
-            __$coverCall('src/snappea-account-sdk.js', '4612:4701');
+            __$coverCall('src/snappea-account-sdk.js', '4588:4677');
             deferred.reject({
                 error: -2,
                 msg: '\u53c2\u6570\u4e0d\u5168'
             });
         } else {
-            __$coverCall('src/snappea-account-sdk.js', '4732:5256');
+            __$coverCall('src/snappea-account-sdk.js', '4708:5232');
             ajax({
                 type: 'POST',
                 dataType: 'json',
                 url: CONFIG.checkUsername,
                 data: { username: username },
                 success: function (resp) {
-                    __$coverCall('src/snappea-account-sdk.js', '4997:5019');
+                    __$coverCall('src/snappea-account-sdk.js', '4973:4995');
                     deferred.resolve(resp);
                 },
                 error: function () {
-                    __$coverCall('src/snappea-account-sdk.js', '5098:5222');
+                    __$coverCall('src/snappea-account-sdk.js', '5074:5198');
                     deferred.reject({
                         error: -1,
                         msg: '\u8bf7\u6c42\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc\u8fde\u63a5\u72b6\u51b5\u3002'
@@ -347,70 +355,70 @@ __$coverCall('src/snappea-account-sdk.js', '16:9662');
                 }
             });
         }
-        __$coverCall('src/snappea-account-sdk.js', '5277:5300');
+        __$coverCall('src/snappea-account-sdk.js', '5253:5276');
         return deferred.promise;
     };
-    __$coverCall('src/snappea-account-sdk.js', '5314:6084');
+    __$coverCall('src/snappea-account-sdk.js', '5290:6060');
     Account.checkUserLoginAsync = function (options) {
-        __$coverCall('src/snappea-account-sdk.js', '5373:5402');
+        __$coverCall('src/snappea-account-sdk.js', '5349:5378');
         var deferred = new Deferred();
-        __$coverCall('src/snappea-account-sdk.js', '5413:5436');
+        __$coverCall('src/snappea-account-sdk.js', '5389:5412');
         options = options || {};
-        __$coverCall('src/snappea-account-sdk.js', '5447:6043');
+        __$coverCall('src/snappea-account-sdk.js', '5423:6019');
         ajax({
             type: 'GET',
             dataType: 'json',
             url: CONFIG.checkUserLogin,
             success: function (resp) {
-                __$coverCall('src/snappea-account-sdk.js', '5608:5928');
+                __$coverCall('src/snappea-account-sdk.js', '5584:5904');
                 if (resp.error === 0) {
-                    __$coverCall('src/snappea-account-sdk.js', '5652:5669');
+                    __$coverCall('src/snappea-account-sdk.js', '5628:5645');
                     IS_LOGINED = true;
-                    __$coverCall('src/snappea-account-sdk.js', '5691:5714');
+                    __$coverCall('src/snappea-account-sdk.js', '5667:5690');
                     USER_INFO = resp.member;
-                    __$coverCall('src/snappea-account-sdk.js', '5736:5758');
+                    __$coverCall('src/snappea-account-sdk.js', '5712:5734');
                     deferred.resolve(true);
                 } else {
-                    __$coverCall('src/snappea-account-sdk.js', '5805:5823');
+                    __$coverCall('src/snappea-account-sdk.js', '5781:5799');
                     IS_LOGINED = false;
-                    __$coverCall('src/snappea-account-sdk.js', '5845:5866');
+                    __$coverCall('src/snappea-account-sdk.js', '5821:5842');
                     USER_INFO = undefined;
-                    __$coverCall('src/snappea-account-sdk.js', '5888:5910');
+                    __$coverCall('src/snappea-account-sdk.js', '5864:5886');
                     deferred.reject(false);
                 }
             },
             error: function () {
-                __$coverCall('src/snappea-account-sdk.js', '5995:6017');
+                __$coverCall('src/snappea-account-sdk.js', '5971:5993');
                 deferred.reject(false);
             }
         });
-        __$coverCall('src/snappea-account-sdk.js', '6054:6077');
+        __$coverCall('src/snappea-account-sdk.js', '6030:6053');
         return deferred.promise;
     };
-    __$coverCall('src/snappea-account-sdk.js', '6091:6924');
+    __$coverCall('src/snappea-account-sdk.js', '6067:6900');
     Account.findPwdAsync = function (username, options) {
-        __$coverCall('src/snappea-account-sdk.js', '6153:6182');
+        __$coverCall('src/snappea-account-sdk.js', '6129:6158');
         var deferred = new Deferred();
-        __$coverCall('src/snappea-account-sdk.js', '6193:6883');
+        __$coverCall('src/snappea-account-sdk.js', '6169:6859');
         if (username === undefined) {
-            __$coverCall('src/snappea-account-sdk.js', '6235:6324');
+            __$coverCall('src/snappea-account-sdk.js', '6211:6300');
             deferred.reject({
                 error: -2,
                 msg: '\u53c2\u6570\u4e0d\u5168'
             });
         } else {
-            __$coverCall('src/snappea-account-sdk.js', '6355:6873');
+            __$coverCall('src/snappea-account-sdk.js', '6331:6849');
             ajax({
                 type: 'POST',
                 dataType: 'json',
                 url: CONFIG.findPwd,
                 data: { username: username },
                 success: function (resp) {
-                    __$coverCall('src/snappea-account-sdk.js', '6614:6636');
+                    __$coverCall('src/snappea-account-sdk.js', '6590:6612');
                     deferred.resolve(resp);
                 },
                 error: function () {
-                    __$coverCall('src/snappea-account-sdk.js', '6715:6839');
+                    __$coverCall('src/snappea-account-sdk.js', '6691:6815');
                     deferred.reject({
                         error: -1,
                         msg: '\u8bf7\u6c42\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc\u8fde\u63a5\u72b6\u51b5\u3002'
@@ -418,26 +426,26 @@ __$coverCall('src/snappea-account-sdk.js', '16:9662');
                 }
             });
         }
-        __$coverCall('src/snappea-account-sdk.js', '6894:6917');
+        __$coverCall('src/snappea-account-sdk.js', '6870:6893');
         return deferred.promise;
     };
-    __$coverCall('src/snappea-account-sdk.js', '6931:8219');
+    __$coverCall('src/snappea-account-sdk.js', '6907:8195');
     Account.resetPwdAsync = function (data, options) {
-        __$coverCall('src/snappea-account-sdk.js', '6990:7019');
+        __$coverCall('src/snappea-account-sdk.js', '6966:6995');
         var deferred = new Deferred();
-        __$coverCall('src/snappea-account-sdk.js', '7030:7047');
+        __$coverCall('src/snappea-account-sdk.js', '7006:7023');
         data = data || {};
-        __$coverCall('src/snappea-account-sdk.js', '7057:7080');
+        __$coverCall('src/snappea-account-sdk.js', '7033:7056');
         options = options || {};
-        __$coverCall('src/snappea-account-sdk.js', '7091:8178');
+        __$coverCall('src/snappea-account-sdk.js', '7067:8154');
         if (data.username === undefined || data.passcode === undefined || data.password === undefined) {
-            __$coverCall('src/snappea-account-sdk.js', '7232:7321');
+            __$coverCall('src/snappea-account-sdk.js', '7208:7297');
             deferred.reject({
                 error: -2,
                 msg: '\u53c2\u6570\u4e0d\u5168'
             });
         } else {
-            __$coverCall('src/snappea-account-sdk.js', '7352:8168');
+            __$coverCall('src/snappea-account-sdk.js', '7328:8144');
             ajax({
                 type: 'POST',
                 dataType: 'json',
@@ -449,17 +457,17 @@ __$coverCall('src/snappea-account-sdk.js', '16:9662');
                     repeatedpassword: data.password
                 },
                 success: function (resp) {
-                    __$coverCall('src/snappea-account-sdk.js', '7763:7931');
+                    __$coverCall('src/snappea-account-sdk.js', '7739:7907');
                     if (resp.error === 0) {
-                        __$coverCall('src/snappea-account-sdk.js', '7811:7833');
+                        __$coverCall('src/snappea-account-sdk.js', '7787:7809');
                         deferred.resolve(resp);
                     } else {
-                        __$coverCall('src/snappea-account-sdk.js', '7888:7909');
+                        __$coverCall('src/snappea-account-sdk.js', '7864:7885');
                         deferred.reject(resp);
                     }
                 },
                 error: function () {
-                    __$coverCall('src/snappea-account-sdk.js', '8010:8134');
+                    __$coverCall('src/snappea-account-sdk.js', '7986:8110');
                     deferred.reject({
                         error: -1,
                         msg: '\u8bf7\u6c42\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc\u8fde\u63a5\u72b6\u51b5\u3002'
@@ -467,64 +475,64 @@ __$coverCall('src/snappea-account-sdk.js', '16:9662');
                 }
             });
         }
-        __$coverCall('src/snappea-account-sdk.js', '8189:8212');
+        __$coverCall('src/snappea-account-sdk.js', '8165:8188');
         return deferred.promise;
     };
-    __$coverCall('src/snappea-account-sdk.js', '8226:8435');
+    __$coverCall('src/snappea-account-sdk.js', '8202:8411');
     Account.isEmail = function (input) {
-        __$coverCall('src/snappea-account-sdk.js', '8271:8386');
+        __$coverCall('src/snappea-account-sdk.js', '8247:8362');
         var EMAIL_PATTREN = /^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$/;
-        __$coverCall('src/snappea-account-sdk.js', '8396:8428');
+        __$coverCall('src/snappea-account-sdk.js', '8372:8404');
         return EMAIL_PATTREN.test(input);
     };
-    __$coverCall('src/snappea-account-sdk.js', '8442:8701');
+    __$coverCall('src/snappea-account-sdk.js', '8418:8582');
     Account.isPhoneNumber = function (input) {
-        __$coverCall('src/snappea-account-sdk.js', '8493:8652');
-        var PHONE_PATTERN = /(^[0-9]{3,4}\-[0-9]{7,8}$)|(^[0-9]{7,8}$)|(^\([0-9]{3,4}\)[0-9]{3,8}$)|(^0{0,1}13[0-9]{9}$)|(13\d{9}$)|(15[0135-9]\d{8}$)|(18[267]\d{8}$)/;
-        __$coverCall('src/snappea-account-sdk.js', '8662:8694');
+        __$coverCall('src/snappea-account-sdk.js', '8469:8533');
+        var PHONE_PATTERN = /^(1(([35][0-9])|(47)|[8][01236789]))\d{8}$/;
+        __$coverCall('src/snappea-account-sdk.js', '8543:8575');
         return PHONE_PATTERN.test(input);
     };
-    __$coverCall('src/snappea-account-sdk.js', '8769:9550');
+    __$coverCall('src/snappea-account-sdk.js', '8650:9431');
     Account.loginWithThirdParty = function (options) {
-        __$coverCall('src/snappea-account-sdk.js', '8828:8851');
+        __$coverCall('src/snappea-account-sdk.js', '8709:8732');
         options = options || {};
-        __$coverCall('src/snappea-account-sdk.js', '8862:8928');
+        __$coverCall('src/snappea-account-sdk.js', '8743:8809');
         options.callback = options.callback || 'http://www.wandoujia.com/';
-        __$coverCall('src/snappea-account-sdk.js', '8939:9074');
+        __$coverCall('src/snappea-account-sdk.js', '8820:8955');
         var platforms = {
                 weibo: 'sina',
                 sina: 'sina',
                 renren: 'renren',
                 qq: 'qq'
             };
-        __$coverCall('src/snappea-account-sdk.js', '9085:9131');
+        __$coverCall('src/snappea-account-sdk.js', '8966:9012');
         options.platform = platforms[options.platform];
-        __$coverCall('src/snappea-account-sdk.js', '9142:9156');
+        __$coverCall('src/snappea-account-sdk.js', '9023:9037');
         var datas = [];
-        __$coverCall('src/snappea-account-sdk.js', '9166:9171');
+        __$coverCall('src/snappea-account-sdk.js', '9047:9052');
         var d;
-        __$coverCall('src/snappea-account-sdk.js', '9181:9346');
+        __$coverCall('src/snappea-account-sdk.js', '9062:9227');
         for (d in options) {
-            __$coverCall('src/snappea-account-sdk.js', '9214:9336');
+            __$coverCall('src/snappea-account-sdk.js', '9095:9217');
             if (options.hasOwnProperty(d)) {
-                __$coverCall('src/snappea-account-sdk.js', '9263:9322');
+                __$coverCall('src/snappea-account-sdk.js', '9144:9203');
                 datas.push(d + '=' + global.encodeURIComponent(options[d]));
             }
         }
-        __$coverCall('src/snappea-account-sdk.js', '9357:9401');
+        __$coverCall('src/snappea-account-sdk.js', '9238:9282');
         var targeURL = CONFIG_V1.loginWithThirdParty;
-        __$coverCall('src/snappea-account-sdk.js', '9412:9501');
+        __$coverCall('src/snappea-account-sdk.js', '9293:9382');
         if (datas.length > 0) {
-            __$coverCall('src/snappea-account-sdk.js', '9448:9491');
+            __$coverCall('src/snappea-account-sdk.js', '9329:9372');
             targeURL = targeURL + '&' + datas.join('&');
         }
-        __$coverCall('src/snappea-account-sdk.js', '9512:9543');
+        __$coverCall('src/snappea-account-sdk.js', '9393:9424');
         global.location.href = targeURL;
     };
-    __$coverCall('src/snappea-account-sdk.js', '9557:9591');
+    __$coverCall('src/snappea-account-sdk.js', '9438:9472');
     var SnapPea = global.SnapPea || {};
-    __$coverCall('src/snappea-account-sdk.js', '9597:9622');
+    __$coverCall('src/snappea-account-sdk.js', '9478:9503');
     SnapPea.Account = Account;
-    __$coverCall('src/snappea-account-sdk.js', '9628:9652');
+    __$coverCall('src/snappea-account-sdk.js', '9509:9533');
     global.SnapPea = SnapPea;
 }(this));
