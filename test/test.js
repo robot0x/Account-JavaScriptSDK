@@ -160,11 +160,11 @@ describe('Account', function () {
             }
         });
 
-        it('Should return true: 13466770014', function (done) {
-            if (Account.isPhoneNumber('13466770014') === true) {
+        it('Should return true: 15266770014', function (done) {
+            if (Account.isPhoneNumber('15266770014') === true) {
                 done();
             } else {
-                done('Should return true: 13466770014');
+                done('Should return true: 15266770014');
             }
         });
 
