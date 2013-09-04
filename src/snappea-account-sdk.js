@@ -1,13 +1,19 @@
-/*global $*/
+/*global $, Q*/
 (function (global) {
-    var Deferred = $.Deferred;
+    //@@ lib/q/q.js
+    var Deferred = Q.defer;
     var ajax = $.ajax;
 
-    $.ajaxSetup({
-        xhrFields : {
-            withCredentials : true
-        }
-    });
+    if ($.ajaxSetup) {
+        $.ajaxSetup({
+            xhrFields : {
+                withCredentials : true
+            }
+        });
+    } else {
+        // $.ajaxSettings;
+    }
+
 
     var HOST = 'https://account.wandoujia.com';
     var API_VERSION_4 = '/v4/api';
@@ -52,6 +58,7 @@
         } else {
             ajax({
                 type : 'POST',
+                dataType : 'json',
                 url : CONFIG.login,
                 data : {
                     username : data.username,
@@ -76,7 +83,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.isLogined = function () {
@@ -92,6 +99,7 @@
 
         ajax({
             type : 'POST',
+            dataType : 'json',
             url : CONFIG.logout,
             success : function (resp) {
                 if (resp.error === 0) {
@@ -110,7 +118,7 @@
             }
         });
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.regAsync = function (data, options) {
@@ -127,6 +135,7 @@
         } else {
             ajax({
                 type : 'POST',
+                dataType : 'json',
                 url : CONFIG.reg,
                 data : {
                     username : data.username,
@@ -152,7 +161,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.checkUsernameAsync = function (username, options) {
@@ -166,6 +175,7 @@
         } else {
             ajax({
                 type : 'POST',
+                dataType : 'json',
                 url : CONFIG.checkUsername,
                 data : {
                     username : username
@@ -182,7 +192,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.checkUserLoginAsync = function (options) {
@@ -192,6 +202,7 @@
 
         ajax({
             type : 'GET',
+            dataType : 'json',
             url : CONFIG.checkUserLogin,
             success : function (resp) {
                 if (resp.error === 0) {
@@ -209,7 +220,7 @@
             }
         });
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.findPwdAsync = function (username, options) {
@@ -223,6 +234,7 @@
         } else {
             ajax({
                 type : 'POST',
+                dataType : 'json',
                 url : CONFIG.findPwd,
                 data : {
                     username : username
@@ -239,7 +251,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.checkCodeAsync = function (data, options) {
@@ -278,7 +290,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.resetPwdAsync = function (data, options) {
@@ -297,6 +309,7 @@
         } else {
             ajax({
                 type : 'POST',
+                dataType : 'json',
                 url : CONFIG.resetPwd,
                 data : {
                     username : data.username,
@@ -320,7 +333,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.isEmail = function (input) {
@@ -329,7 +342,7 @@
     };
 
     Account.isPhoneNumber = function (input) {
-        var PHONE_PATTERN = /(^[0-9]{3,4}\-[0-9]{7,8}$)|(^[0-9]{7,8}$)|(^\([0-9]{3,4}\)[0-9]{3,8}$)|(^0{0,1}13[0-9]{9}$)|(13\d{9}$)|(15[0135-9]\d{8}$)|(18[267]\d{8}$)/;
+        var PHONE_PATTERN = /^(1(([35][0-9])|(47)|[8][01236789]))\d{8}$/;
         return PHONE_PATTERN.test(input);
     };
 
@@ -352,7 +365,7 @@
         var d;
         for (d in options) {
             if (options.hasOwnProperty(d)) {
-                datas.push(d + '=' + window.encodeURIComponent(options[d]));
+                datas.push(d + '=' + global.encodeURIComponent(options[d]));
             }
         }
 
@@ -362,12 +375,10 @@
             targeURL = targeURL + '&' + datas.join('&');
         }
 
-        location.href = targeURL;
+        global.location.href = targeURL;
     };
 
     var SnapPea = global.SnapPea || {};
     SnapPea.Account = Account;
     global.SnapPea = SnapPea;
-
-    return Account;
 }(this));

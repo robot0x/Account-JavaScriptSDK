@@ -10,18 +10,19 @@
     <div id="mocha"></div>
     <div id="coverage"></div>
     <div id="menu"></div>
-    <script type="text/javascript" src="../libs/jquery.js"></script>
+    <script type="text/javascript" src="../libs/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../libs/q/q.js"></script>
     <script type="text/javascript" src="lib/underscore.js"></script>
     <script type="text/javascript" src="lib/backbone.js"></script>
     <script type="text/javascript" src="lib/mocha.js"></script>
     <script type="text/javascript" src="lib/reporter.js"></script>
     <script type="text/javascript" src="lib/JSCovReporter.js"></script>
     <script>mocha.setup('bdd');</script>
-    
+
     <!-- test case below -->
     <script type="text/javascript" src="../instrumented/snappea-account-sdk.js"></script>
     <script type="text/javascript" src="test.js"></script>
-    
+
     <script>
         mocha.checkLeaks();
         mocha.globals(['jQuery']);
