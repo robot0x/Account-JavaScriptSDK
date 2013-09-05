@@ -181,7 +181,11 @@
                     username : username
                 },
                 success : function (resp) {
-                    deferred.resolve(resp);
+                    if (resp.error === 0) {
+                        deferred.resolve(resp);
+                    } else {
+                        deferred.reject(resp);
+                    }
                 },
                 error : function () {
                     deferred.reject({
@@ -240,7 +244,11 @@
                     username : username
                 },
                 success : function (resp) {
-                    deferred.resolve(resp);
+                    if (resp.error === 0) {
+                        deferred.resolve(resp);
+                    } else {
+                        deferred.reject(resp);
+                    }
                 },
                 error : function () {
                     deferred.reject({
