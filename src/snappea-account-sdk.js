@@ -147,7 +147,7 @@
                     if (resp.error === 0) {
                         IS_LOGINED = true;
                         USER_INFO = resp.member;
-                        deferred.resolve(resp);
+                        deferred.resolve(resp.member);
                     } else {
                         deferred.reject(resp);
                     }
