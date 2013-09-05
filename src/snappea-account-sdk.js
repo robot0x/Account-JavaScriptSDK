@@ -147,7 +147,7 @@
                     if (resp.error === 0) {
                         IS_LOGINED = true;
                         USER_INFO = resp.member;
-                        deferred.resolve(resp);
+                        deferred.resolve(resp.member);
                     } else {
                         deferred.reject(resp);
                     }
@@ -240,7 +240,11 @@
                     username : username
                 },
                 success : function (resp) {
-                    deferred.resolve(resp);
+                    if (resp.error === 0) {
+                        deferred.resolve(resp);
+                    } else {
+                        deferred.reject(resp);
+                    }
                 },
                 error : function () {
                     deferred.reject({

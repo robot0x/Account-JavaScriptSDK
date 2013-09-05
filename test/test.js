@@ -313,7 +313,7 @@ describe('Account', function () {
         });
 
         it('Should success when username is not empty. ', function (done) {
-            Account.findPwdAsync('testtesttest@gmail').then(function () {
+            Account.findPwdAsync('testtesttest@gmail.com').then(function (resp) {
                 done();
             }).fail(function () {
                 done('Should success when user info is empty. ');
