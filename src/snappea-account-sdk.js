@@ -181,11 +181,7 @@
                     username : username
                 },
                 success : function (resp) {
-                    if (resp.error === 0) {
-                        deferred.resolve(resp);
-                    } else {
-                        deferred.reject(resp);
-                    }
+                    deferred.resolve(resp);
                 },
                 error : function () {
                     deferred.reject({
