@@ -1,66 +1,77 @@
 describe('Account', function () {
     var Account = window.SnapPea.Account;
 
-    var userInfo = {
-    };
-    var userInfo2 = {
-        username : 'a'
-    };
-    var userInfo3 = {
-        password : 'b'
-    };
-    var userInfo4 = {
-        username : 'a',
-        password : 'b'
-    };
-    var userInfo5 = {
-        username : 'testtesttest@gmail.com',
-        password : 'testtest123'
-    };
+    var userEmpty = {},
+        userOnlyUsername = {
+            username : 'a'
+        },
+        userOnlyPassword = {
+            password : 'b'
+        },
+        userWrong = {
+            username : 'a',
+            password : 'b'
+        },
+        userCorrect = {
+            username : 'testtesttest@gmail.com',
+            password : 'testtest123'
+        },
+        userNew = {
+            username : 'zwy-wdj-test' + new Date().getTime() + '@gmail.com',
+            password : new Date().getTime() + 'abcd'
+        };
 
     describe('Account.loginAsync()', function () {
         it('Should faild when misssing params. ', function (done) {
-            Account.loginAsync(userInfo).then(function () {
+            Account.loginAsync(userEmpty).then(function () {
                 done('Should faild when misssing params. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
                     done();
+                } else {
+                    done('Should faild when misssing params. ');
                 }
             });
         });
 
         it('Should faild when misssing password. ', function (done) {
-            Account.loginAsync(userInfo2).then(function () {
+            Account.loginAsync(userOnlyUsername).then(function () {
                 done('Should faild when misssing password. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
                     done();
+                } else {
+                    done('Should faild when misssing password. ');
                 }
             });
         });
 
         it('Should faild when misssing username. ', function (done) {
-            Account.loginAsync(userInfo3).then(function () {
+            Account.loginAsync(userOnlyPassword).then(function () {
                 done('Should faild when misssing username. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
                     done();
+                } else {
+                    done('Should faild when misssing username. ');
                 }
             });
         });
 
         it('Should faild when username or password is incorrect. ', function (done) {
-            Account.loginAsync(userInfo4).then(function () {
+            Account.loginAsync(userWrong).then(function () {
                 done('Should faild when username or password is wrong. ');
             }).fail(function (resp) {
                 if (resp.error === 1010) {
                     done();
+                } else {
+                    done('Should faild when username or password is wrong. ');
                 }
             });
         });
 
         it('Should pass when username and password are correct. ', function (done) {
-            Account.loginAsync(userInfo5).then(function () {
+            Account.loginAsync(userCorrect).then(function () {
                 done();
             }).fail(function (resp) {
                 done('Should faild when username or password are correct. ');
@@ -96,7 +107,7 @@ describe('Account', function () {
 
     describe('Account.isLogined()', function () {
         it('Should return true when login. ', function (done) {
-            Account.loginAsync(userInfo5).then(function () {
+            Account.loginAsync(userCorrect).then(function () {
                 if (Account.isLogined()) {
                     done();
                 } else {
@@ -124,7 +135,6 @@ describe('Account', function () {
                 done('Should return true: ivanzhaowy@gmail.com');
             }
         });
-
 
         it('Should return true: wangye.zhao@gmail.com ', function (done) {
             if (Account.isEmail('wangye.zhao@gmail.com') === true) {
@@ -179,60 +189,62 @@ describe('Account', function () {
 
     describe('Account.regAsync()', function () {
         it('Should faild when misssing params. ', function (done) {
-            Account.regAsync(userInfo).then(function () {
+            Account.regAsync(userEmpty).then(function () {
                 done('Should faild when misssing params. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
                     done();
+                } else {
+                    done('Should faild when misssing params. ');
                 }
             });
         });
 
         it('Should faild when misssing password. ', function (done) {
-            Account.regAsync(userInfo2).then(function () {
+            Account.regAsync(userOnlyUsername).then(function () {
                 done('Should faild when misssing password. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
                     done();
+                } else {
+                    done('Should faild when misssing password. ');
                 }
             });
         });
 
         it('Should faild when misssing username. ', function (done) {
-            Account.regAsync(userInfo3).then(function () {
+            Account.regAsync(userOnlyPassword).then(function () {
                 done('Should faild when misssing username. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
                     done();
+                } else {
+                    done('Should faild when misssing username. ');
                 }
             });
         });
 
         it('Should faild when user exist. ', function (done) {
-            Account.regAsync(userInfo5).then(function (resp) {
+            Account.regAsync(userCorrect).then(function (resp) {
                 done('Should faild when user exist. ');
             }).fail(function (resp) {
                 done();
             });
         });
 
-        var username = 'zwy-wdj-test' + new Date().getTime() + '@gmail.com';
         it('Should pass when have username and password. ', function (done) {
-            Account.regAsync({
-                username : username,
-                password : new Date().getTime() + 'abcd'
-            }).then(function () {
+            Account.regAsync(userNew).then(function () {
                 done();
             }).fail(function (resp) {
                 done('Should pass when have username and password. ');
             });
         });
 
-        it('Should have the username ' + username + '. ', function (done) {
-            if (Account.getUserInfo().username === username) {
+        it('Should have the username ' + userNew.username + '. ', function (done) {
+            if (Account.getUserInfo().username === userNew.username) {
                 done();
             } else {
-                done('Should have the username ' + username + '. ');
+                done('Should have the username ' + userNew.username + '. ');
             }
         });
     });
@@ -244,6 +256,8 @@ describe('Account', function () {
             }).fail(function (resp) {
                 if (resp.error === -2) {
                     done();
+                } else {
+                    done('Should faild when misssing params. ');
                 }
             });
         });
@@ -275,7 +289,7 @@ describe('Account', function () {
 
     describe('Account.checkUserLoginAsync()', function () {
         it('Should return true when logined. ', function (done) {
-            Account.loginAsync(userInfo5).then(function () {
+            Account.loginAsync(userCorrect).then(function () {
                 Account.checkUserLoginAsync().then(function (resp) {
                     if (resp) {
                         done();
@@ -289,7 +303,7 @@ describe('Account', function () {
         });
 
         it('Should return false when logout. ', function (done) {
-            Account.logoutAsync(userInfo5).then(function () {
+            Account.logoutAsync(userCorrect).then(function () {
                 Account.checkUserLoginAsync().then(function (resp) {
                     if (!resp) {
                         done();
@@ -323,7 +337,7 @@ describe('Account', function () {
 
     describe('Account.resetPwdAsync()', function () {
         it('Should fail when data is not enough. ', function (done) {
-            Account.resetPwdAsync(userInfo5).then(function () {
+            Account.resetPwdAsync(userCorrect).then(function () {
                 done('Should fail when data is not enough. ');
             }).fail(function () {
                 done();
@@ -331,11 +345,68 @@ describe('Account', function () {
         });
 
         it('Should fail when passcode is not correct. ', function (done) {
-            userInfo5.passcode = 123455;
-            Account.resetPwdAsync(userInfo5).then(function () {
+            userCorrect.passcode = 123455;
+            Account.resetPwdAsync(userCorrect).then(function () {
                 done('Should fail when passcode is not correct. ');
             }).fail(function () {
                 done();
+            });
+        });
+    });
+
+    describe('Account.modifyPwdAsync()', function () {
+        it('Should fail when user is not logged in. ', function (done) {
+            var password = {
+                password : '123456',
+                newpassword : 'wdj123456'
+            };
+
+            Account.logoutAsync().then(function () {
+                Account.modifyPwdAsync(password).then(function () {
+                    done('Should fail when user is not logged in. ');
+                }).fail(function () {
+                    done();
+                });
+            });
+        });
+
+        it('Should faild when misssing params. ', function (done) {
+            Account.loginAsync(userNew).then(function () {
+                Account.modifyPwdAsync(userOnlyPassword).then(function () {
+                    done('Should faild when misssing params. ');
+                }).fail(function (resp) {
+                    if (resp.error === -2) {
+                        done();
+                    } else {
+                        done('Should faild when misssing params. ');
+                    }
+                });
+            });
+        });
+
+        it('Should fail when password is not correct. ', function (done) {
+            var password = {
+                password : '123456',
+                newpassword : 'wdj123456'
+            };
+
+            Account.modifyPwdAsync(password).then(function () {
+                done('Should fail when password is not correct. ');
+            }).fail(function () {
+                done();
+            });
+        });
+
+        it('Should success when password is correct. ', function (done) {
+            var password = {
+                password : userNew.password,
+                newpassword : 'wdj123456'
+            };
+
+            Account.modifyPwdAsync(password).then(function (resp) {
+                done();
+            }).fail(function () {
+                done('Should success when password is correct. ');
             });
         });
     });
