@@ -240,11 +240,11 @@ describe('Account', function () {
             });
         });
 
-        it('Should have the username ' + username + '. ', function (done) {
-            if (Account.getUserInfo().username === username) {
+        it('Should have the username ' + userNew.username + '. ', function (done) {
+            if (Account.getUserInfo().username === userNew.username) {
                 done();
             } else {
-                done('Should have the username ' + username + '. ');
+                done('Should have the username ' + userNew.username + '. ');
             }
         });
     });
