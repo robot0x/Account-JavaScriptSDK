@@ -1,26 +1,31 @@
 describe('Account', function () {
     var Account = window.SnapPea.Account;
 
-    var userInfo = {
+    var userEmpty = {
     };
-    var userInfo2 = {
+    var userOnlyUsername = {
         username : 'a'
     };
-    var userInfo3 = {
+    var userOnlyPassword = {
         password : 'b'
     };
-    var userInfo4 = {
+    var userWrong = {
         username : 'a',
         password : 'b'
     };
-    var userInfo5 = {
+    var userCorrect = {
         username : 'testtesttest@gmail.com',
         password : 'testtest123'
     };
 
+    var userNew = {
+        username : 'zwy-wdj-test' + new Date().getTime() + '@gmail.com',
+        password : new Date().getTime() + 'abcd'
+    };
+
     describe('Account.loginAsync()', function () {
         it('Should faild when misssing params. ', function (done) {
-            Account.loginAsync(userInfo).then(function () {
+            Account.loginAsync(userEmpty).then(function () {
                 done('Should faild when misssing params. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
@@ -30,7 +35,7 @@ describe('Account', function () {
         });
 
         it('Should faild when misssing password. ', function (done) {
-            Account.loginAsync(userInfo2).then(function () {
+            Account.loginAsync(userOnlyUsername).then(function () {
                 done('Should faild when misssing password. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
@@ -40,7 +45,7 @@ describe('Account', function () {
         });
 
         it('Should faild when misssing username. ', function (done) {
-            Account.loginAsync(userInfo3).then(function () {
+            Account.loginAsync(userOnlyPassword).then(function () {
                 done('Should faild when misssing username. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
@@ -50,7 +55,7 @@ describe('Account', function () {
         });
 
         it('Should faild when username or password is incorrect. ', function (done) {
-            Account.loginAsync(userInfo4).then(function () {
+            Account.loginAsync(userWrong).then(function () {
                 done('Should faild when username or password is wrong. ');
             }).fail(function (resp) {
                 if (resp.error === 1010) {
@@ -60,7 +65,7 @@ describe('Account', function () {
         });
 
         it('Should pass when username and password are correct. ', function (done) {
-            Account.loginAsync(userInfo5).then(function () {
+            Account.loginAsync(userCorrect).then(function () {
                 done();
             }).fail(function (resp) {
                 done('Should faild when username or password are correct. ');
@@ -96,7 +101,7 @@ describe('Account', function () {
 
     describe('Account.isLogined()', function () {
         it('Should return true when login. ', function (done) {
-            Account.loginAsync(userInfo5).then(function () {
+            Account.loginAsync(userCorrect).then(function () {
                 if (Account.isLogined()) {
                     done();
                 } else {
@@ -179,7 +184,7 @@ describe('Account', function () {
 
     describe('Account.regAsync()', function () {
         it('Should faild when misssing params. ', function (done) {
-            Account.regAsync(userInfo).then(function () {
+            Account.regAsync(userEmpty).then(function () {
                 done('Should faild when misssing params. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
@@ -189,7 +194,7 @@ describe('Account', function () {
         });
 
         it('Should faild when misssing password. ', function (done) {
-            Account.regAsync(userInfo2).then(function () {
+            Account.regAsync(userOnlyUsername).then(function () {
                 done('Should faild when misssing password. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
@@ -199,7 +204,7 @@ describe('Account', function () {
         });
 
         it('Should faild when misssing username. ', function (done) {
-            Account.regAsync(userInfo3).then(function () {
+            Account.regAsync(userOnlyPassword).then(function () {
                 done('Should faild when misssing username. ');
             }).fail(function (resp) {
                 if (resp.error === -2) {
@@ -209,19 +214,15 @@ describe('Account', function () {
         });
 
         it('Should faild when user exist. ', function (done) {
-            Account.regAsync(userInfo5).then(function (resp) {
+            Account.regAsync(userCorrect).then(function (resp) {
                 done('Should faild when user exist. ');
             }).fail(function (resp) {
                 done();
             });
         });
 
-        var username = 'zwy-wdj-test' + new Date().getTime() + '@gmail.com';
         it('Should pass when have username and password. ', function (done) {
-            Account.regAsync({
-                username : username,
-                password : new Date().getTime() + 'abcd'
-            }).then(function () {
+            Account.regAsync(userNew).then(function () {
                 done();
             }).fail(function (resp) {
                 done('Should pass when have username and password. ');
@@ -275,7 +276,7 @@ describe('Account', function () {
 
     describe('Account.checkUserLoginAsync()', function () {
         it('Should return true when logined. ', function (done) {
-            Account.loginAsync(userInfo5).then(function () {
+            Account.loginAsync(userCorrect).then(function () {
                 Account.checkUserLoginAsync().then(function (resp) {
                     if (resp) {
                         done();
@@ -289,7 +290,7 @@ describe('Account', function () {
         });
 
         it('Should return false when logout. ', function (done) {
-            Account.logoutAsync(userInfo5).then(function () {
+            Account.logoutAsync(userCorrect).then(function () {
                 Account.checkUserLoginAsync().then(function (resp) {
                     if (!resp) {
                         done();
@@ -323,7 +324,7 @@ describe('Account', function () {
 
     describe('Account.resetPwdAsync()', function () {
         it('Should fail when data is not enough. ', function (done) {
-            Account.resetPwdAsync(userInfo5).then(function () {
+            Account.resetPwdAsync(userCorrect).then(function () {
                 done('Should fail when data is not enough. ');
             }).fail(function () {
                 done();
@@ -331,8 +332,8 @@ describe('Account', function () {
         });
 
         it('Should fail when passcode is not correct. ', function (done) {
-            userInfo5.passcode = 123455;
-            Account.resetPwdAsync(userInfo5).then(function () {
+            userCorrect.passcode = 123455;
+            Account.resetPwdAsync(userCorrect).then(function () {
                 done('Should fail when passcode is not correct. ');
             }).fail(function () {
                 done();
