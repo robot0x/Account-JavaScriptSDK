@@ -1,27 +1,25 @@
 describe('Account', function () {
     var Account = window.SnapPea.Account;
 
-    var userEmpty = {
-    };
-    var userOnlyUsername = {
-        username : 'a'
-    };
-    var userOnlyPassword = {
-        password : 'b'
-    };
-    var userWrong = {
-        username : 'a',
-        password : 'b'
-    };
-    var userCorrect = {
-        username : 'testtesttest@gmail.com',
-        password : 'testtest123'
-    };
-
-    var userNew = {
-        username : 'zwy-wdj-test' + new Date().getTime() + '@gmail.com',
-        password : new Date().getTime() + 'abcd'
-    };
+    var userEmpty = {},
+        userOnlyUsername = {
+            username : 'a'
+        },
+        userOnlyPassword = {
+            password : 'b'
+        },
+        userWrong = {
+            username : 'a',
+            password : 'b'
+        },
+        userCorrect = {
+            username : 'testtesttest@gmail.com',
+            password : 'testtest123'
+        },
+        userNew = {
+            username : 'zwy-wdj-test' + new Date().getTime() + '@gmail.com',
+            password : new Date().getTime() + 'abcd'
+        };
 
     describe('Account.loginAsync()', function () {
         it('Should faild when misssing params. ', function (done) {
@@ -129,7 +127,6 @@ describe('Account', function () {
                 done('Should return true: ivanzhaowy@gmail.com');
             }
         });
-
 
         it('Should return true: wangye.zhao@gmail.com ', function (done) {
             if (Account.isEmail('wangye.zhao@gmail.com') === true) {
