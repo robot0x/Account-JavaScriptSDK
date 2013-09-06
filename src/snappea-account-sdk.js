@@ -30,7 +30,8 @@
         checkUserLogin : PREFIX + '/profile',
         findPwd : PREFIX + '/findpassword',
         checkCode : PREFIX + '/checkcode',
-        resetPwd : PREFIX + '/resetpassword'
+        resetPwd : PREFIX + '/resetpassword',
+        modifyPwd : PREFIX + '/profile/password'
     };
 
     var CONFIG_V1 = {
@@ -320,6 +321,46 @@
                     passcode : data.passcode,
                     password : data.password,
                     repeatedpassword : data.password
+                },
+                success : function (resp) {
+                    if (resp.error === 0) {
+                        deferred.resolve(resp);
+                    } else {
+                        deferred.reject(resp);
+                    }
+                },
+                error : function () {
+                    deferred.reject({
+                        error : -1,
+                        msg : '请求失败，请检查网络连接状况。'
+                    });
+                }
+            });
+        }
+
+        return deferred.promise;
+    };
+
+    Account.modifyPwdAsync = function (data, options) {
+        var deferred = new Deferred();
+
+        data = data || {};
+        options = options || {};
+
+        if (data.password === undefined ||
+                data.newpassword === undefined) {
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
+            });
+        } else {
+            ajax({
+                type : 'POST',
+                dataType : 'json',
+                url : CONFIG.modifyPwd,
+                data : {
+                    oldpassword : data.password,
+                    newpassword : data.newpassword
                 },
                 success : function (resp) {
                     if (resp.error === 0) {
