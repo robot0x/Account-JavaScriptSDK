@@ -28,6 +28,8 @@ describe('Account', function () {
             }).fail(function (resp) {
                 if (resp.error === -2) {
                     done();
+                } else {
+                    done('Should faild when misssing params. ');
                 }
             });
         });
@@ -38,6 +40,8 @@ describe('Account', function () {
             }).fail(function (resp) {
                 if (resp.error === -2) {
                     done();
+                } else {
+                    done('Should faild when misssing password. ');
                 }
             });
         });
@@ -48,6 +52,8 @@ describe('Account', function () {
             }).fail(function (resp) {
                 if (resp.error === -2) {
                     done();
+                } else {
+                    done('Should faild when misssing username. ');
                 }
             });
         });
@@ -58,6 +64,8 @@ describe('Account', function () {
             }).fail(function (resp) {
                 if (resp.error === 1010) {
                     done();
+                } else {
+                    done('Should faild when username or password is wrong. ');
                 }
             });
         });
@@ -186,6 +194,8 @@ describe('Account', function () {
             }).fail(function (resp) {
                 if (resp.error === -2) {
                     done();
+                } else {
+                    done('Should faild when misssing params. ');
                 }
             });
         });
@@ -196,6 +206,8 @@ describe('Account', function () {
             }).fail(function (resp) {
                 if (resp.error === -2) {
                     done();
+                } else {
+                    done('Should faild when misssing password. ');
                 }
             });
         });
@@ -206,6 +218,8 @@ describe('Account', function () {
             }).fail(function (resp) {
                 if (resp.error === -2) {
                     done();
+                } else {
+                    done('Should faild when misssing username. ');
                 }
             });
         });
@@ -242,6 +256,8 @@ describe('Account', function () {
             }).fail(function (resp) {
                 if (resp.error === -2) {
                     done();
+                } else {
+                    done('Should faild when misssing params. ');
                 }
             });
         });
