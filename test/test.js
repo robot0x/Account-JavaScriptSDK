@@ -337,4 +337,61 @@ describe('Account', function () {
             });
         });
     });
+
+    describe('Account.modifyPwdAsync()', function () {
+        it('Should fail when user is not logged in. ', function (done) {
+            var password = {
+                password : '123456',
+                newpassword : 'wdj123456'
+            };
+
+            Account.logoutAsync().then(function () {
+                Account.modifyPwdAsync(password).then(function () {
+                    done('Should fail when user is not logged in. ');
+                }).fail(function () {
+                    done();
+                });
+            });
+        });
+
+        it('Should faild when misssing params. ', function (done) {
+            Account.loginAsync(userNew).then(function () {
+                Account.modifyPwdAsync(userOnlyPassword).then(function () {
+                    done('Should faild when misssing params. ');
+                }).fail(function (resp) {
+                    if (resp.error === -2) {
+                        done();
+                    } else {
+                        done('Should faild when misssing params. ');
+                    }
+                });
+            });
+        });
+
+        it('Should fail when password is not correct. ', function (done) {
+            var password = {
+                password : '123456',
+                newpassword : 'wdj123456'
+            };
+
+            Account.modifyPwdAsync(password).then(function () {
+                done('Should fail when password is not correct. ');
+            }).fail(function () {
+                done();
+            });
+        });
+
+        it('Should success when password is correct. ', function (done) {
+            var password = {
+                password : userNew.password,
+                newpassword : 'wdj123456'
+            };
+
+            Account.modifyPwdAsync(password).then(function (resp) {
+                done();
+            }).fail(function () {
+                done('Should success when password is correct. ');
+            });
+        });
+    });
 });
