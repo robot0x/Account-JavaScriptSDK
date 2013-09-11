@@ -17,7 +17,7 @@ module.exports = function (grunt) {
         watch : {
             jstest : {
                 files : ['<%= paths.app %>/**/*.js'],
-                tasks : ['jslint', 'karma:unit:run']
+                tasks : ['jslint', 'karma:server:run']
             }
         },
         jslint : {
@@ -50,20 +50,48 @@ module.exports = function (grunt) {
             }
         },
         karma : {
-            unit : {
+            options : {
                 configFile : '<%= paths.test %>/karma.conf.js',
+                browsers : ['Chrome_without_security']
+            },
+            server : {
+                reporters : ['progress'],
+                background : true
+            },
+            unit : {
+                reporters : ['progress', 'junit', 'coverage'],
+                preprocessors : {
+                    'src/**/*.js' : 'coverage'
+                },
+                junitReporter : {
+                    outputFile : 'test/test_out/test-results.xml'
+                },
+                coverageReporter : {
+                    type : 'html',
+                    dir : 'test/test_out/coverage/'
+                },
+                singleRun : true
+            },
+            travis : {
+                browsers : ['PhantomJS'],
+                reporters : ['progress'],
                 singleRun : true
             }
         }
     });
 
     grunt.registerTask('server', [
-        'karma',
+        'karma:server',
         'watch'
     ]);
 
     grunt.registerTask('test', [
         'jslint',
         'karma:unit'
+    ]);
+
+    grunt.registerTask('test:travis', [
+        'jslint',
+        'karma:travis'
     ]);
 };
