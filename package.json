@@ -1,25 +1,37 @@
 {
-  "name": "Account-JavaScriptSDK",
-  "version": "0.0.1",
-  "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-copy": "latest",
-    "grunt-contrib-concat": "latest",
-    "grunt-contrib-uglify": "latest",
-    "grunt-contrib-clean": "latest",
-    "grunt-contrib-requirejs": "latest",
-    "grunt-rev": "latest",
-    "grunt-autoprefixer": "latest",
-    "grunt-usemin": "latest",
-    "grunt-jslint": "latest",
-    "grunt-concurrent": "latest",
-    "grunt-mocha":"latest",
-    "matchdep": "latest"
-  },
-  "engines": {
-    "node": ">=0.8.0"
-  },
-  "scripts": {
-    "test": "grunt test --verbose;"
-  }
+    "name" : "Account-JavaScriptSDK",
+    "version" : "0.0.1",
+    "devDependencies" : {
+        "grunt" : "~0.4.1",
+        "grunt-contrib-copy" : "~0.4.0",
+        "grunt-contrib-concat" : "~0.3.0",
+        "grunt-contrib-uglify" : "~0.2.2",
+        "grunt-contrib-clean" : "~0.5.0",
+        "grunt-contrib-requirejs" : "~0.4.0",
+        "grunt-rev" : "~0.1.0",
+        "grunt-autoprefixer" : "latest",
+        "grunt-usemin" : "git+https://github.com/yeoman/grunt-usemin.git",
+        "grunt-jslint" : "latest",
+        "grunt-mocha" : "latest",
+        "grunt-contrib-watch" : "~0.5.3",
+        "grunt-karma" : "~0.7.1",
+        "karma" : "~0.10.1",
+        "karma-script-launcher" : "~0.1.0",
+        "karma-mocha" : "~0.1.0",
+        "karma-opera-launcher" : "~0.1.0",
+        "karma-firefox-launcher" : "~0.1.0",
+        "karma-ie-launcher" : "~0.1.0",
+        "karma-safari-launcher" : "~0.1.0",
+        "karma-phantomjs-launcher" : "~0.1.0",
+        "karma-coverage" : "~0.1.0",
+        "karma-junit-reporter" : "~0.1.0",
+        "karma-requirejs" : "~0.1.0",
+        "matchdep" : "~0.1.2"
+    },
+    "engines": {
+        "node": ">=0.8.0"
+    },
+    "scripts": {
+        "test": "grunt test --verbose;"
+    }
 }
