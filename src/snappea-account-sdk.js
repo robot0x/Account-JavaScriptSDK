@@ -1,7 +1,6 @@
-/*global $, Q*/
+/*global $, assure*/
 (function (global) {
-    //@@ lib/q/q.js
-    var Deferred = Q.defer;
+    var Deferred = $.Deferred;
     var ajax = $.ajax;
 
     if ($.ajaxSetup) {
@@ -10,8 +9,6 @@
                 withCredentials : true
             }
         });
-    } else {
-        // $.ajaxSettings;
     }
 
     var extend = function (dist, source) {
@@ -99,7 +96,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred;
     };
 
     Account.isLogined = function () {
@@ -137,7 +134,7 @@
             }
         });
 
-        return deferred.promise;
+        return deferred;
     };
 
     Account.regAsync = function (data, options) {
@@ -180,7 +177,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred;
     };
 
     Account.checkUsernameAsync = function (username, options) {
@@ -213,7 +210,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred;
     };
 
     Account.checkUserLoginAsync = function (options) {
@@ -242,7 +239,7 @@
             }
         });
 
-        return deferred.promise;
+        return deferred;
     };
 
     Account.findPwdAsync = function (username, options) {
@@ -318,7 +315,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred;
     };
 
     Account.resetPwdAsync = function (data, options) {
@@ -401,7 +398,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred;
     };
 
     Account.updateProfileAsync = function (data, options) {
