@@ -14,6 +14,20 @@
         // $.ajaxSettings;
     }
 
+    var extend = function (dist, source) {
+        if (!source) {
+            return dist;
+        }
+
+        var prop;
+        for (prop in source) {
+            if (source.hasOwnProperty(prop)) {
+                dist[prop] = source[prop];
+            }
+        }
+
+        return dist;
+    };
 
     var HOST = 'https://account.wandoujia.com';
     var API_VERSION_4 = '/v4/api';
@@ -60,11 +74,11 @@
                 type : 'POST',
                 dataType : 'json',
                 url : CONFIG.login,
-                data : {
+                data : extend({
                     username : data.username,
                     password : data.password,
                     seccode : data.seccode || ''
-                },
+                }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
                         IS_LOGINED = true;
@@ -94,13 +108,16 @@
         return USER_INFO;
     };
 
-    Account.logoutAsync = function () {
+    Account.logoutAsync = function (options) {
         var deferred = new Deferred();
+
+        options = options || {};
 
         ajax({
             type : 'POST',
             dataType : 'json',
             url : CONFIG.logout,
+            data : options,
             success : function (resp) {
                 if (resp.error === 0) {
                     IS_LOGINED = false;
@@ -137,12 +154,12 @@
                 type : 'POST',
                 dataType : 'json',
                 url : CONFIG.reg,
-                data : {
+                data : extend({
                     username : data.username,
                     password : data.password,
                     nick : data.nickname || '',
                     seccode : data.seccode || ''
-                },
+                }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
                         IS_LOGINED = true;
@@ -167,6 +184,8 @@
     Account.checkUsernameAsync = function (username, options) {
         var deferred = new Deferred();
 
+        options = options || {};
+
         if (username === undefined) {
             deferred.reject({
                 error : -2,
@@ -177,9 +196,9 @@
                 type : 'POST',
                 dataType : 'json',
                 url : CONFIG.checkUsername,
-                data : {
+                data : extend({
                     username : username
-                },
+                }, options),
                 success : function (resp) {
                     deferred.resolve(resp);
                 },
@@ -204,6 +223,7 @@
             type : 'GET',
             dataType : 'json',
             url : CONFIG.checkUserLogin,
+            data : options,
             success : function (resp) {
                 if (resp.error === 0) {
                     IS_LOGINED = true;
@@ -226,6 +246,8 @@
     Account.findPwdAsync = function (username, options) {
         var deferred = new Deferred();
 
+        options = options || {};
+
         if (username === undefined) {
             deferred.reject({
                 error : -2,
@@ -236,9 +258,9 @@
                 type : 'POST',
                 dataType : 'json',
                 url : CONFIG.findPwd,
-                data : {
+                data : extend({
                     username : username
-                },
+                }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
                         deferred.resolve(resp);
@@ -274,10 +296,10 @@
             ajax({
                 type : 'POST',
                 url : CONFIG.checkCode,
-                data : {
+                data : extend({
                     username : data.username,
                     passcode : data.passcode
-                },
+                }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
                         deferred.resolve(resp);
@@ -315,12 +337,12 @@
                 type : 'POST',
                 dataType : 'json',
                 url : CONFIG.resetPwd,
-                data : {
+                data : extend({
                     username : data.username,
                     passcode : data.passcode,
                     password : data.password,
                     repeatedpassword : data.password
-                },
+                }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
                         deferred.resolve(resp);
@@ -357,10 +379,10 @@
                 type : 'POST',
                 dataType : 'json',
                 url : CONFIG.modifyPwd,
-                data : {
+                data : extend({
                     oldpassword : data.password,
                     newpassword : data.newpassword
-                },
+                }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
                         deferred.resolve(resp);
