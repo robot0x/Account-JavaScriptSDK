@@ -435,7 +435,7 @@
                 contentType : false,
                 success : function (resp) {
                     if (resp.error === 0) {
-                        deferred.resolve(resp);
+                        deferred.resolve(resp.member.avatar);
                     } else {
                         deferred.reject(resp);
                     }
@@ -448,6 +448,7 @@
                 }
             });
         }
+
 
         return deferred.promise;
     };
