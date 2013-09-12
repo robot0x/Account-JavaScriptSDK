@@ -45,6 +45,7 @@
         checkCode : PREFIX + '/checkcode',
         resetPwd : PREFIX + '/resetpassword',
         modifyPwd : PREFIX + '/profile/password',
+        completeProfile : PREFIX + '/completeProfile',
         avatar : PREFIX + '/avatar'
     };
 
@@ -403,6 +404,46 @@
         return deferred.promise;
     };
 
+    Account.updateProfileAsync = function (data, options) {
+        var deferred = new Deferred();
+
+        data = data || {};
+        options = options || {};
+
+        if (data.nickname === undefined) {
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
+            });
+        } else {
+            ajax({
+                type : 'POST',
+                dataType : 'json',
+                url : CONFIG.completeProfile,
+                data : extend({
+                    nick : data.nickname
+                }, options),
+                success : function (resp) {
+                    if (resp.error === 0) {
+                        USER_INFO = resp.member;
+                        deferred.resolve(resp.member);
+                    } else {
+                        deferred.reject(resp);
+                    }
+                },
+                error : function () {
+                    deferred.reject({
+                        error : -1,
+                        msg : '请求失败，请检查网络连接状况。'
+                    });
+                }
+            });
+        }
+
+        return deferred.promise;
+    };
+
+    /* `data.file` should be `File` */
     Account.uploadAvatarAsync = function (data, options) {
         var deferred = new Deferred();
 
@@ -449,7 +490,6 @@
                 }
             });
         }
-
 
         return deferred.promise;
     };
