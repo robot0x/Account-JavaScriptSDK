@@ -140,7 +140,7 @@
                 data : {
                     username : data.username,
                     password : data.password,
-                    nikename : data.nikename || '',
+                    nick : data.nickname || '',
                     seccode : data.seccode || ''
                 },
                 success : function (resp) {
