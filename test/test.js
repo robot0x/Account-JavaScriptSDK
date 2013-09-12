@@ -416,6 +416,7 @@ describe('Account', function () {
             };
 
             Account.modifyPwdAsync(password).then(function (resp) {
+                userNew.password = password.newpassword;
                 done();
             }).fail(function () {
                 done('Should success when password is correct. ');
