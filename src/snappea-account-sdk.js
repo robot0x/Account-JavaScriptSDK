@@ -44,7 +44,8 @@
         findPwd : PREFIX + '/findpassword',
         checkCode : PREFIX + '/checkcode',
         resetPwd : PREFIX + '/resetpassword',
-        modifyPwd : PREFIX + '/profile/password'
+        modifyPwd : PREFIX + '/profile/password',
+        avatar : PREFIX + '/avatar'
     };
 
     var CONFIG_WEB = {
@@ -383,6 +384,55 @@
                     oldpassword : data.password,
                     newpassword : data.newpassword
                 }, options),
+                success : function (resp) {
+                    if (resp.error === 0) {
+                        deferred.resolve(resp);
+                    } else {
+                        deferred.reject(resp);
+                    }
+                },
+                error : function () {
+                    deferred.reject({
+                        error : -1,
+                        msg : '请求失败，请检查网络连接状况。'
+                    });
+                }
+            });
+        }
+
+        return deferred.promise;
+    };
+
+    Account.uploadAvatarAsync = function (data, options) {
+        var deferred = new Deferred();
+
+        data = data || {};
+        options = options || {};
+
+        var formData, f;
+
+        if (data.file === undefined) {
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
+            });
+        } else {
+            formData = new global.FormData();
+            formData.append('file', data.file);
+
+            for (f in options) {
+                if (options.hasOwnProperty(f)) {
+                    formData.append(f, options[f]);
+                }
+            }
+
+            ajax({
+                type : 'POST',
+                dataType : 'json',
+                url : CONFIG.avatar,
+                data : formData,
+                processData : false,
+                contentType : false,
                 success : function (resp) {
                     if (resp.error === 0) {
                         deferred.resolve(resp);
