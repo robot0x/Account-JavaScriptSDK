@@ -17,7 +17,6 @@
 
     var HOST = 'https://account.wandoujia.com';
     var API_VERSION_4 = '/v4/api';
-    var API_VERSION_1 = '/v1';
 
     var PREFIX = HOST + API_VERSION_4;
 
@@ -34,8 +33,8 @@
         modifyPwd : PREFIX + '/profile/password'
     };
 
-    var CONFIG_V1 = {
-        loginWithThirdParty : HOST + API_VERSION_1 + '/user/?do=login'
+    var CONFIG_WEB = {
+        loginWithThirdParty : HOST + '/web/oauth2/{1}/login'
     };
 
     var USER_INFO;
@@ -404,7 +403,8 @@
             qq : 'qq'
         };
 
-        options.platform = platforms[options.platform];
+        var platform = platforms[options.platform];
+        delete options.platform;
 
         var datas = [];
         var d;
@@ -414,10 +414,10 @@
             }
         }
 
-        var targeURL = CONFIG_V1.loginWithThirdParty;
+        var targeURL = CONFIG_WEB.loginWithThirdParty.replace('{1}', platform);
 
         if (datas.length > 0) {
-            targeURL = targeURL + '&' + datas.join('&');
+            targeURL = targeURL + '?' + datas.join('&');
         }
 
         global.location.href = targeURL;
