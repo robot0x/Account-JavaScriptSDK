@@ -435,6 +435,7 @@
                 contentType : false,
                 success : function (resp) {
                     if (resp.error === 0) {
+                        USER_INFO = resp.member;
                         deferred.resolve(resp.member.avatar);
                     } else {
                         deferred.reject(resp);
