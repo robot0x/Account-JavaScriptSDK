@@ -355,32 +355,44 @@ describe('Account', function () {
     });
 
     describe('Account.modifyPwdAsync()', function () {
+        it('Should pass anyway. ', function (done) {
+            Account.logoutAsync().then(function () {
+                done();
+            }).fail(function (resp) {
+                done('Should pass anyway. ');
+            });
+        });
+
         it('Should fail when user is not logged in. ', function (done) {
             var password = {
                 password : '123456',
                 newpassword : 'wdj123456'
             };
 
-            Account.logoutAsync().then(function () {
-                Account.modifyPwdAsync(password).then(function () {
-                    done('Should fail when user is not logged in. ');
-                }).fail(function () {
-                    done();
-                });
+            Account.modifyPwdAsync(password).then(function () {
+                done('Should fail when user is not logged in. ');
+            }).fail(function () {
+                done();
+            });
+        });
+
+        it('Should pass anyway. ', function (done) {
+            Account.loginAsync(userNew).then(function () {
+                done();
+            }).fail(function (resp) {
+                done('Should pass anyway. ');
             });
         });
 
         it('Should faild when misssing params. ', function (done) {
-            Account.loginAsync(userNew).then(function () {
-                Account.modifyPwdAsync(userOnlyPassword).then(function () {
+            Account.modifyPwdAsync(userOnlyPassword).then(function () {
+                done('Should faild when misssing params. ');
+            }).fail(function (resp) {
+                if (resp.error === -2) {
+                    done();
+                } else {
                     done('Should faild when misssing params. ');
-                }).fail(function (resp) {
-                    if (resp.error === -2) {
-                        done();
-                    } else {
-                        done('Should faild when misssing params. ');
-                    }
-                });
+                }
             });
         });
 
