@@ -14,10 +14,23 @@
         // $.ajaxSettings;
     }
 
+    var extend = function (dist, source) {
+        if (!source) {
+            return dist;
+        }
+
+        var prop;
+        for (prop in source) {
+            if (source.hasOwnProperty(prop)) {
+                dist[prop] = source[prop];
+            }
+        }
+
+        return dist;
+    };
 
     var HOST = 'https://account.wandoujia.com';
     var API_VERSION_4 = '/v4/api';
-    var API_VERSION_1 = '/v1';
 
     var PREFIX = HOST + API_VERSION_4;
 
@@ -31,11 +44,13 @@
         findPwd : PREFIX + '/findpassword',
         checkCode : PREFIX + '/checkcode',
         resetPwd : PREFIX + '/resetpassword',
-        modifyPwd : PREFIX + '/profile/password'
+        modifyPwd : PREFIX + '/profile/password',
+        completeProfile : PREFIX + '/completeProfile',
+        avatar : PREFIX + '/avatar'
     };
 
-    var CONFIG_V1 = {
-        loginWithThirdParty : HOST + API_VERSION_1 + '/user/?do=login'
+    var CONFIG_WEB = {
+        loginWithThirdParty : HOST + '/web/oauth2/{1}/login'
     };
 
     var USER_INFO;
@@ -61,11 +76,11 @@
                 type : 'POST',
                 dataType : 'json',
                 url : CONFIG.login,
-                data : {
+                data : extend({
                     username : data.username,
                     password : data.password,
                     seccode : data.seccode || ''
-                },
+                }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
                         IS_LOGINED = true;
@@ -95,13 +110,16 @@
         return USER_INFO;
     };
 
-    Account.logoutAsync = function () {
+    Account.logoutAsync = function (options) {
         var deferred = new Deferred();
+
+        options = options || {};
 
         ajax({
             type : 'POST',
             dataType : 'json',
             url : CONFIG.logout,
+            data : options,
             success : function (resp) {
                 if (resp.error === 0) {
                     IS_LOGINED = false;
@@ -138,12 +156,12 @@
                 type : 'POST',
                 dataType : 'json',
                 url : CONFIG.reg,
-                data : {
+                data : extend({
                     username : data.username,
                     password : data.password,
-                    nikename : data.nikename || '',
+                    nick : data.nickname || '',
                     seccode : data.seccode || ''
-                },
+                }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
                         IS_LOGINED = true;
@@ -168,6 +186,8 @@
     Account.checkUsernameAsync = function (username, options) {
         var deferred = new Deferred();
 
+        options = options || {};
+
         if (username === undefined) {
             deferred.reject({
                 error : -2,
@@ -178,9 +198,9 @@
                 type : 'POST',
                 dataType : 'json',
                 url : CONFIG.checkUsername,
-                data : {
+                data : extend({
                     username : username
-                },
+                }, options),
                 success : function (resp) {
                     deferred.resolve(resp);
                 },
@@ -205,6 +225,7 @@
             type : 'GET',
             dataType : 'json',
             url : CONFIG.checkUserLogin,
+            data : options,
             success : function (resp) {
                 if (resp.error === 0) {
                     IS_LOGINED = true;
@@ -227,6 +248,8 @@
     Account.findPwdAsync = function (username, options) {
         var deferred = new Deferred();
 
+        options = options || {};
+
         if (username === undefined) {
             deferred.reject({
                 error : -2,
@@ -237,9 +260,9 @@
                 type : 'POST',
                 dataType : 'json',
                 url : CONFIG.findPwd,
-                data : {
+                data : extend({
                     username : username
-                },
+                }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
                         deferred.resolve(resp);
@@ -275,10 +298,10 @@
             ajax({
                 type : 'POST',
                 url : CONFIG.checkCode,
-                data : {
+                data : extend({
                     username : data.username,
                     passcode : data.passcode
-                },
+                }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
                         deferred.resolve(resp);
@@ -316,12 +339,12 @@
                 type : 'POST',
                 dataType : 'json',
                 url : CONFIG.resetPwd,
-                data : {
+                data : extend({
                     username : data.username,
                     passcode : data.passcode,
                     password : data.password,
                     repeatedpassword : data.password
-                },
+                }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
                         deferred.resolve(resp);
@@ -358,13 +381,103 @@
                 type : 'POST',
                 dataType : 'json',
                 url : CONFIG.modifyPwd,
-                data : {
+                data : extend({
                     oldpassword : data.password,
                     newpassword : data.newpassword
-                },
+                }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
                         deferred.resolve(resp);
+                    } else {
+                        deferred.reject(resp);
+                    }
+                },
+                error : function () {
+                    deferred.reject({
+                        error : -1,
+                        msg : '请求失败，请检查网络连接状况。'
+                    });
+                }
+            });
+        }
+
+        return deferred.promise;
+    };
+
+    Account.updateProfileAsync = function (data, options) {
+        var deferred = new Deferred();
+
+        data = data || {};
+        options = options || {};
+
+        if (data.nickname === undefined) {
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
+            });
+        } else {
+            ajax({
+                type : 'POST',
+                dataType : 'json',
+                url : CONFIG.completeProfile,
+                data : extend({
+                    nick : data.nickname
+                }, options),
+                success : function (resp) {
+                    if (resp.error === 0) {
+                        USER_INFO = resp.member;
+                        deferred.resolve(resp.member);
+                    } else {
+                        deferred.reject(resp);
+                    }
+                },
+                error : function () {
+                    deferred.reject({
+                        error : -1,
+                        msg : '请求失败，请检查网络连接状况。'
+                    });
+                }
+            });
+        }
+
+        return deferred.promise;
+    };
+
+    /* `data.file` should be `File` */
+    Account.uploadAvatarAsync = function (data, options) {
+        var deferred = new Deferred();
+
+        data = data || {};
+        options = options || {};
+
+        var formData, f;
+
+        if (data.file === undefined) {
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
+            });
+        } else {
+            formData = new global.FormData();
+            formData.append('file', data.file);
+
+            for (f in options) {
+                if (options.hasOwnProperty(f)) {
+                    formData.append(f, options[f]);
+                }
+            }
+
+            ajax({
+                type : 'POST',
+                dataType : 'json',
+                url : CONFIG.avatar,
+                data : formData,
+                processData : false,
+                contentType : false,
+                success : function (resp) {
+                    if (resp.error === 0) {
+                        USER_INFO = resp.member;
+                        deferred.resolve(resp.member.avatar);
                     } else {
                         deferred.reject(resp);
                     }
@@ -404,7 +517,8 @@
             qq : 'qq'
         };
 
-        options.platform = platforms[options.platform];
+        var platform = platforms[options.platform];
+        delete options.platform;
 
         var datas = [];
         var d;
@@ -414,10 +528,10 @@
             }
         }
 
-        var targeURL = CONFIG_V1.loginWithThirdParty;
+        var targeURL = CONFIG_WEB.loginWithThirdParty.replace('{1}', platform);
 
         if (datas.length > 0) {
-            targeURL = targeURL + '&' + datas.join('&');
+            targeURL = targeURL + '?' + datas.join('&');
         }
 
         global.location.href = targeURL;

@@ -355,32 +355,44 @@ describe('Account', function () {
     });
 
     describe('Account.modifyPwdAsync()', function () {
+        it('Should pass anyway. ', function (done) {
+            Account.logoutAsync().then(function () {
+                done();
+            }).fail(function (resp) {
+                done('Should pass anyway. ');
+            });
+        });
+
         it('Should fail when user is not logged in. ', function (done) {
             var password = {
                 password : '123456',
                 newpassword : 'wdj123456'
             };
 
-            Account.logoutAsync().then(function () {
-                Account.modifyPwdAsync(password).then(function () {
-                    done('Should fail when user is not logged in. ');
-                }).fail(function () {
-                    done();
-                });
+            Account.modifyPwdAsync(password).then(function () {
+                done('Should fail when user is not logged in. ');
+            }).fail(function () {
+                done();
+            });
+        });
+
+        it('Should pass anyway. ', function (done) {
+            Account.loginAsync(userNew).then(function () {
+                done();
+            }).fail(function (resp) {
+                done('Should pass anyway. ');
             });
         });
 
         it('Should faild when misssing params. ', function (done) {
-            Account.loginAsync(userNew).then(function () {
-                Account.modifyPwdAsync(userOnlyPassword).then(function () {
+            Account.modifyPwdAsync(userOnlyPassword).then(function () {
+                done('Should faild when misssing params. ');
+            }).fail(function (resp) {
+                if (resp.error === -2) {
+                    done();
+                } else {
                     done('Should faild when misssing params. ');
-                }).fail(function (resp) {
-                    if (resp.error === -2) {
-                        done();
-                    } else {
-                        done('Should faild when misssing params. ');
-                    }
-                });
+                }
             });
         });
 
@@ -404,9 +416,68 @@ describe('Account', function () {
             };
 
             Account.modifyPwdAsync(password).then(function (resp) {
+                userNew.password = password.newpassword;
                 done();
             }).fail(function () {
                 done('Should success when password is correct. ');
+            });
+        });
+    });
+
+    describe('Account.updateProfileAsync()', function () {
+        var nick = 'WandouLabs';
+
+        it('Should pass anyway. ', function (done) {
+            Account.logoutAsync().then(function () {
+                done();
+            }).fail(function (resp) {
+                done('Should pass anyway. ');
+            });
+        });
+
+        it('Should fail when user is not logged in. ', function (done) {
+            Account.updateProfileAsync({
+                nickname : nick
+            }).then(function () {
+                done('Should fail when user is not logged in. ');
+            }).fail(function () {
+                done();
+            });
+        });
+
+        it('Should pass anyway. ', function (done) {
+            Account.loginAsync(userNew).then(function () {
+                done();
+            }).fail(function (resp) {
+                done('Should pass anyway. ');
+            });
+        });
+
+        it('Should faild when misssing params. ', function (done) {
+            Account.updateProfileAsync({
+                nick : 'wrongParameter'
+            }).then(function () {
+                done('Should faild when misssing params. ');
+            }).fail(function (resp) {
+                if (resp.error === -2) {
+                    done();
+                } else {
+                    done('Should faild when misssing params. ');
+                }
+            });
+        });
+
+        it('Should success when nickname is not empty. ', function (done) {
+            Account.updateProfileAsync({
+                nickname : nick
+            }).then(function (resp) {
+                if (Account.getUserInfo().nick === nick) {
+                    done();
+                } else {
+                    done('Should success when nickname is not empty. ');
+                }
+            }).fail(function () {
+                done('Should success when nickname is not empty. ');
             });
         });
     });
