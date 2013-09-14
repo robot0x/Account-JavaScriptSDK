@@ -17,9 +17,6 @@ module.exports = function (config) {
                 base : 'Chrome',
                 flags : ['--disable-web-security']
             }
-        },
-        proxies : {
-            'http://account.wandoujia.com/*': 'http://127.0.0.1:8888'
         }
     });
 };

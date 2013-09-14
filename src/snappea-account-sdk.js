@@ -1,5 +1,6 @@
 /*global $, assure*/
 (function (global) {
+
     var Deferred = window.Q.defer;
     var ajax = window.$.ajax;
 
