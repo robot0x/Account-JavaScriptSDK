@@ -1,7 +1,7 @@
 /*global $, assure*/
 (function (global) {
-    var Deferred = $.Deferred;
-    var ajax = window.Zepto.ajax;
+    var Deferred = window.Q.defer;
+    var ajax = window.$.ajax;
 
     if ($.ajaxSetup) {
         $.ajaxSetup({
@@ -96,7 +96,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.isLogined = function () {
@@ -134,7 +134,7 @@
             }
         });
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.regAsync = function (data, options) {
@@ -177,7 +177,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.checkUsernameAsync = function (username, options) {
@@ -210,7 +210,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.checkUserLoginAsync = function (options) {
@@ -239,7 +239,7 @@
             }
         });
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.findPwdAsync = function (username, options) {
@@ -276,7 +276,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.checkCodeAsync = function (data, options) {
@@ -315,7 +315,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.resetPwdAsync = function (data, options) {
@@ -358,7 +358,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.modifyPwdAsync = function (data, options) {
@@ -398,7 +398,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.updateProfileAsync = function (data, options) {
@@ -437,7 +437,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     /* `data.file` should be `File` */
@@ -488,7 +488,7 @@
             });
         }
 
-        return deferred.promise();
+        return deferred.promise;
     };
 
     Account.isEmail = function (input) {
