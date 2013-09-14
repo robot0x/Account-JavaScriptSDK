@@ -52,7 +52,7 @@ module.exports = function (grunt) {
         karma : {
             options : {
                 configFile : '<%= paths.test %>/karma.conf.js',
-                browsers : ['Chrome_without_security']
+                browsers : ['Chrome_without_security', /*'Firefox',*/ 'Safari', /*'Opera'*/]
             },
             server : {
                 reporters : ['progress'],

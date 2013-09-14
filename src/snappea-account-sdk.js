@@ -1,7 +1,7 @@
 /*global $, assure*/
 (function (global) {
     var Deferred = $.Deferred;
-    var ajax = $.ajax;
+    var ajax = window.Zepto.ajax;
 
     if ($.ajaxSetup) {
         $.ajaxSetup({
@@ -96,7 +96,7 @@
             });
         }
 
-        return deferred;
+        return deferred.promise();
     };
 
     Account.isLogined = function () {
@@ -134,7 +134,7 @@
             }
         });
 
-        return deferred;
+        return deferred.promise();
     };
 
     Account.regAsync = function (data, options) {
@@ -177,7 +177,7 @@
             });
         }
 
-        return deferred;
+        return deferred.promise();
     };
 
     Account.checkUsernameAsync = function (username, options) {
@@ -193,7 +193,7 @@
         } else {
             ajax({
                 type : 'POST',
-                dataType : 'json',
+                dataType : 'JSON',
                 url : CONFIG.checkUsername,
                 data : extend({
                     username : username
@@ -201,7 +201,7 @@
                 success : function (resp) {
                     deferred.resolve(resp);
                 },
-                error : function () {
+                error : function (resp) {
                     deferred.reject({
                         error : -1,
                         msg : '请求失败，请检查网络连接状况。'
@@ -210,7 +210,7 @@
             });
         }
 
-        return deferred;
+        return deferred.promise();
     };
 
     Account.checkUserLoginAsync = function (options) {
@@ -239,7 +239,7 @@
             }
         });
 
-        return deferred;
+        return deferred.promise();
     };
 
     Account.findPwdAsync = function (username, options) {
@@ -276,7 +276,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.checkCodeAsync = function (data, options) {
@@ -315,7 +315,7 @@
             });
         }
 
-        return deferred;
+        return deferred.promise();
     };
 
     Account.resetPwdAsync = function (data, options) {
@@ -358,7 +358,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.modifyPwdAsync = function (data, options) {
@@ -398,7 +398,7 @@
             });
         }
 
-        return deferred;
+        return deferred.promise();
     };
 
     Account.updateProfileAsync = function (data, options) {
@@ -428,7 +428,7 @@
                         deferred.reject(resp);
                     }
                 },
-                error : function () {
+                error : function (resp) {
                     deferred.reject({
                         error : -1,
                         msg : '请求失败，请检查网络连接状况。'
@@ -437,7 +437,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     /* `data.file` should be `File` */
@@ -488,7 +488,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.isEmail = function (input) {
@@ -497,7 +497,7 @@
     };
 
     Account.isPhoneNumber = function (input) {
-        var PHONE_PATTERN = /^(1(([35][0-9])|(47)|[8][01236789]))\d{8}$/;
+        var PHONE_PATTERN = /^(1(([3548][\d])))\d{8}$/;
         return PHONE_PATTERN.test(input);
     };
 
