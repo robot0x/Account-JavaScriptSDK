@@ -1,79 +1,24 @@
 'use strict';
 
-var LIVERELOAD_PORT = 35729;
-
 module.exports = function (grunt) {
     // load all grunt tasks
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
     // configurable paths
-    var yeomanConfig = {
+    var pathsConfig = {
         app : 'src',
-        dist : 'dist'
+        dist : 'dist',
+        tmp : '.tmp',
+        test : 'test'
     };
 
     grunt.initConfig({
-        yeoman : yeomanConfig,
-        requirejs : {
-            dist : {
-                options : {
-                    optimize : 'uglify',
-                    uglify : {
-                        toplevel : true,
-                        ascii_only : false,
-                        beautify : false
-                    },
-                    preserveLicenseComments : true,
-                    useStrict : false,
-                    wrap : true
-                }
-            },
-            source : {
-                options : {
-                    appDir : '<%= yeoman.app %>',
-                    dir :　'<%= yeoman.dist %>',
-                    optimize : 'uglify',
-                    uglify : {
-                        toplevel : true,
-                        ascii_only : false,
-                        beautify : false
-                    },
-                    preserveLicenseComments : true,
-                    useStrict : false,
-                    wrap : true
-                }
+        paths : pathsConfig,
+        watch : {
+            jstest : {
+                files : ['<%= paths.app %>/**/*.js'],
+                tasks : ['jslint', 'karma:server:run']
             }
-
-        },
-        mocha: {
-          test: {
-            src: [ 'test/index.html' ],
-            options: {
-              // Bail means if a test fails, grunt will abort. False by default.
-              bail: true,
-
-              // Pipe output console.log from your JS to grunt. False by default.
-              log: true,
-
-              // mocha options
-              mocha: {
-                ignoreLeaks: false,
-                grep: 'food'
-              },
-
-              // Select a Mocha reporter
-              // http://visionmedia.github.com/mocha/#reporters
-              reporter: 'Nyan',
-
-              // Indicates whether 'mocha.run()' should be executed in
-              // 'bridge.js'. If you include `mocha.run()` in your html spec,
-              // check if environment is PhantomJS. See example/test/test2.html
-              run: false,
-
-              // Override the timeout of the test (default is 5000)
-              timeout: 10000
-            }
-          }
         },
         jslint : {
             sources : {
@@ -95,7 +40,7 @@ module.exports = function (grunt) {
                     evil : true,
                     regexp : true,
                     ass : true,
-                    predef: [ // array of pre-defined globals
+                    predef : [
                         'define', 'require'
                     ]
                 },
@@ -103,13 +48,50 @@ module.exports = function (grunt) {
                     errorsOnly : true
                 }
             }
+        },
+        karma : {
+            options : {
+                configFile : '<%= paths.test %>/karma.conf.js',
+                browsers : ['Chrome_without_security'/*, 'Firefox','Safari', 'Opera'*/]
+            },
+            server : {
+                reporters : ['progress'],
+                background : true
+            },
+            unit : {
+                reporters : ['progress', 'junit', 'coverage'],
+                preprocessors : {
+                    'src/**/*.js' : 'coverage'
+                },
+                junitReporter : {
+                    outputFile : 'test/test_out/test-results.xml'
+                },
+                coverageReporter : {
+                    type : 'html',
+                    dir : 'test/test_out/coverage/'
+                },
+                singleRun : true
+            },
+            travis : {
+                browsers : ['PhantomJS'],
+                reporters : ['progress'],
+                singleRun : true
+            }
         }
     });
 
-    grunt.registerTask('build', [
+    grunt.registerTask('server', [
+        'karma:server',
+        'watch'
     ]);
 
-    grunt.registerTask('test', function () {
-        grunt.task.run('mocha:test');
-    });
+    grunt.registerTask('test', [
+        'jslint',
+        'karma:unit'
+    ]);
+
+    grunt.registerTask('test:travis', [
+        'jslint',
+        'karma:travis'
+    ]);
 };

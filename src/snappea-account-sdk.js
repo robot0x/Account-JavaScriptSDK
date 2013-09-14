@@ -1,8 +1,8 @@
-/*global $, Q*/
+/*global $, assure*/
 (function (global) {
-    //@@ lib/q/q.js
-    var Deferred = Q.defer;
-    var ajax = $.ajax;
+
+    var Deferred = window.Q.defer;
+    var ajax = window.$.ajax;
 
     if ($.ajaxSetup) {
         $.ajaxSetup({
@@ -10,8 +10,6 @@
                 withCredentials : true
             }
         });
-    } else {
-        // $.ajaxSettings;
     }
 
     var extend = function (dist, source) {
@@ -196,7 +194,7 @@
         } else {
             ajax({
                 type : 'POST',
-                dataType : 'json',
+                dataType : 'JSON',
                 url : CONFIG.checkUsername,
                 data : extend({
                     username : username
@@ -204,7 +202,7 @@
                 success : function (resp) {
                     deferred.resolve(resp);
                 },
-                error : function () {
+                error : function (resp) {
                     deferred.reject({
                         error : -1,
                         msg : '请求失败，请检查网络连接状况。'
@@ -431,7 +429,7 @@
                         deferred.reject(resp);
                     }
                 },
-                error : function () {
+                error : function (resp) {
                     deferred.reject({
                         error : -1,
                         msg : '请求失败，请检查网络连接状况。'
@@ -500,7 +498,7 @@
     };
 
     Account.isPhoneNumber = function (input) {
-        var PHONE_PATTERN = /^(1(([35][0-9])|(47)|[8][01236789]))\d{8}$/;
+        var PHONE_PATTERN = /^(1(([3548][\d])))\d{8}$/;
         return PHONE_PATTERN.test(input);
     };
 
