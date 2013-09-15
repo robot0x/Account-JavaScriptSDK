@@ -77,6 +77,16 @@ module.exports = function (grunt) {
                 reporters : ['progress'],
                 singleRun : true
             }
+        },
+        clean : {
+            dist : ['<%= paths.tmp %>', '<%= paths.dist %>']
+        },
+        uglify: {
+            dist: {
+                files: {
+                    '<%= paths.dist %>/snappea-account-sdk.js': ['components/q/q.js', '<%= paths.app %>/snappea-account-sdk.js']
+                }
+            }
         }
     });
 
@@ -88,6 +98,11 @@ module.exports = function (grunt) {
     grunt.registerTask('test', [
         'jslint',
         'karma:unit'
+    ]);
+
+    grunt.registerTask('build', [
+        'clean:dist',
+        'uglify:dist'
     ]);
 
     grunt.registerTask('test:travis', [
