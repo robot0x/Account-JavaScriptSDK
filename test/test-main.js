@@ -19,6 +19,7 @@ require.config({
 });
 
 require(['$', 'Zepto', 'Q'], function ($, Zepto, Q) {
+    window.Q = Q;
     require(['test/specs/sdk-spec'], function () {
         window.__karma__.start();
     });
