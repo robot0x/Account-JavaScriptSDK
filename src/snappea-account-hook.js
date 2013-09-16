@@ -24,9 +24,9 @@
 
     var AccountHook = {};
 
-    AccountHook.open = function () {
+    AccountHook.open = function (name, callback, context) {
         var $iframe = $('<iframe>').css(IFRAME_STYLE).attr({
-            src : 'http://www.wandoujia.com/account'
+            src : 'http://www.wandoujia.com/?source=web&close=1#' + name
         });
 
         var $ctn = $('<div>').css(CTN_STYLE).append($iframe);
@@ -38,6 +38,7 @@
         messenger.onmessage = function (data) {
             if (data === 'close') {
                 $ctn.remove();
+                callback.call(context || window);
             }
         };
     };
