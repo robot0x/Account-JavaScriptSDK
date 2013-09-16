@@ -3,8 +3,8 @@
     "version" : "0.0.1",
     "devDependencies" : {
         "q" : "0.9.7",
-        "jquery" : "2.0.0",
-        "zepto" : "1.0.0rc1"
+        "jquery": "~1.10",
+        "zepto" : "1.0.0rc1",
         "MessengerJS": "biqing/MessengerJS"
     }
 }
