@@ -32,6 +32,14 @@
         var $ctn = $('<div>').css(CTN_STYLE).append($iframe);
 
         $('body').append($ctn);
+
+        var messenger = global.Messenger.initInParent($iframe[0]);
+
+        messenger.onmessage = function (data) {
+            if (data === 'close') {
+                $ctn.remove();
+            }
+        };
     };
 
     var SnapPea = global.SnapPea || {};
