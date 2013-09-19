@@ -6,15 +6,18 @@
         'border: none;',
         'border-radius: 10px;',
         'left: 50%;',
-        'height: 450px;',
-        'margin: -225px 0 0 -215px;',
+        'height: 417px;',
+        'margin: -215px 0 0 -208px;',
         'position: absolute;',
+        'position: fixed;',
         'top: 50%;',
         'width: 430px;'
     ].join('');
 
     var CTN_STYLE = [
-        'background-color: rgba(0, 0, 0, .7);',
+        'background: #4C4C4C;',
+        'background: url(http://img.wdjimg.com/account/overlay.png);',
+        'background: rgba(0, 0, 0, .7);',
         'bottom: 0;',
         'left: 0;',
         'position: absolute;',
