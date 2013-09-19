@@ -34,12 +34,20 @@
 
         var messenger = global.Messenger.initInParent($iframe[0]);
 
+        var close = function () {
+            $ctn.remove();
+            callback.call(context || window);
+        };
+
         messenger.onmessage = function (data) {
             if (data === 'close') {
-                $ctn.remove();
-                callback.call(context || window);
+                close();
             }
         };
+
+        $ctn.on('click', function () {
+            close();
+        });
     };
 
     var SnapPea = global.SnapPea || {};
