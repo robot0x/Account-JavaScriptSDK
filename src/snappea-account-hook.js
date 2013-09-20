@@ -21,13 +21,20 @@
         'bottom: 0;',
         'left: 0;',
         'position: absolute;',
+        'position: fixed;',
         'right: 0;',
-        'top: 0;'
+        'top: 0;',
+        'z-index: 999;'
     ].join('');
 
     var AccountHook = {};
 
     AccountHook.open = function (name, callback, context) {
+        if (!global.Messenger) {
+            global.document.location.href = 'http://www.wandoujia.com/account/?callback=' + encodeURIComponent(global.document.location.href) + '#' + name;
+            return;
+        }
+
         var $ctn = $('<div>').attr('style', CTN_STYLE).appendTo('body');
 
         var $iframe = $('<iframe>').attr({
