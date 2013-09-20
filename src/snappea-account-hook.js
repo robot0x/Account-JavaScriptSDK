@@ -30,6 +30,11 @@
     var AccountHook = {};
 
     AccountHook.open = function (name, callback, context) {
+        if (!global.Messenger) {
+            global.document.location.href = 'http://www.wandoujia.com/account/?callback=' + encodeURIComponent(global.document.location.href) + '#' + name;
+            return;
+        }
+
         var $ctn = $('<div>').attr('style', CTN_STYLE).appendTo('body');
 
         var $iframe = $('<iframe>').attr({
