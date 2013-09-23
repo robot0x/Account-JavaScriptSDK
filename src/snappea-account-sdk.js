@@ -27,7 +27,10 @@
         return dist;
     };
 
-    var HOST = 'https://account.wandoujia.com';
+    var ua = navigator.userAgent.toLowerCase();
+    var USE_HTTP_API = ua.indexOf('msie') > -1;
+
+    var HOST = USE_HTTP_API ? 'http://www.wandoujia.com/api/account' : 'https://account.wandoujia.com';
     var API_VERSION_4 = '/v4/api';
 
     var PREFIX = HOST + API_VERSION_4;
