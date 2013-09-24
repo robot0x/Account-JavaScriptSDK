@@ -31,7 +31,7 @@
 
     AccountHook.open = function (name, callback, context) {
         if (!global.Messenger) {
-            global.document.location.href = 'http://www.wandoujia.com/account/?callback=' + encodeURIComponent(global.document.location.href) + '#' + name;
+            global.document.location.href = 'http://www.wandoujia.com/account/web.html?callback=' + encodeURIComponent(global.document.location.href) + '#' + name;
             return;
         }
 
