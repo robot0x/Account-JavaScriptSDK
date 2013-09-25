@@ -561,6 +561,13 @@
         var platform = platforms[options.platform];
         delete options.platform;
 
+        var callbackFunc;
+
+        if (typeof options.callback === 'function') {
+            callbackFunc = options.callback;
+            options.callback = 'javascript:window.close();';
+        }
+
         var datas = [];
         var d;
         for (d in options) {
@@ -569,13 +576,18 @@
             }
         }
 
-        var targeURL = CONFIG_WEB.loginWithThirdParty.replace('{1}', platform);
+        var targetURL = CONFIG_WEB.loginWithThirdParty.replace('{1}', platform);
 
         if (datas.length > 0) {
-            targeURL = targeURL + '?' + datas.join('&');
+            targetURL = targetURL + '?' + datas.join('&');
         }
 
-        global.location.href = targeURL;
+        if (!!callbackFunc) {
+            window.showModalDialog(targetURL);
+            callbackFunc.call(window);
+        } else {
+            global.location.href = targetURL;
+        }
     };
 
     var SnapPea = global.SnapPea || {};
