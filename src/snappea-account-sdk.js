@@ -576,17 +576,17 @@
             }
         }
 
-        var targeURL = CONFIG_WEB.loginWithThirdParty.replace('{1}', platform);
+        var targetURL = CONFIG_WEB.loginWithThirdParty.replace('{1}', platform);
 
         if (datas.length > 0) {
-            targeURL = targeURL + '?' + datas.join('&');
+            targetURL = targetURL + '?' + datas.join('&');
         }
 
         if (!!callbackFunc) {
-            window.showModalDialog(targeURL);
+            window.showModalDialog(targetURL);
             callbackFunc.call(window);
         } else {
-            global.location.href = targeURL;
+            global.location.href = targetURL;
         }
     };
 
