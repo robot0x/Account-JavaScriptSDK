@@ -561,6 +561,13 @@
         var platform = platforms[options.platform];
         delete options.platform;
 
+        var callbackFunc;
+
+        if (typeof options.callback === 'function') {
+            callbackFunc = options.callback;
+            options.callback = 'javascript:window.close();';
+        }
+
         var datas = [];
         var d;
         for (d in options) {
@@ -575,7 +582,12 @@
             targeURL = targeURL + '?' + datas.join('&');
         }
 
-        global.location.href = targeURL;
+        if (!!callbackFunc) {
+            window.showModalDialog(targeURL);
+            callbackFunc.call(window);
+        } else {
+            global.location.href = targeURL;
+        }
     };
 
     var SnapPea = global.SnapPea || {};
