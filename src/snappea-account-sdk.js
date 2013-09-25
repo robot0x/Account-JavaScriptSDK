@@ -583,7 +583,7 @@
         }
 
         if (!!callbackFunc) {
-            window.showModalDialog(targetURL);
+            window.showModalDialog(targetURL, '', 'dialogWidth:650px;dialogHeight:480px;center:1;resizable:1;scroll:0;');
             callbackFunc.call(window);
         } else {
             global.location.href = targetURL;
