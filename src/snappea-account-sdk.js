@@ -91,10 +91,14 @@
                         deferred.reject(resp);
                     }
                 },
-                error : function () {
+                error : function (xhr) {
+                    if (xhr.readyState === 4) {
+                        deferred.reject(xhr.responseJSON);
+                    }
+
                     deferred.reject({
                         error : -1,
-                        msg : '请求失败，请检查网络连接状况'
+                        msg : '请求失败，请检查网络连接状况。'
                     });
                 }
             });
@@ -130,7 +134,11 @@
                     deferred.reject(resp);
                 }
             },
-            error : function () {
+            error : function (xhr) {
+                if (xhr.readyState === 4) {
+                    deferred.reject(xhr.responseJSON);
+                }
+
                 deferred.reject({
                     error : -1,
                     msg : '请求失败，请检查网络连接状况。'
@@ -172,7 +180,11 @@
                         deferred.reject(resp);
                     }
                 },
-                error : function () {
+                error : function (xhr) {
+                    if (xhr.readyState === 4) {
+                        deferred.reject(xhr.responseJSON);
+                    }
+
                     deferred.reject({
                         error : -1,
                         msg : '请求失败，请检查网络连接状况。'
@@ -205,7 +217,11 @@
                 success : function (resp) {
                     deferred.resolve(resp);
                 },
-                error : function (resp) {
+                error : function (xhr) {
+                    if (xhr.readyState === 4) {
+                        deferred.reject(xhr.responseJSON);
+                    }
+
                     deferred.reject({
                         error : -1,
                         msg : '请求失败，请检查网络连接状况。'
@@ -271,7 +287,11 @@
                         deferred.reject(resp);
                     }
                 },
-                error : function () {
+                error : function (xhr) {
+                    if (xhr.readyState === 4) {
+                        deferred.reject(xhr.responseJSON);
+                    }
+
                     deferred.reject({
                         error : -1,
                         msg : '请求失败，请检查网络连接状况。'
@@ -310,7 +330,11 @@
                         deferred.reject(resp);
                     }
                 },
-                error : function () {
+                error : function (xhr) {
+                    if (xhr.readyState === 4) {
+                        deferred.reject(xhr.responseJSON);
+                    }
+
                     deferred.reject({
                         error : -1,
                         msg : '请求失败，请检查网络连接状况。'
@@ -353,7 +377,11 @@
                         deferred.reject(resp);
                     }
                 },
-                error : function () {
+                error : function (xhr) {
+                    if (xhr.readyState === 4) {
+                        deferred.reject(xhr.responseJSON);
+                    }
+
                     deferred.reject({
                         error : -1,
                         msg : '请求失败，请检查网络连接状况。'
@@ -393,7 +421,11 @@
                         deferred.reject(resp);
                     }
                 },
-                error : function () {
+                error : function (xhr) {
+                    if (xhr.readyState === 4) {
+                        deferred.reject(xhr.responseJSON);
+                    }
+
                     deferred.reject({
                         error : -1,
                         msg : '请求失败，请检查网络连接状况。'
@@ -432,7 +464,11 @@
                         deferred.reject(resp);
                     }
                 },
-                error : function (resp) {
+                error : function (xhr) {
+                    if (xhr.readyState === 4) {
+                        deferred.reject(xhr.responseJSON);
+                    }
+
                     deferred.reject({
                         error : -1,
                         msg : '请求失败，请检查网络连接状况。'
@@ -483,7 +519,11 @@
                         deferred.reject(resp);
                     }
                 },
-                error : function () {
+                error : function (xhr) {
+                    if (xhr.readyState === 4) {
+                        deferred.reject(xhr.responseJSON);
+                    }
+
                     deferred.reject({
                         error : -1,
                         msg : '请求失败，请检查网络连接状况。'
