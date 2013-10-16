@@ -46,6 +46,8 @@
         checkCode : PREFIX + '/checkcode',
         resetPwd : PREFIX + '/resetpassword',
         modifyPwd : PREFIX + '/profile/password',
+        checkPasscode : PREFIX + '/checkpasscode',
+        modifyPwdByCode : PREFIX + '/modifypassword',
         completeProfile : PREFIX + '/completeProfile',
         avatar : PREFIX + '/avatar'
     };
@@ -413,6 +415,92 @@
                 data : extend({
                     oldpassword : data.password,
                     newpassword : data.newpassword
+                }, options),
+                success : function (resp) {
+                    if (resp.error === 0) {
+                        deferred.resolve(resp);
+                    } else {
+                        deferred.reject(resp);
+                    }
+                },
+                error : function (xhr) {
+                    if (xhr.readyState === 4) {
+                        deferred.reject(xhr.responseJSON);
+                    }
+
+                    deferred.reject({
+                        error : -1,
+                        msg : '请求失败，请检查网络连接状况。'
+                    });
+                }
+            });
+        }
+
+        return deferred.promise;
+    };
+
+    Account.checkPasscodeAsync = function (data, options) {
+        var deferred = new Deferred();
+
+        data = data || {};
+        options = options || {};
+
+        if (data.passcode === undefined) {
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
+            });
+        } else {
+            ajax({
+                type : 'POST',
+                dataType : 'json',
+                url : CONFIG.checkPasscode,
+                data : extend({
+                    passcode : data.passcode
+                }, options),
+                success : function (resp) {
+                    if (resp.error === 0) {
+                        deferred.resolve(resp);
+                    } else {
+                        deferred.reject(resp);
+                    }
+                },
+                error : function (xhr) {
+                    if (xhr.readyState === 4) {
+                        deferred.reject(xhr.responseJSON);
+                    }
+
+                    deferred.reject({
+                        error : -1,
+                        msg : '请求失败，请检查网络连接状况。'
+                    });
+                }
+            });
+        }
+
+        return deferred.promise;
+    };
+
+    Account.modifyPwdByCodeAsync = function (data, options) {
+        var deferred = new Deferred();
+
+        data = data || {};
+        options = options || {};
+
+        if (data.passcode === undefined ||
+                data.password === undefined) {
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
+            });
+        } else {
+            ajax({
+                type : 'POST',
+                dataType : 'json',
+                url : CONFIG.modifyPwdByCode,
+                data : extend({
+                    passcode : data.passcode,
+                    password : data.password
                 }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
