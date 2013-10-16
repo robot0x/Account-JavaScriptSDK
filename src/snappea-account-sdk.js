@@ -649,13 +649,6 @@
         var platform = platforms[options.platform];
         delete options.platform;
 
-        var callbackFunc;
-
-        if (typeof options.callback === 'function') {
-            callbackFunc = options.callback;
-            options.callback = 'javascript:window.close();';
-        }
-
         var datas = [];
         var d;
         for (d in options) {
@@ -670,9 +663,8 @@
             targetURL = targetURL + '?' + datas.join('&');
         }
 
-        if (!!callbackFunc) {
+        if (options.popup) {
             window.showModalDialog(targetURL, '', 'dialogWidth:650px;dialogHeight:480px;center:1;resizable:1;scroll:0;');
-            callbackFunc.call(window);
         } else {
             global.location.href = targetURL;
         }
