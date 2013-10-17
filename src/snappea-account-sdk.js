@@ -46,6 +46,8 @@
         checkCode : PREFIX + '/checkcode',
         resetPwd : PREFIX + '/resetpassword',
         modifyPwd : PREFIX + '/profile/password',
+        checkPasscode : PREFIX + '/checkpasscode',
+        modifyPwdByCode : PREFIX + '/modifypassword',
         completeProfile : PREFIX + '/completeProfile',
         avatar : PREFIX + '/avatar'
     };
@@ -437,6 +439,92 @@
         return deferred.promise;
     };
 
+    Account.checkPasscodeAsync = function (data, options) {
+        var deferred = new Deferred();
+
+        data = data || {};
+        options = options || {};
+
+        if (data.passcode === undefined) {
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
+            });
+        } else {
+            ajax({
+                type : 'POST',
+                dataType : 'json',
+                url : CONFIG.checkPasscode,
+                data : extend({
+                    passcode : data.passcode
+                }, options),
+                success : function (resp) {
+                    if (resp.error === 0) {
+                        deferred.resolve(resp);
+                    } else {
+                        deferred.reject(resp);
+                    }
+                },
+                error : function (xhr) {
+                    if (xhr.readyState === 4) {
+                        deferred.reject(xhr.responseJSON);
+                    }
+
+                    deferred.reject({
+                        error : -1,
+                        msg : '请求失败，请检查网络连接状况。'
+                    });
+                }
+            });
+        }
+
+        return deferred.promise;
+    };
+
+    Account.modifyPwdByCodeAsync = function (data, options) {
+        var deferred = new Deferred();
+
+        data = data || {};
+        options = options || {};
+
+        if (data.passcode === undefined ||
+                data.password === undefined) {
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
+            });
+        } else {
+            ajax({
+                type : 'POST',
+                dataType : 'json',
+                url : CONFIG.modifyPwdByCode,
+                data : extend({
+                    passcode : data.passcode,
+                    password : data.password
+                }, options),
+                success : function (resp) {
+                    if (resp.error === 0) {
+                        deferred.resolve(resp);
+                    } else {
+                        deferred.reject(resp);
+                    }
+                },
+                error : function (xhr) {
+                    if (xhr.readyState === 4) {
+                        deferred.reject(xhr.responseJSON);
+                    }
+
+                    deferred.reject({
+                        error : -1,
+                        msg : '请求失败，请检查网络连接状况。'
+                    });
+                }
+            });
+        }
+
+        return deferred.promise;
+    };
+
     Account.updateProfileAsync = function (data, options) {
         var deferred = new Deferred();
 
@@ -561,13 +649,6 @@
         var platform = platforms[options.platform];
         delete options.platform;
 
-        var callbackFunc;
-
-        if (typeof options.callback === 'function') {
-            callbackFunc = options.callback;
-            options.callback = 'javascript:window.close();';
-        }
-
         var datas = [];
         var d;
         for (d in options) {
@@ -582,9 +663,8 @@
             targetURL = targetURL + '?' + datas.join('&');
         }
 
-        if (!!callbackFunc) {
-            window.showModalDialog(targetURL);
-            callbackFunc.call(window);
+        if (options.popup) {
+            window.showModalDialog(targetURL, '', 'dialogWidth:650px;dialogHeight:480px;center:1;resizable:1;scroll:0;');
         } else {
             global.location.href = targetURL;
         }
