@@ -10,7 +10,7 @@
         'margin: -215px 0 0 -208px;',
         'position: fixed;',
         'top: 50%;',
-        'width: 430px;'
+        'width: 434px;'
     ].join('');
 
     var CTN_STYLE = [
@@ -42,19 +42,36 @@
 
         var messenger = global.Messenger.initInParent($iframe[0]);
 
-        var close = function () {
-            $ctn.remove();
-            callback.call(context || window);
-        };
+        messenger.onmessage = function (message) {
+            var msg = message.split(':'),
+                data = decodeURIComponent(msg[1]);
 
-        messenger.onmessage = function (data) {
-            if (data === 'close') {
-                close();
+            switch (msg[0]) {
+            case 'height':
+                if (navigator.userAgent.toLowerCase().indexOf('msie') > -1) {
+                    data = Number(data) + 4;
+                }
+
+                $iframe.css('height', data + 'px');
+                break;
+
+            case 'close':
+                $ctn.remove();
+                break;
+
+            case 'done':
+                $ctn.remove();
+                callback.call(context || window);
+                break;
+
+            case 'redirect':
+                window.document.location.href = data;
+                break;
             }
         };
 
         $ctn.on('click', function () {
-            close();
+            $ctn.remove();
         });
     };
 
