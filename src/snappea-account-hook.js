@@ -61,11 +61,11 @@
 
             case 'done':
                 $ctn.remove();
-                callback.call(context || window);
+                callback.call(context || global);
                 break;
 
             case 'redirect':
-                window.document.location.href = data;
+                global.document.location.href = data;
                 break;
             }
         };
