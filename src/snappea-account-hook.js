@@ -27,16 +27,21 @@
 
     var AccountHook = {};
 
-    AccountHook.open = function (name, callback, context) {
-        if (!global.Messenger) {
-            global.document.location.href = 'http://www.wandoujia.com/account/web.html?callback=' + encodeURIComponent(global.document.location.href) + '#' + name;
+    AccountHook.open = function (options, context) {
+        options = options || {};
+
+        options.name = options.name || '';
+        options.callback = options.callback || function () { return; };
+
+        if (!global.Messenger || options.popup === false) {
+            global.document.location.href = 'http://www.wandoujia.com/account/web.html?callback=' + encodeURIComponent(global.document.location.href) + '#' + options.name;
             return;
         }
 
         var $ctn = $('<div>').attr('style', CTN_STYLE).appendTo('body');
 
         var $iframe = $('<iframe>').attr({
-            src : 'http://www.wandoujia.com/account/?source=web&close=1#' + name,
+            src : 'http://www.wandoujia.com/account/?source=web&close=1#' + options.name,
             style : IFRAME_STYLE
         }).appendTo($ctn);
 
@@ -61,7 +66,7 @@
 
             case 'done':
                 $ctn.remove();
-                callback.call(context || global);
+                options.callback.call(context || global);
                 break;
 
             case 'redirect':

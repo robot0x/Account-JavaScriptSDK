@@ -36,8 +36,12 @@
         <script type="text/javascript" src="src/snappea-account-hook.js"></script>
         <script type="text/javascript">
             function demo(name) {
-                SnapPea.AccountHook.open(name, function () {
-                    console.log('Callback in parent');
+                SnapPea.AccountHook.open({
+                    name : name,
+                    // popup : false,
+                    callback : function () {
+                        alert('Callback in parent');
+                    }
                 });
             }
         </script>
