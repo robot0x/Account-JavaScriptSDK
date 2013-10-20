@@ -8,7 +8,6 @@
         'left: 50%;',
         'height: 417px;',
         'margin: -215px 0 0 -208px;',
-        'position: absolute;',
         'position: fixed;',
         'top: 50%;',
         'width: 430px;'
@@ -20,7 +19,6 @@
         'background: rgba(0, 0, 0, .7);',
         'bottom: 0;',
         'left: 0;',
-        'position: absolute;',
         'position: fixed;',
         'right: 0;',
         'top: 0;',
