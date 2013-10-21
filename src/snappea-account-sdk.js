@@ -27,13 +27,11 @@
         return dist;
     };
 
-    var ua = navigator.userAgent.toLowerCase();
-    var USE_HTTP_API = ua.indexOf('msie') > -1;
-
-    var HOST = USE_HTTP_API ? 'http://www.wandoujia.com/api/account' : 'https://account.wandoujia.com';
-    var API_VERSION_4 = '/v4/api';
-
-    var PREFIX = HOST + API_VERSION_4;
+    var HOST = 'https://account.wandoujia.com',
+        HOST_HTTP = 'http://www.wandoujia.com/api/account',
+        API_VERSION_4 = '/v4/api',
+        USE_HTTP_API = navigator.userAgent.toLowerCase().indexOf('msie') > -1,
+        PREFIX = (USE_HTTP_API ? HOST_HTTP : HOST) + API_VERSION_4;
 
     var CONFIG = {
         login : PREFIX + '/login',
@@ -649,6 +647,9 @@
         var platform = platforms[options.platform];
         delete options.platform;
 
+        var onclose = options.onclose || function () { return; };
+        delete options.onclose;
+
         var datas = [];
         var d;
         for (d in options) {
@@ -664,7 +665,14 @@
         }
 
         if (options.popup) {
-            window.open(targetURL, 'loginWithThirdParty', 'width=650, height=480');
+            var win = window.open(targetURL, 'loginWithThirdParty', 'width=650, height=480');
+
+            var winInterval = setInterval(function () {
+                if (win.closed) {
+                    clearInterval(winInterval);
+                    onclose.call(this);
+                }
+            }, 200);
         } else {
             global.location.href = targetURL;
         }
