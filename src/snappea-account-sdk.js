@@ -647,6 +647,9 @@
         var platform = platforms[options.platform];
         delete options.platform;
 
+        var onclose = options.onclose || function () { return; };
+        delete options.onclose;
+
         var datas = [];
         var d;
         for (d in options) {
@@ -662,7 +665,14 @@
         }
 
         if (options.popup) {
-            window.open(targetURL, 'loginWithThirdParty', 'width=650, height=480');
+            var win = window.open(targetURL, 'loginWithThirdParty', 'width=650, height=480');
+
+            var winInterval = setInterval(function () {
+                if (win.closed) {
+                    clearInterval(winInterval);
+                    onclose.call(this);
+                }
+            }, 200);
         } else {
             global.location.href = targetURL;
         }
