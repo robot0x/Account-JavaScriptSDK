@@ -664,7 +664,7 @@
         }
 
         if (options.popup) {
-            window.showModalDialog(targetURL, '', 'dialogWidth:650px;dialogHeight:480px;center:1;resizable:1;scroll:0;');
+            window.open(targetURL, 'loginWithThirdParty', 'width=650, height=480');
         } else {
             global.location.href = targetURL;
         }
