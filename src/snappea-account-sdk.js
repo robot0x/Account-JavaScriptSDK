@@ -238,9 +238,12 @@
 
         options = options || {};
 
+        var jsonp = options.jsonp;
+        delete options.jsonp;
+
         ajax({
             type : 'GET',
-            dataType : 'json',
+            dataType : jsonp ? 'jsonp' : 'json',
             url : CONFIG.checkUserLogin,
             data : options,
             success : function (resp) {
