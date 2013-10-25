@@ -209,7 +209,7 @@
         } else {
             ajax({
                 type : 'POST',
-                dataType : 'JSON',
+                dataType : 'json',
                 url : CONFIG.checkUsername,
                 data : extend({
                     username : username
@@ -322,6 +322,7 @@
         } else {
             ajax({
                 type : 'POST',
+                dataType : 'json',
                 url : CONFIG.checkCode,
                 data : extend({
                     username : data.username,
