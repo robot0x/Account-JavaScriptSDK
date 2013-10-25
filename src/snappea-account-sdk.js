@@ -238,7 +238,7 @@
 
         options = options || {};
 
-        var jsonp = options.jsonp;
+        var jsonp = !!options.jsonp;
         delete options.jsonp;
 
         ajax({
@@ -246,6 +246,7 @@
             dataType : jsonp ? 'jsonp' : 'json',
             url : CONFIG.checkUserLogin,
             data : options,
+            crossDomain: jsonp ? true : undefined,
             success : function (resp) {
                 if (resp.error === 0) {
                     IS_LOGINED = true;
