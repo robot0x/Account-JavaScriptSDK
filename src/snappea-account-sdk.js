@@ -656,7 +656,7 @@
                 }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
-                        deferred.resolve(resp.member);
+                        deferred.resolve(resp);
                     } else {
                         deferred.reject(resp);
                     }
