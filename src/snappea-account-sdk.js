@@ -47,6 +47,7 @@
         checkPasscode : PREFIX + '/checkpasscode',
         modifyPwdByCode : PREFIX + '/modifypassword',
         completeProfile : PREFIX + '/completeProfile',
+        unbindThirdParty : PREFIX + '/social/unbind',
         avatar : PREFIX + '/avatar'
     };
 
@@ -209,7 +210,7 @@
         } else {
             ajax({
                 type : 'POST',
-                dataType : 'JSON',
+                dataType : 'json',
                 url : CONFIG.checkUsername,
                 data : extend({
                     username : username
@@ -238,7 +239,7 @@
 
         options = options || {};
 
-        var jsonp = options.jsonp;
+        var jsonp = !!options.jsonp;
         delete options.jsonp;
 
         ajax({
@@ -246,6 +247,7 @@
             dataType : jsonp ? 'jsonp' : 'json',
             url : CONFIG.checkUserLogin,
             data : options,
+            crossDomain: jsonp ? true : undefined,
             success : function (resp) {
                 if (resp.error === 0) {
                     IS_LOGINED = true;
@@ -321,6 +323,7 @@
         } else {
             ajax({
                 type : 'POST',
+                dataType : 'json',
                 url : CONFIG.checkCode,
                 data : extend({
                     username : data.username,
@@ -604,6 +607,56 @@
                     if (resp.error === 0) {
                         USER_INFO = resp.member;
                         deferred.resolve(resp.member.avatar);
+                    } else {
+                        deferred.reject(resp);
+                    }
+                },
+                error : function (xhr) {
+                    if (xhr.readyState === 4) {
+                        deferred.reject(xhr.responseJSON);
+                    }
+
+                    deferred.reject({
+                        error : -1,
+                        msg : '请求失败，请检查网络连接状况。'
+                    });
+                }
+            });
+        }
+
+        return deferred.promise;
+    };
+
+    Account.unbindThirdPartyAsync = function (data, options) {
+        var deferred = new Deferred();
+
+        data = data || {};
+        options = options || {};
+
+        var platforms = {
+            weibo : '1',
+            sina : '1',
+            qq : '2',
+            renren : '3'
+        };
+
+        if (data.platform === undefined ||
+                platforms[data.platform] === undefined) {
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
+            });
+        } else {
+            ajax({
+                type : 'POST',
+                dataType : 'json',
+                url : CONFIG.unbindThirdParty,
+                data : extend({
+                    platid : platforms[data.platform]
+                }, options),
+                success : function (resp) {
+                    if (resp.error === 0) {
+                        deferred.resolve(resp);
                     } else {
                         deferred.reject(resp);
                     }
