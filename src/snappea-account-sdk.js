@@ -121,11 +121,15 @@
 
         options = options || {};
 
+        var jsonp = !!options.jsonp;
+        delete options.jsonp;
+
         ajax({
             type : 'POST',
-            dataType : 'json',
+            dataType : jsonp ? 'jsonp' : 'json',
             url : CONFIG.logout,
             data : options,
+            crossDomain: jsonp ? true : undefined,
             success : function (resp) {
                 if (resp.error === 0) {
                     IS_LOGINED = false;
