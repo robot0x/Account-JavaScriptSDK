@@ -1,6 +1,6 @@
 {
     "name" : "WandouLab-AccountJavaScriptSDK",
-    "version" : "0.0.1",
+    "version" : "1.0.0",
     "devDependencies" : {
         "q" : "0.9.7",
         "jquery": "~1.10",
