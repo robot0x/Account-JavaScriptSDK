@@ -47,6 +47,8 @@
         checkPasscode : PREFIX + '/checkpasscode',
         modifyPwdByCode : PREFIX + '/modifypassword',
         completeProfile : PREFIX + '/completeProfile',
+        activate : PREFIX + '/activation/initialization',
+        activateValid : PREFIX + '/activation/validation',
         unbindThirdParty : PREFIX + '/social/unbind',
         avatar : PREFIX + '/avatar'
     };
@@ -556,6 +558,91 @@
                     if (resp.error === 0) {
                         USER_INFO = resp.member;
                         deferred.resolve(resp.member);
+                    } else {
+                        deferred.reject(resp);
+                    }
+                },
+                error : function (xhr) {
+                    if (xhr.readyState === 4) {
+                        deferred.reject(xhr.responseJSON);
+                    }
+
+                    deferred.reject({
+                        error : -1,
+                        msg : '请求失败，请检查网络连接状况。'
+                    });
+                }
+            });
+        }
+
+        return deferred.promise;
+    };
+
+    Account.activateAsync = function (data, options) {
+        var deferred = new Deferred();
+
+        data = data || {};
+        options = options || {};
+
+        if (data.type === undefined) {
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
+            });
+        } else {
+            ajax({
+                type : 'GET',
+                dataType : 'json',
+                url : CONFIG.activate,
+                data : extend({
+                    type : data.type
+                }, options),
+                success : function (resp) {
+                    if (resp.error === 0) {
+                        deferred.resolve(resp);
+                    } else {
+                        deferred.reject(resp);
+                    }
+                },
+                error : function (xhr) {
+                    if (xhr.readyState === 4) {
+                        deferred.reject(xhr.responseJSON);
+                    }
+
+                    deferred.reject({
+                        error : -1,
+                        msg : '请求失败，请检查网络连接状况。'
+                    });
+                }
+            });
+        }
+
+        return deferred.promise;
+    };
+
+    Account.activateValidAsync = function (data, options) {
+        var deferred = new Deferred();
+
+        data = data || {};
+        options = options || {};
+
+        if (data.code === undefined) {
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
+            });
+        } else {
+            ajax({
+                type : 'POST',
+                dataType : 'json',
+                url : CONFIG.activateValid,
+                data : extend({
+                    code : data.code,
+                    type : 'sms'
+                }, options),
+                success : function (resp) {
+                    if (resp.error === 0) {
+                        deferred.resolve(resp);
                     } else {
                         deferred.reject(resp);
                     }
