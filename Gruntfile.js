@@ -1,74 +1,197 @@
 'use strict';
 
+var lrSnippet = require('connect-livereload')();
+
+var mountFolder = function (connect, dir) {
+    return connect.static(require('path').resolve(dir));
+};
+
 module.exports = function (grunt) {
     // load all grunt tasks
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
     // configurable paths
-    var pathsConfig = {
-        app : 'src',
+    var pathConfig = {
+        app : 'app',
         dist : 'dist',
         tmp : '.tmp',
         test : 'test'
     };
 
     grunt.initConfig({
-        paths : pathsConfig,
+        paths : pathConfig,
         watch : {
-            jstest : {
-                files : ['<%= paths.app %>/**/*.js'],
-                tasks : ['jslint', 'karma:server:run']
-            }
-        },
-        jslint : {
-            sources : {
-                src : [
-                    'src/*.js'
-                ],
-                directives : {
-                    sloppy : true,
-                    vars : true,
-                    nomen : true,
-                    devel : true,
-                    browser : true,
-                    indent : 4,
-                    unparam: true,
-                    plusplus : true,
-                    todo : true,
-                    bitwise :  true,
-                    stupid : true,
-                    evil : true,
-                    regexp : true,
-                    ass : true,
-                    predef : [
-                        'define', 'require'
-                    ]
-                },
+            compass : {
+                files : ['<%= paths.app %>/compass/{,*/}*/{,*/}*.{scss,sass,png,ttf}'],
+                tasks : ['compass:server']
+            },
+            test : {
+                files : ['<%= paths.app %>/javascripts/**/*.js'],
+                tasks : ['jshint:test', 'karma:server:run'],
                 options : {
-                    errorsOnly : true
+                    spawn : false
+                }
+            },
+            livereload: {
+                files: [
+                    '<%= paths.app %>/*.html',
+                    '<%= paths.app %>/javascripts/**/*.js',
+                    '<%= paths.app %>/images/**/*.*',
+                    '<%= paths.tmp %>/stylesheets/**/*.css',
+                    '<%= paths.tmp %>/images/**/*.*'
+                ],
+                options : {
+                    livereload : true,
+                    spawn : false
                 }
             }
+        },
+        connect : {
+            options : {
+                port : 9999,
+                hostname : '0.0.0.0'
+            },
+            server : {
+                options : {
+                    middleware : function (connect) {
+                        return [
+                            lrSnippet,
+                            mountFolder(connect, '.tmp'),
+                            mountFolder(connect, pathConfig.app)
+                        ];
+                    }
+                }
+            }
+        },
+        open: {
+            server : {
+                path : 'http://127.0.0.1:<%= connect.options.port %>',
+                app : 'Google Chrome Canary'
+            }
+        },
+        clean : {
+            dist : ['<%= paths.tmp %>', '<%= paths.dist %>'],
+            server : '<%= paths.tmp %>'
+        },
+        useminPrepare : {
+            html : ['<%= paths.app %>/*.html'],
+            options : {
+                dest : '<%= paths.dist %>'
+            }
+        },
+        usemin: {
+            html : ['<%= paths.dist %>/*.html'],
+            options : {
+                dirs : ['<%= paths.dist %>']
+            }
+        },
+        htmlmin : {
+            dist : {
+                files : [{
+                    expand : true,
+                    cwd : '<%= paths.app %>',
+                    src : ['*.html'],
+                    dest : '<%= paths.dist %>'
+                }]
+            }
+        },
+        copy : {
+            dist : {
+                files : [{
+                    expand : true,
+                    dot : true,
+                    cwd : '<%= paths.app %>',
+                    dest : '<%= paths.dist %>',
+                    src : [
+                        'images/**/*.{webp,gif,png,jpg,jpeg}'
+                    ]
+                }]
+            }
+        },
+        compass : {
+            options : {
+                sassDir : '<%= paths.app %>/compass/sass',
+                imagesDir : '<%= paths.app %>/compass/images',
+                fontsDir : '<%= paths.app %>/compass/fonts',
+                relativeAssets : true
+            },
+            dist : {
+                options : {
+                    cssDir : '<%= paths.dist %>/stylesheets',
+                    generatedImagesDir : '<%= paths.dist %>/images',
+                    outputStyle : 'compressed'
+                }
+            },
+            server : {
+                options : {
+                    cssDir : '<%= paths.tmp %>/stylesheets',
+                    generatedImagesDir : '<%= paths.tmp %>/images',
+                    debugInfo : true
+                }
+            }
+        },
+        rev: {
+            dist: {
+                files: {
+                    src: [
+                        '<%= paths.dist %>/javascripts/**/*.js',
+                        '<%= paths.dist %>/stylesheets/**/*.css',
+                        '<%= paths.dist %>/images/**/*.*'
+                    ]
+                }
+            }
+        },
+        imagemin : {
+            dist : {
+                files : [{
+                    expand : true,
+                    cwd : '<%= paths.dist %>/images',
+                    src : '**/*.{png,jpg,jpeg}',
+                    dest : '<%= paths.dist %>/images'
+                }]
+            }
+        },
+        requirejs : {
+            dist : {
+                options : {
+                    optimize : 'uglify',
+                    uglify : {
+                        toplevel : true,
+                        ascii_only : false,
+                        beautify : false
+                    },
+                    preserveLicenseComments : true,
+                    useStrict : false,
+                    wrap : true
+                }
+            }
+        },
+        concurrent: {
+            dist : ['copy:dist', 'compass:dist']
+        },
+        jshint : {
+            test : ['<%= paths.app %>/javascripts/**/*.js']
         },
         karma : {
             options : {
                 configFile : '<%= paths.test %>/karma.conf.js',
-                browsers : ['Chrome_without_security'/*, 'Firefox','Safari', 'Opera'*/]
+                browsers : ['Chrome_without_security']
             },
             server : {
                 reporters : ['progress'],
                 background : true
             },
-            unit : {
+            test : {
                 reporters : ['progress', 'junit', 'coverage'],
                 preprocessors : {
-                    'src/**/*.js' : 'coverage'
+                    '<%= paths.app %>/javascripts/**/*.js' : 'coverage'
                 },
                 junitReporter : {
-                    outputFile : 'test/test_out/test-results.xml'
+                    outputFile : '<%= paths.test %>/output/test-results.xml'
                 },
                 coverageReporter : {
                     type : 'html',
-                    dir : 'test/test_out/coverage/'
+                    dir : '<%= paths.test %>/output/coverage/'
                 },
                 singleRun : true
             },
@@ -78,35 +201,52 @@ module.exports = function (grunt) {
                 singleRun : true
             }
         },
-        clean : {
-            dist : ['<%= paths.tmp %>', '<%= paths.dist %>']
+        bump : {
+            options : {
+                files : ['package.json', 'bower.json'],
+                updateConfigs : [],
+                commit : true,
+                commitMessage : 'Release v%VERSION%',
+                commitFiles : ['-a'],
+                createTag : true,
+                tagName : 'v%VERSION%',
+                tagMessage : 'Version %VERSION%',
+                push : false
+            }
         },
         uglify: {
             dist: {
                 files: {
-                    '<%= paths.dist %>/snappea-account-sdk.js': ['components/q/q.js', '<%= paths.app %>/snappea-account-sdk.js']
+                    '<%= paths.dist %>/snappea-account-sdk.js': [
+                        '<%= paths.app %>/components/q/q.js',
+                        '<%= paths.app %>/snappea-account-sdk.js'
+                    ]
                 }
             }
         }
     });
 
     grunt.registerTask('server', [
+        'clean:server',
+        'compass:server',
+        'connect:server',
         'karma:server',
+        'open',
         'watch'
     ]);
 
     grunt.registerTask('test', [
-        'jslint',
-        'karma:unit'
+        'jshint:test',
+        'karma:test'
+    ]);
+
+    grunt.registerTask('test:travis', [
+        'jshint:test',
+        'karma:travis'
     ]);
 
     grunt.registerTask('build', [
         'clean:dist',
         'uglify:dist'
-    ]);
-
-    grunt.registerTask('test:travis', [
-        'jslint',
-        'karma:travis'
     ]);
 };

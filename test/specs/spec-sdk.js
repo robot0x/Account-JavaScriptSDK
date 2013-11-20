@@ -1,6 +1,6 @@
 /*global define, it, describe*/
 (function (window) {
-    define(['src/snappea-account-sdk'], function () {
+    define(['app/javascripts/snappea-account-sdk'], function () {
         describe('Account', function () {
             var Account = window.SnapPea.Account;
 
@@ -481,4 +481,3 @@
         });
     });
 }(this));
-
