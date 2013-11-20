@@ -3,10 +3,10 @@ module.exports = function (config) {
         basePath : '../',
         frameworks : ['mocha', 'requirejs'],
         files : ['test/test-main.js', {
-            pattern : 'src/**/*.js',
+            pattern : 'app/javascripts/**/*.js',
             included : false
         }, {
-            pattern : 'components/**/*.js',
+            pattern : 'app/components/**/*.js',
             included : false
         }, {
             pattern : 'test/specs/**/*.js',

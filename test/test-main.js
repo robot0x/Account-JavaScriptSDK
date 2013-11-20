@@ -1,9 +1,9 @@
 require.config({
     baseUrl: '/base/',
     paths : {
-        $ : 'components/jquery/jquery',
-        Zepto : 'components/zepto/zepto',
-        Q : 'components/q/q'
+        $ : 'app/components/jquery/jquery',
+        Zepto : 'app/components/zepto/zepto',
+        Q : 'app/components/q/q'
     },
     shim : {
         $ : {
@@ -20,7 +20,7 @@ require.config({
 
 require(['$', 'Zepto', 'Q'], function ($, Zepto, Q) {
     window.Q = Q;
-    require(['test/specs/sdk-spec'], function () {
+    require(['test/specs/spec-sdk'], function () {
         window.__karma__.start();
     });
 });

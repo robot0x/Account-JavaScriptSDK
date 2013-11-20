@@ -1,8 +1,10 @@
-*.sublime-project
-*.sublime-workspace
 *.DS_store
 *.log
+*.sublime*
 
 /node_modules/
-/components/
-/test/test_out/
+/app/components
+/dist/
+/test/output/
+/.sass-cache/
+/.tmp/
