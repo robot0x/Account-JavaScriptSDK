@@ -5,6 +5,6 @@
         "q" : "0.9.7",
         "jquery": "~1.10",
         "zepto" : "1.0.0rc1",
-        "MessengerJS": "biqing/MessengerJS"
+        "MessengerJS": "biqing/MessengerJS#1.0"
     }
 }
