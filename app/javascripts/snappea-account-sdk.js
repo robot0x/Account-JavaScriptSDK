@@ -161,7 +161,7 @@
         data = data || {};
         options = options || {};
 
-        if (!data.username || !data.password) {
+        if (!data.username || (!data.oneKeyRegister && !data.password)) {
             deferred.reject({
                 error : -2,
                 msg : '参数不全'
@@ -174,6 +174,7 @@
                 data : extend({
                     username : data.username,
                     password : data.password,
+                    oneKeyRegister : data.oneKeyRegister || false,
                     nick : data.nickname || '',
                     seccode : data.seccode || ''
                 }, options),
