@@ -49,7 +49,8 @@
         activate : PREFIX + '/activation/initialization',
         activateValid : PREFIX + '/activation/validation',
         unbindThirdParty : PREFIX + '/social/unbind',
-        avatar : PREFIX + '/avatar'
+        avatar : PREFIX + '/avatar',
+        confirm : PREFIX + '/account/confirm'
     };
 
     var CONFIG_WEB = {
@@ -744,6 +745,48 @@
                 url : CONFIG.unbindThirdParty,
                 data : extend({
                     platid : platforms[data.platform]
+                }, options),
+                success : function (resp) {
+                    if (resp.error === 0) {
+                        deferred.resolve(resp);
+                    } else {
+                        deferred.reject(resp);
+                    }
+                },
+                error : function (xhr) {
+                    if (xhr.readyState === 4) {
+                        deferred.reject(xhr.responseJSON);
+                    }
+
+                    deferred.reject({
+                        error : -1,
+                        msg : '请求失败，请检查网络连接状况。'
+                    });
+                }
+            });
+        }
+
+        return deferred.promise;
+    };
+
+    Account.confirmAsync = function (data, options) {
+        var deferred = new Deferred();
+
+        data = data || {};
+        options = options || {};
+
+        if (data.code === undefined) {
+            deferred.reject({
+                error : -2,
+                msg : '参数不全'
+            });
+        } else {
+            ajax({
+                type : 'POST',
+                dataType : 'json',
+                url : CONFIG.confirm,
+                data : extend({
+                    code : data.code
                 }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
