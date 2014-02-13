@@ -45,9 +45,10 @@
             style : IFRAME_STYLE
         }).appendTo($ctn);
 
-        var messenger = global.Messenger.initInParent($iframe[0]);
+        var messenger = new global.Messenger('parent', 'Account');
+        messenger.addTarget($iframe[0].contentWindow, 'iframe');
 
-        messenger.onmessage = function (message) {
+        messenger.listen(function (message) {
             var msg = message.split(':'),
                 data = decodeURIComponent(msg[1]);
 
@@ -73,7 +74,7 @@
                 global.document.location.href = data;
                 break;
             }
-        };
+        });
 
         $ctn.on('click', function () {
             $ctn.remove();
