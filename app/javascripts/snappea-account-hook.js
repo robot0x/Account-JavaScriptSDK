@@ -4,6 +4,10 @@
     var ajax = global.$.ajax;
     var Deferred = global.Q.defer;
 
+    /**
+     * Configuration
+     */
+
     if ($.ajaxSetup) {
         $.ajaxSetup({
             xhrFields : {
@@ -13,6 +17,61 @@
     }
 
     window.Q.stopUnhandledRejectionTracking();
+
+    /**
+     * Windows Client Logic
+     */
+
+    var IS_WINDOWS = !!window.OneRingRequest;
+
+    var oneRingRequestAsync = window.orr = function (options) {
+        var deferred = new Deferred();
+
+        options = options || {};
+        options.data = options.data || {};
+        options.type = options.type || 'get';
+        options.url = options.url || '';
+
+        var url =  options.url;
+
+        var done = function (resp) {
+            resp = JSON.parse(resp);
+            resp.state_line = resp.state_line || resp.state_code;
+
+            console.log('IO - Callback message for \'' + options.url + '\'', resp);
+
+            deferred.resolve(resp);
+        };
+
+        switch (options.type.toLowerCase()) {
+        case 'get':
+            var datas = [];
+            var d;
+            for (d in options.data) {
+                if (options.data.hasOwnProperty(d)) {
+                    datas.push(d + '=' + window.encodeURIComponent(options.data[d]));
+                }
+            }
+
+            if (datas.length > 0) {
+                url = url + '?' + datas.join('&');
+            }
+
+            window.OneRingRequest(options.type, url, null, done);
+            break;
+        case 'post':
+            window.OneRingRequest(options.type, url, window.encodeURIComponent(JSON.stringify(options.data)), done);
+            break;
+        }
+
+        console.log('IO - AJAX call: ' + options.url, options);
+
+        return deferred.promise;
+    };
+
+    /**
+     * Hook Logic
+     */
 
     var IFRAME_STYLE = [
         'border: none;',
@@ -75,15 +134,60 @@
 
     AccountHook.openAsync = function (name) {
         var deferred = new Deferred();
-
         var defaultData = {
             isLoggedIn : false,
             data : {}
         };
+        var url = '';
 
-        name = name || '';
+        name = (name && name.toLowerCase()) || 'login';
 
-        var url = 'http://www.wandoujia.com/account/' +
+        if (IS_WINDOWS) {
+            switch (name) {
+            case 'login':
+                url = 'wdj://account/login.json';
+                break;
+
+            case 'register':
+                url = 'wdj://account/register.json';
+                break;
+
+            case 'find':
+                url = 'wdj://account/reset.json';
+                break;
+
+            case 'logout':
+                url = 'wdj://account/logout.json';
+                break;
+            }
+
+            oneRingRequestAsync({
+                url : url
+            }).then(function () {
+                var intervalCheck;
+                var intervalFunc;
+                var doneFunc = function (resp) {
+                    clearInterval(intervalCheck);
+                    deferred.resolve(resp);
+                };
+
+                if (name !== 'logout') {
+                    intervalFunc = function () {
+                        AccountHook.checkAsync().then(doneFunc);
+                    };
+                } else {
+                    intervalFunc = function () {
+                        AccountHook.checkAsync().fail(doneFunc);
+                    };
+                }
+
+                intervalCheck = setInterval(intervalFunc, 500);
+            });
+
+            return deferred.promise;
+        }
+
+        url = 'http://www.wandoujia.com/account/' +
                     '?source=web' +
                     '&medium=' + encodeURIComponent(location.host + location.pathname) +
                     '&close=1' +
