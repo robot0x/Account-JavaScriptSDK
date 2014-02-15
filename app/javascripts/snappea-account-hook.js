@@ -1,6 +1,18 @@
 /*global $, assure*/
 (function (global) {
     var $ = global.$;
+    var ajax = global.$.ajax;
+    var Deferred = global.Q.defer;
+
+    if ($.ajaxSetup) {
+        $.ajaxSetup({
+            xhrFields : {
+                withCredentials : true
+            }
+        });
+    }
+
+    window.Q.stopUnhandledRejectionTracking();
 
     var IFRAME_STYLE = [
         'border: none;',
@@ -26,6 +38,40 @@
     ].join('');
 
     var AccountHook = {};
+
+    var CONFIG = {
+        checkUserLogin : 'https://account.wandoujia.com/v4/api/profile'
+    };
+
+    AccountHook.checkAsync = function (data) {
+        var deferred = new Deferred();
+
+        var returnData = {
+            isLoggedIn : false,
+            data : {}
+        };
+
+        ajax({
+            type : 'GET',
+            dataType : 'json',
+            url : CONFIG.checkUserLogin,
+            data :  data || {},
+            success : function (resp) {
+                if (resp.error === 0) {
+                    returnData.isLoggedIn = true;
+                    returnData.data = resp.member;
+                    deferred.resolve(returnData);
+                } else {
+                    deferred.reject(returnData);
+                }
+            },
+            error : function () {
+                deferred.reject(returnData);
+            }
+        });
+
+        return deferred.promise;
+    };
 
     AccountHook.open = function (options, context) {
         options = options || {};
