@@ -2,13 +2,15 @@
 <html>
     <head>
         <title>WandouLabs Account Hook Demo</title>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <meta charset="utf-8">
     </head>
     <body>
         <div class="w-container">
             <button onclick="demo('login')">Login</button>
             <button onclick="demo('register')">Register</button>
             <button onclick="demo('find')">Find</button>
+            <button onclick="demo('logout')">Logout</button>
+
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero nam dolore debitis aliquid dolorem tempora. Doloremque, excepturi tempora quos cupiditate exercitationem. Ipsum, blanditiis omnis impedit neque nemo hic voluptate quas.</p>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam, ut, veniam, facere perferendis asperiores consequuntur quas deserunt recusandae provident aliquam soluta laudantium optio maxime in dolore deleniti eveniet quos nisi!</p>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore, explicabo, at quis odio nostrum aut non nulla earum aliquam cum quidem architecto incidunt omnis sint facilis consectetur suscipit voluptatem? Nisi!</p>
@@ -31,16 +33,24 @@
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, ullam, soluta, sunt, quia vero temporibus maiores iure deserunt ipsa doloremque aspernatur quasi nisi non sapiente fugiat perferendis ipsum. Tempore, odio.</p>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates, dignissimos consequatur cupiditate nemo ipsa voluptatum facilis fugit? Sunt, laudantium, quam expedita harum impedit dolorum fugiat ipsam nihil id qui assumenda.</p>
         </div>
+
         <script type="text/javascript" src="components/MessengerJS/messenger.js"></script>
+        <script type="text/javascript" src="components/q/q.js"></script>
         <script type="text/javascript" src="components/jquery/jquery.js"></script>
         <script type="text/javascript" src="javascripts/snappea-account-hook.js"></script>
         <script type="text/javascript">
+            SnapPea.AccountHook.checkAsync().then(function (resp) {
+                console.log('Hello, %s!', resp.data.nick);
+            }).fail(function () {
+                console.log('Who are you?');
+            });
+
             function demo(name) {
-                SnapPea.AccountHook.open({
-                    name : name,
-                    // popup : false,
-                    callback : function () {
-                        alert('Callback in parent');
+                SnapPea.AccountHook.openAsync(name).then(function (resp) {
+                    if (resp.isLoggedIn) {
+                        console.log('Welcome back, %s!', resp.data.nick);
+                    } else {
+                        console.log('Bye.');
                     }
                 });
             }
