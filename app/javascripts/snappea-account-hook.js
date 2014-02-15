@@ -73,21 +73,26 @@
         return deferred.promise;
     };
 
-    AccountHook.open = function (options, context) {
-        options = options || {};
+    AccountHook.openAsync = function (name) {
+        var deferred = new Deferred();
 
-        options.name = options.name || '';
-        options.callback = options.callback || function () { return; };
+        var defaultData = {
+            isLoggedIn : false,
+            data : {}
+        };
 
-        if (!global.Messenger || options.popup === false) {
-            global.document.location.href = 'http://www.wandoujia.com/account/web.html?callback=' + encodeURIComponent(global.document.location.href) + '#' + options.name;
-            return;
-        }
+        name = name || '';
+
+        var url = 'http://www.wandoujia.com/account/' +
+                    '?source=web' +
+                    '&medium=' + encodeURIComponent(location.host + location.pathname) +
+                    '&close=1' +
+                    '#' + name;
 
         var $ctn = $('<div>').attr('style', CTN_STYLE).appendTo('body');
 
         var $iframe = $('<iframe>').attr({
-            src : 'http://www.wandoujia.com/account/?source=web&close=1#' + options.name,
+            src : url,
             style : IFRAME_STYLE
         }).appendTo($ctn);
 
@@ -109,11 +114,15 @@
 
             case 'close':
                 $ctn.remove();
+                deferred.reject(defaultData);
                 break;
 
             case 'done':
-                $ctn.remove();
-                options.callback.call(context || global);
+                deferred.resolve(AccountHook.checkAsync().fail(function (resp) {
+                    return resp;
+                }).fin(function () {
+                    $ctn.remove();
+                }));
                 break;
 
             case 'redirect':
@@ -125,6 +134,8 @@
         $ctn.on('click', function () {
             $ctn.remove();
         });
+
+        return deferred.promise;
     };
 
     var SnapPea = global.SnapPea || {};
