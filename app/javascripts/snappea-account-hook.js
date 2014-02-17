@@ -73,29 +73,6 @@
      * Hook Logic
      */
 
-    var IFRAME_STYLE = [
-        'border: none;',
-        'border-radius: 10px;',
-        'left: 50%;',
-        'height: 417px;',
-        'margin: -215px 0 0 -208px;',
-        'position: fixed;',
-        'top: 50%;',
-        'width: 434px;'
-    ].join('');
-
-    var CTN_STYLE = [
-        'background: #4C4C4C;',
-        'background: url(http://img.wdjimg.com/account/overlay.png);',
-        'background: rgba(0, 0, 0, .7);',
-        'bottom: 0;',
-        'left: 0;',
-        'position: fixed;',
-        'right: 0;',
-        'top: 0;',
-        'z-index: 999;'
-    ].join('');
-
     var AccountHook = {};
 
     var CONFIG = {
@@ -112,7 +89,7 @@
 
         ajax({
             type : 'GET',
-            dataType : 'json',
+            dataType : 'jsonp',
             url : CONFIG.checkUserLogin,
             data :  data || {},
             success : function (resp) {
@@ -193,23 +170,29 @@
                     '&close=1' +
                     '#' + name;
 
-        var $ctn = $('<div>').attr('style', CTN_STYLE).appendTo('body');
+        var forceReflow;
+        var $body = $('body').addClass('w-account-hook-opened');
+        var $ctn = $('<div>').addClass('w-account-hook-backdrop').appendTo($body);
+        var $iframe = $('<iframe>').attr('src', url).addClass('w-account-hook-iframe').appendTo($ctn);
 
-        var $iframe = $('<iframe>').attr({
-            src : url,
-            style : IFRAME_STYLE
-        }).appendTo($ctn);
+        forceReflow = $ctn[0].offsetWidth;
+        $ctn.addClass('w-account-hook-backdrop-in');
 
         var messenger = new global.Messenger('parent', 'Account');
         messenger.addTarget($iframe[0].contentWindow, 'iframe');
 
         var close = function () {
-            $ctn.remove();
+            $iframe.removeClass('w-account-hook-iframe-in');
+            $ctn.removeClass('w-account-hook-backdrop-in').one('webkitTransitionEnd', function () {
+                $ctn.remove();
+            });
+            $body.removeClass('w-account-hook-opened');
         };
 
         messenger.listen(function (message) {
-            var msg = message.split(':'),
-                data = decodeURIComponent(msg[1]);
+            var msg = message.split(':');
+            var data = decodeURIComponent(msg[1]);
+            var isShown = false;
 
             switch (msg[0]) {
             case 'height':
@@ -218,6 +201,14 @@
                 }
 
                 $iframe.css('height', data + 'px');
+
+                if (!isShown) {
+                    $iframe.one('webkitTransitionEnd', function () {
+                        $iframe.addClass('w-account-hook-iframe-in');
+                        isShown = true;
+                    });
+                }
+
                 break;
 
             case 'close':
@@ -239,7 +230,7 @@
             }
         });
 
-        $ctn.on('click', close);
+        $ctn.one('click', close);
 
         return deferred.promise;
     };
