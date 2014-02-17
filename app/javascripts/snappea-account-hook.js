@@ -203,6 +203,10 @@
         var messenger = new global.Messenger('parent', 'Account');
         messenger.addTarget($iframe[0].contentWindow, 'iframe');
 
+        var close = function () {
+            $ctn.remove();
+        };
+
         messenger.listen(function (message) {
             var msg = message.split(':'),
                 data = decodeURIComponent(msg[1]);
@@ -217,7 +221,7 @@
                 break;
 
             case 'close':
-                $ctn.remove();
+                close();
                 deferred.reject(defaultData);
                 break;
 
@@ -235,9 +239,7 @@
             }
         });
 
-        $ctn.on('click', function () {
-            $ctn.remove();
-        });
+        $ctn.on('click', close);
 
         return deferred.promise;
     };
