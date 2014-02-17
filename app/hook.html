@@ -99,17 +99,17 @@
         <script type="text/javascript" src="javascripts/snappea-account-hook.js"></script>
         <script type="text/javascript">
             SnapPea.AccountHook.checkAsync().then(function (resp) {
-                alert('Hello, ' + resp.data.nick);
+                console.log('Hello, %s!', resp.data.nick);
             }).fail(function () {
-                alert('Who are you?');
+                console.log('Who are you?');
             });
 
             function demo(name) {
                 SnapPea.AccountHook.openAsync(name).then(function (resp) {
                     if (resp.isLoggedIn) {
-                        alert('Welcome back, ' + resp.data.nick);
+                        console.log('Welcome back, %s.', resp.data.nick);
                     } else {
-                        alert('Bye.');
+                        console.log('Bye.');
                     }
                 });
             }
