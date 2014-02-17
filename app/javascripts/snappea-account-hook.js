@@ -18,6 +18,49 @@
 
     window.Q.stopUnhandledRejectionTracking();
 
+    var TRANSITION_END_EVENT_NAME = (function () {
+        var el = document.createElement('snappea');
+
+        var transEndEventNames = {
+            'WebkitTransition' : 'webkitTransitionEnd',
+            'MozTransition'    : 'transitionend',
+            'MSTransition'     : 'msTransitionEnd',
+            'OTransition'      : 'oTransitionEnd otransitionend',
+            'transition'       : 'transitionend'
+        };
+
+        for (var name in transEndEventNames) {
+            if (el.style[name] !== undefined) {
+                return transEndEventNames[name];
+            }
+        }
+
+        return false;
+    }());
+
+    $.fn.transitionEnd = function (callback, secDuration) {
+        var that = this;
+        var called = false;
+
+        if (TRANSITION_END_EVENT_NAME === false) {
+            callback.call(that);
+            return this;
+        }
+
+        $(this).one(TRANSITION_END_EVENT_NAME, function () {
+            called = true;
+            callback.call(that);
+        });
+
+        setTimeout(function () {
+            if (!called) {
+                callback.call(that);
+            }
+        }, secDuration + 200);
+
+        return this;
+    };
+
     /**
      * Windows Client Logic
      */
@@ -185,16 +228,17 @@
 
         var close = function () {
             $iframe.removeClass('w-account-hook-iframe-in');
-            $ctn.removeClass('w-account-hook-backdrop-in').one('webkitTransitionEnd', function () {
+            $ctn.removeClass('w-account-hook-backdrop-in').transitionEnd(function () {
                 $ctn.remove();
-            });
+            }, 150);
             $body.removeClass('w-account-hook-opened');
         };
+
+        var isShown = false;
 
         messenger.listen(function (message) {
             var msg = message.split(':');
             var data = decodeURIComponent(msg[1]);
-            var isShown = false;
 
             switch (msg[0]) {
             case 'height':
@@ -205,12 +249,11 @@
                 $iframe.css('height', data + 'px');
 
                 if (!isShown) {
-                    $iframe.one('webkitTransitionEnd', function () {
+                    $iframe.transitionEnd(function () {
                         $iframe.addClass('w-account-hook-iframe-in');
                         isShown = true;
-                    });
+                    }, 300);
                 }
-
                 break;
 
             case 'close':

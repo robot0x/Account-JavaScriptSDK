@@ -21,6 +21,9 @@
                 z-index: 999;
 
                 -webkit-transition: opacity .15s linear;
+                -moz-transition: opacity .15s linear;
+                -ms-transition: opacity .15s linear;
+                -o-transition: opacity .15s linear;
                 transition: opacity .15s linear;
             }
 
@@ -39,13 +42,23 @@
                 width: 434px;
 
                 -webkit-transform: translate3d(0, -150%, 0);
-                -webkit-transition: height .3s linear, -webkit-transform .3s ease-in-out;
+                -moz-transform: translate3d(0, -150%, 0);
+                -ms-transform: translate3d(0, -150%, 0);
+                -o-transform: translate3d(0, -150%, 0);
                 transform: translate3d(0, -150%, 0);
+
+                -webkit-transition: height .3s linear, -webkit-transform .3s ease-in-out;
+                -moz-transition: height .3s linear, -moz-transform .3s ease-in-out;
+                -ms-transition: height .3s linear, -ms-transform .3s ease-in-out;
+                -o-transition: height .3s linear, -o-transform .3s ease-in-out;
                 transition: height .3s linear, transform .3s ease-in-out;
             }
 
             .w-account-hook-iframe-in {
                 -webkit-transform: translate3d(0, 0, 0);
+                -moz-transform: translate3d(0, 0, 0);
+                -ms-transform: translate3d(0, 0, 0);
+                -o-transform: translate3d(0, 0, 0);
                 transform: translate3d(0, 0, 0);
             }
         </style>
@@ -86,17 +99,17 @@
         <script type="text/javascript" src="javascripts/snappea-account-hook.js"></script>
         <script type="text/javascript">
             SnapPea.AccountHook.checkAsync().then(function (resp) {
-                console.log('Hello, %s!', resp.data.nick);
+                alert('Hello, ' + resp.data.nick);
             }).fail(function () {
-                console.log('Who are you?');
+                alert('Who are you?');
             });
 
             function demo(name) {
                 SnapPea.AccountHook.openAsync(name).then(function (resp) {
                     if (resp.isLoggedIn) {
-                        console.log('Welcome back, %s!', resp.data.nick);
+                        alert('Welcome back, ' + resp.data.nick);
                     } else {
-                        console.log('Bye.');
+                        alert('Bye.');
                     }
                 });
             }
