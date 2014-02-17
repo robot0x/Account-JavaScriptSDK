@@ -109,6 +109,8 @@
         return deferred.promise;
     };
 
+    var intervalCheck;
+
     AccountHook.openAsync = function (name) {
         var deferred = new Deferred();
         var defaultData = {
@@ -141,7 +143,6 @@
             oneRingRequestAsync({
                 url : url
             }).then(function () {
-                var intervalCheck;
                 var intervalFunc;
                 var doneFunc = function (resp) {
                     clearInterval(intervalCheck);
@@ -158,6 +159,7 @@
                     };
                 }
 
+                clearInterval(intervalCheck);
                 intervalCheck = setInterval(intervalFunc, 500);
             });
 
