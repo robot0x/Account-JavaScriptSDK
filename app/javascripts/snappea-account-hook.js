@@ -218,7 +218,10 @@
         var forceReflow;
         var $body = $('body').addClass('w-account-hook-opened');
         var $ctn = $('<div>').addClass('w-account-hook-backdrop').appendTo($body);
-        var $iframe = $('<iframe>').attr('src', url).addClass('w-account-hook-iframe').appendTo($ctn);
+        var $iframe = $('<iframe>').attr({
+            src : url,
+            frameBorder : 0
+        }).addClass('w-account-hook-iframe').appendTo($ctn);
 
         forceReflow = $ctn[0].offsetWidth;
         $ctn.addClass('w-account-hook-backdrop-in');
