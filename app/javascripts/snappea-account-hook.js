@@ -24,7 +24,7 @@
 
     var IS_WINDOWS = !!window.OneRingRequest;
 
-    var oneRingRequestAsync = window.orr = function (options) {
+    var oneRingRequestAsync = function (options) {
         var deferred = new Deferred();
 
         options = options || {};
