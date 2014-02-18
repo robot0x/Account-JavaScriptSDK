@@ -283,6 +283,14 @@
         return deferred.promise;
     };
 
+    AccountHook.redirect = function (name) {
+        var url = 'http://www.wandoujia.com/account/web.html' +
+                    '?callback=' + encodeURIComponent(location.href) +
+                    '#' + name;
+
+        location.href = url;
+    };
+
     var SnapPea = global.SnapPea || {};
     SnapPea.AccountHook = AccountHook;
     global.SnapPea = SnapPea;
