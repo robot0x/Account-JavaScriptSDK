@@ -217,12 +217,15 @@ module.exports = function (grunt) {
                 push : false
             }
         },
-        uglify: {
-            dist: {
-                files: {
-                    '<%= paths.dist %>/snappea-account-sdk.js': [
-                        '<%= paths.app %>/components/q/q.js',
-                        '<%= paths.app %>/snappea-account-sdk.js'
+        uglify : {
+            dist : {
+                files : {
+                    '<%= paths.dist %>/snappea-account-sdk.js' : [
+                        '<%= paths.app %>/javascripts/snappea-account-sdk.js'
+                    ],
+                    '<%= paths.dist %>/snappea-account-hook.js': [
+                        '<%= paths.app %>/components/MessengerJS/messenger.js',
+                        '<%= paths.app %>/javascripts/snappea-account-hook.js'
                     ]
                 }
             }
