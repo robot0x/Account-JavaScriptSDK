@@ -2,7 +2,7 @@
 (function (global) {
     var $ = global.$;
     var ajax = global.$.ajax;
-    var Deferred = global.Q.defer;
+    var Deferred = global.$.Deferred;
 
     /**
      * Configuration
@@ -15,8 +15,6 @@
             }
         });
     }
-
-    window.Q.stopUnhandledRejectionTracking();
 
     var STYLE_RULES =
         '.w-account-hook-opened {' +
@@ -160,7 +158,7 @@
 
         console.log('IO - AJAX call: ' + options.url, options);
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     /**
@@ -200,7 +198,7 @@
             }
         });
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     var intervalCheck;
@@ -209,10 +207,12 @@
 
     AccountHook.openAsync = function (name) {
         var deferred = new Deferred();
+
         var defaultData = {
             isLoggedIn : false,
             data : {}
         };
+
         var url = '';
 
         name = (name && name.toLowerCase()) || 'login';
@@ -259,7 +259,7 @@
                 intervalCheck = setInterval(intervalFunc, 500);
             });
 
-            return deferred.promise;
+            return deferred.promise();
         }
 
         url = 'http://www.wandoujia.com/account/' +
@@ -333,7 +333,7 @@
 
         $ctn.one('click', close);
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     AccountHook.redirect = function (name) {

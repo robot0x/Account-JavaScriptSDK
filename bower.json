@@ -1,9 +1,9 @@
 {
-    "name" : "WandouLabs-AccountJavaScriptSDK",
-    "version" : "1.0.1",
-    "dependencies" : {
-        "q" : "~1.0.0",
-        "jquery": "~1.11.0",
-        "MessengerJS": "git@github.com:biqing/MessengerJS.git#086d1f9217f90404d237f54b29a9fd9b99f513eb"
-    }
+  "name": "WandouLabs-AccountJavaScriptSDK",
+  "version": "1.0.1",
+  "dependencies": {
+    "zeptojs": "~1.1.3",
+    "jquery": "~1.11.0",
+    "MessengerJS": "git@github.com:biqing/MessengerJS.git#086d1f9217f90404d237f54b29a9fd9b99f513eb"
+  }
 }
