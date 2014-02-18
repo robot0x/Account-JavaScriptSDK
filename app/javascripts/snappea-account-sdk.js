@@ -812,7 +812,7 @@
     };
 
     Account.isEmail = function (input) {
-        var EMAIL_PATTREN = /^\s*?(.+)@(.+?)\s*$/;
+        var EMAIL_PATTREN = /^\s*?(.+)@(.+?)\.(.+?)\s*$/;
         return EMAIL_PATTREN.test(input);
     };
 
