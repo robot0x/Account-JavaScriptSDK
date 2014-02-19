@@ -1,6 +1,6 @@
 /*global $, assure*/
 (function (global) {
-    var Deferred = window.Q.defer;
+    var Deferred = window.$.Deferred;
     var ajax = window.$.ajax;
 
     if ($.ajaxSetup) {
@@ -107,7 +107,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.isLogined = function () {
@@ -153,7 +153,7 @@
             }
         });
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.regAsync = function (data, options) {
@@ -201,7 +201,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.checkUsernameAsync = function (username, options) {
@@ -238,7 +238,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.checkUserLoginAsync = function (options) {
@@ -271,7 +271,7 @@
             }
         });
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.findPwdAsync = function (username, options) {
@@ -312,7 +312,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.checkCodeAsync = function (data, options) {
@@ -356,7 +356,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.resetPwdAsync = function (data, options) {
@@ -403,7 +403,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.modifyPwdAsync = function (data, options) {
@@ -447,7 +447,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.checkPasscodeAsync = function (data, options) {
@@ -489,7 +489,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.modifyPwdByCodeAsync = function (data, options) {
@@ -533,7 +533,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.updateProfileAsync = function (data, options) {
@@ -576,7 +576,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.activateAsync = function (data, options) {
@@ -618,7 +618,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.activateValidAsync = function (data, options) {
@@ -661,7 +661,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     /* `data.file` should be `File` */
@@ -716,7 +716,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.unbindThirdPartyAsync = function (data, options) {
@@ -766,7 +766,7 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.confirmAsync = function (data, options) {
@@ -808,11 +808,11 @@
             });
         }
 
-        return deferred.promise;
+        return deferred.promise();
     };
 
     Account.isEmail = function (input) {
-        var EMAIL_PATTREN = /^\s*?(.+)@(.+?)\s*$/;
+        var EMAIL_PATTREN = /^\s*?(.+)@(.+?)\.(.+?)\s*$/;
         return EMAIL_PATTREN.test(input);
     };
 
