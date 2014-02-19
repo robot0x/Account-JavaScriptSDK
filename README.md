@@ -15,6 +15,14 @@ Hook 和 SDK 都依赖 [jQuery](https://github.com/jquery/jquery)（或 [Zepto](
 
 其中，Zepto 需要通过定制额外支持 data / deferred / callbacks 模块。定制方法请参考[官方说明](https://github.com/madrobby/zepto)，或者直接使用我们编译好的定制版 `app/javascripts/zepto.js` 。
 
+如何使用
+--------------------------------------
+1. `git clone git@github.com:wandoulabs/Account-JavaScriptSDK.git` ；
+2. `npm install` ；
+3. `bower install` ；
+4. `grunt build` ；
+5. 在页面中引入 `dist/snappea-account-hook.js` 或 `dist/snappea-account-sdk.js` 。
+
 约定
 --------------------------------------
 
