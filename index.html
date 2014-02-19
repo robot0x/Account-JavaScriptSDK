@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Account-javascriptsdk by wandoulabs</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Account-javascriptsdk</h1>
+        <h2>Account SDK implement in JavaScript</h2>
+        <a href="https://github.com/wandoulabs/Account-JavaScriptSDK" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="%E8%B1%8C%E8%B1%86%E8%8D%9A%E8%B4%A6%E5%8F%B7%E7%B3%BB%E7%BB%9F-javascript-sdk" class="anchor" href="#%E8%B1%8C%E8%B1%86%E8%8D%9A%E8%B4%A6%E5%8F%B7%E7%B3%BB%E7%BB%9F-javascript-sdk"><span class="octicon octicon-link"></span></a>豌豆荚账号系统 JavaScript SDK</h1>
+
+<p>统一 Web 端（含 Windows 客户端和各种 Webview 中需要调用账号信息的场景）调用豌豆荚账号系统 API 的方式，封装内部细节。保证 SDK API 稳定、优雅、安全并且文件体积小巧。</p>
+
+<p>目前提供两种方案使用：</p>
+
+<ol>
+<li>通过 Hook 在页面中嵌入豌豆荚账号页面，用户登录（或其它操作）成功后将返回用户信息。适合需要豌豆荚账号进行认证的产品；</li>
+<li>通过 SDK 直接访问账号系统 API。适合针对豌豆荚账号系统进行深度定制的产品。</li>
+</ol><h2>
+<a name="%E4%BE%9D%E8%B5%96" class="anchor" href="#%E4%BE%9D%E8%B5%96"><span class="octicon octicon-link"></span></a>依赖</h2>
+
+<p>Hook 和 SDK 都依赖 <a href="https://github.com/jquery/jquery">jQuery</a>（或 <a href="https://github.com/madrobby/zepto">Zepto</a>）。由于跨文档通讯的需要，Hook 还依赖 <a href="https://github.com/biqing/MessengerJS">MessengerJS</a>。</p>
+
+<p>其中，Zepto 需要通过定制额外支持 data / deferred / callbacks 模块。定制方法请参考<a href="https://github.com/madrobby/zepto">官方说明</a>，或者直接使用我们编译好的定制版 <code>app/javascripts/zepto.js</code> 。</p>
+
+<h2>
+<a name="%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8" class="anchor" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="octicon octicon-link"></span></a>如何使用</h2>
+
+<ol>
+<li>
+<code>git clone git@github.com:wandoulabs/Account-JavaScriptSDK.git</code> ；</li>
+<li>
+<code>npm install</code> ；</li>
+<li>
+<code>bower install</code> ；</li>
+<li>
+<code>grunt build</code> ；</li>
+<li>在页面中引入 <code>dist/snappea-account-hook.js</code> 或 <code>dist/snappea-account-sdk.js</code> 。</li>
+</ol><h2>
+<a name="%E7%BA%A6%E5%AE%9A" class="anchor" href="#%E7%BA%A6%E5%AE%9A"><span class="octicon octicon-link"></span></a>约定</h2>
+
+<p>所有异步函数（函数名以 <code>Async</code> 结尾）将返回 <code>$.Deferred</code> 对象。</p>
+
+<h2>
+<a name="hook-%E7%94%A8%E6%B3%95" class="anchor" href="#hook-%E7%94%A8%E6%B3%95"><span class="octicon octicon-link"></span></a>Hook 用法</h2>
+
+<h4>
+<a name="%E6%A3%80%E6%9F%A5%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8A%B6%E6%80%81" class="anchor" href="#%E6%A3%80%E6%9F%A5%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8A%B6%E6%80%81"><span class="octicon octicon-link"></span></a>检查用户登录状态</h4>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">AccountHook</span><span class="p">.</span><span class="nx">checkAsync</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">resp</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Hello, %s!'</span><span class="p">,</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">nick</span><span class="p">);</span> <span class="c1">// 已登录</span>
+<span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Who are you?'</span><span class="p">);</span> <span class="c1">// 未登录</span>
+<span class="p">});</span>
+</pre></div>
+
+<h4>
+<a name="%E5%9C%A8%E9%A1%B5%E9%9D%A2%E5%86%85%E5%B5%8C%E5%85%A5%E8%B1%8C%E8%B1%86%E8%8D%9A%E8%B4%A6%E5%8F%B7%E9%A1%B5%E9%9D%A2" class="anchor" href="#%E5%9C%A8%E9%A1%B5%E9%9D%A2%E5%86%85%E5%B5%8C%E5%85%A5%E8%B1%8C%E8%B1%86%E8%8D%9A%E8%B4%A6%E5%8F%B7%E9%A1%B5%E9%9D%A2"><span class="octicon octicon-link"></span></a>在页面内嵌入豌豆荚账号页面</h4>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">AccountHook</span><span class="p">.</span><span class="nx">openAsync</span><span class="p">(</span><span class="nx">name</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">resp</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">isLoggedIn</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Welcome back, %s.'</span><span class="p">,</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">nick</span><span class="p">);</span> <span class="c1">// 操作成功后处于登录状态</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Bye.'</span><span class="p">);</span> <span class="c1">// 操作成功后处于未登录状态</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>其中，<code>name</code> 可为：</p>
+
+<ul>
+<li>login 登录</li>
+<li>register 注册</li>
+<li>find 找回密码</li>
+<li>password 修改密码</li>
+<li>logout 退出</li>
+</ul><h4>
+<a name="%E8%B7%B3%E8%BD%AC%E5%88%B0%E8%B1%8C%E8%B1%86%E8%8D%9A%E8%B4%A6%E5%8F%B7%E9%A1%B5%E9%9D%A2" class="anchor" href="#%E8%B7%B3%E8%BD%AC%E5%88%B0%E8%B1%8C%E8%B1%86%E8%8D%9A%E8%B4%A6%E5%8F%B7%E9%A1%B5%E9%9D%A2"><span class="octicon octicon-link"></span></a>跳转到豌豆荚账号页面</h4>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">AccountHook</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="sdk-%E7%94%A8%E6%B3%95" class="anchor" href="#sdk-%E7%94%A8%E6%B3%95"><span class="octicon octicon-link"></span></a>SDK 用法</h2>
+
+<h3>
+<a name="%E7%99%BB%E5%BD%95" class="anchor" href="#%E7%99%BB%E5%BD%95"><span class="octicon octicon-link"></span></a>登录</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">loginAsync</span><span class="p">({</span>
+    <span class="nx">username</span> <span class="o">:</span> <span class="s1">'username'</span><span class="p">,</span>
+    <span class="nx">password</span> <span class="o">:</span> <span class="s1">'psw'</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>
+<a name="%E6%B3%A8%E5%86%8C" class="anchor" href="#%E6%B3%A8%E5%86%8C"><span class="octicon octicon-link"></span></a>注册</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">regAsync</span><span class="p">({</span>
+    <span class="nx">username</span> <span class="o">:</span> <span class="s1">'username'</span><span class="p">,</span>
+    <span class="nx">password</span> <span class="o">:</span> <span class="s1">'psw'</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>
+<a name="%E9%AA%8C%E8%AF%81%E9%82%AE%E7%AE%B1%E6%A0%BC%E5%BC%8F" class="anchor" href="#%E9%AA%8C%E8%AF%81%E9%82%AE%E7%AE%B1%E6%A0%BC%E5%BC%8F"><span class="octicon octicon-link"></span></a>验证邮箱格式</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">isEmail</span><span class="p">(</span><span class="nx">email</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="%E9%AA%8C%E8%AF%81%E6%89%8B%E6%9C%BA%E5%8F%B7%E6%A0%BC%E5%BC%8F" class="anchor" href="#%E9%AA%8C%E8%AF%81%E6%89%8B%E6%9C%BA%E5%8F%B7%E6%A0%BC%E5%BC%8F"><span class="octicon octicon-link"></span></a>验证手机号格式</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">isPhoneNumber</span><span class="p">(</span><span class="nx">email</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="%E6%A3%80%E6%9F%A5%E7%94%A8%E6%88%B7%E5%90%8D%E6%98%AF%E5%90%A6%E5%8F%AF%E7%94%A8" class="anchor" href="#%E6%A3%80%E6%9F%A5%E7%94%A8%E6%88%B7%E5%90%8D%E6%98%AF%E5%90%A6%E5%8F%AF%E7%94%A8"><span class="octicon octicon-link"></span></a>检查用户名是否可用</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">checkUsernameAsync</span><span class="p">(</span><span class="nx">username</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="%E9%80%9A%E8%BF%87%E7%AC%AC%E4%B8%89%E6%96%B9%E8%B4%A6%E5%8F%B7%E7%99%BB%E5%BD%95" class="anchor" href="#%E9%80%9A%E8%BF%87%E7%AC%AC%E4%B8%89%E6%96%B9%E8%B4%A6%E5%8F%B7%E7%99%BB%E5%BD%95"><span class="octicon octicon-link"></span></a>通过第三方账号登录</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">loginWithThirdParty</span><span class="p">({</span>
+    <span class="nx">platform</span> <span class="o">:</span> <span class="s1">'sina'</span><span class="p">,</span>
+    <span class="nx">callback</span> <span class="o">:</span> <span class="s1">'http://www.wandoujia.com/'</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>
+<a name="%E4%BB%8E%E6%9C%AC%E5%9C%B0%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8A%B6%E6%80%81" class="anchor" href="#%E4%BB%8E%E6%9C%AC%E5%9C%B0%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8A%B6%E6%80%81"><span class="octicon octicon-link"></span></a>从本地获取用户登录状态</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">isLogined</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="%E4%BB%8E%E6%9C%AC%E5%9C%B0%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF" class="anchor" href="#%E4%BB%8E%E6%9C%AC%E5%9C%B0%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="octicon octicon-link"></span></a>从本地获取用户信息</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">getUserInfo</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="%E4%BB%8E%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E7%9A%84%E7%99%BB%E5%BD%95%E7%8A%B6%E6%80%81%E5%92%8C%E4%BF%A1%E6%81%AF" class="anchor" href="#%E4%BB%8E%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E7%9A%84%E7%99%BB%E5%BD%95%E7%8A%B6%E6%80%81%E5%92%8C%E4%BF%A1%E6%81%AF"><span class="octicon octicon-link"></span></a>从服务端获取用户的登录状态和信息</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">checkUserLoginAsync</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="%E9%80%9A%E8%BF%87%E7%94%A8%E6%88%B7%E5%90%8D%E6%89%BE%E5%9B%9E%E5%AF%86%E7%A0%81" class="anchor" href="#%E9%80%9A%E8%BF%87%E7%94%A8%E6%88%B7%E5%90%8D%E6%89%BE%E5%9B%9E%E5%AF%86%E7%A0%81"><span class="octicon octicon-link"></span></a>通过用户名找回密码</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">findPwdAsync</span><span class="p">(</span><span class="nx">username</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="%E5%88%A4%E6%96%AD%E6%89%BE%E5%9B%9E%E5%AF%86%E7%A0%81%E7%9A%84%E6%BF%80%E6%B4%BB%E7%A0%81%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A1%AE" class="anchor" href="#%E5%88%A4%E6%96%AD%E6%89%BE%E5%9B%9E%E5%AF%86%E7%A0%81%E7%9A%84%E6%BF%80%E6%B4%BB%E7%A0%81%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A1%AE"><span class="octicon octicon-link"></span></a>判断找回密码的激活码是否正确</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">checkCodeAsync</span><span class="p">({</span>
+    <span class="nx">username</span> <span class="o">:</span> <span class="s1">'username'</span><span class="p">,</span>
+    <span class="nx">passcode</span> <span class="o">:</span> <span class="s1">'passcode'</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>
+<a name="%E9%87%8D%E7%BD%AE%E5%AF%86%E7%A0%81" class="anchor" href="#%E9%87%8D%E7%BD%AE%E5%AF%86%E7%A0%81"><span class="octicon octicon-link"></span></a>重置密码</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">resetPwdAsync</span><span class="p">({</span>
+    <span class="nx">username</span> <span class="o">:</span> <span class="s1">'username'</span><span class="p">,</span>
+    <span class="nx">passcode</span> <span class="o">:</span> <span class="s1">'passcode'</span><span class="p">,</span>
+    <span class="nx">password</span> <span class="o">:</span> <span class="s1">'password'</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>
+<a name="%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81" class="anchor" href="#%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81"><span class="octicon octicon-link"></span></a>修改密码</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">modifyPwdAsync</span><span class="p">({</span>
+    <span class="nx">password</span> <span class="o">:</span> <span class="s1">'password'</span><span class="p">,</span>
+    <span class="nx">newpassword</span> <span class="o">:</span> <span class="s1">'newpassword'</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>
+<a name="%E4%BF%AE%E6%94%B9%E6%98%B5%E7%A7%B0" class="anchor" href="#%E4%BF%AE%E6%94%B9%E6%98%B5%E7%A7%B0"><span class="octicon octicon-link"></span></a>修改昵称</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">updateProfileAsync</span><span class="p">({</span>
+    <span class="nx">nickname</span> <span class="o">:</span> <span class="s1">'nickname'</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>
+<a name="%E4%BF%AE%E6%94%B9%E5%A4%B4%E5%83%8F" class="anchor" href="#%E4%BF%AE%E6%94%B9%E5%A4%B4%E5%83%8F"><span class="octicon octicon-link"></span></a>修改头像</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">uploadAvatarAsync</span><span class="p">({</span>
+    <span class="nx">file</span> <span class="o">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>
+<a name="%E5%88%A4%E6%96%AD%E4%B8%80%E9%94%AE%E6%B3%A8%E5%86%8C%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81%E7%9A%84%E6%BF%80%E6%B4%BB%E7%A0%81%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A1%AE" class="anchor" href="#%E5%88%A4%E6%96%AD%E4%B8%80%E9%94%AE%E6%B3%A8%E5%86%8C%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81%E7%9A%84%E6%BF%80%E6%B4%BB%E7%A0%81%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A1%AE"><span class="octicon octicon-link"></span></a>判断一键注册修改密码的激活码是否正确</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">checkPasscodeAsync</span><span class="p">({</span>
+    <span class="nx">passcode</span> <span class="o">:</span> <span class="s1">'passcode'</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>
+<a name="%E4%B8%80%E9%94%AE%E6%B3%A8%E5%86%8C%E7%9A%84%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81" class="anchor" href="#%E4%B8%80%E9%94%AE%E6%B3%A8%E5%86%8C%E7%9A%84%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81"><span class="octicon octicon-link"></span></a>一键注册的修改密码</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">modifyPwdByCodeAsync</span><span class="p">({</span>
+    <span class="nx">passcode</span> <span class="o">:</span> <span class="s1">'passcode'</span><span class="p">,</span>
+    <span class="nx">password</span> <span class="o">:</span> <span class="s1">'password'</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>
+<a name="%E6%BF%80%E6%B4%BB%E8%B4%A6%E5%8F%B7" class="anchor" href="#%E6%BF%80%E6%B4%BB%E8%B4%A6%E5%8F%B7"><span class="octicon octicon-link"></span></a>激活账号</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">activateAsync</span><span class="p">({</span>
+    <span class="nx">type</span> <span class="o">:</span> <span class="s1">'sms'</span> <span class="c1">// or email</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>
+<a name="%E5%88%A4%E6%96%AD%E6%BF%80%E6%B4%BB%E8%B4%A6%E5%8F%B7%E7%9A%84%E6%BF%80%E6%B4%BB%E7%A0%81%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A1%AE" class="anchor" href="#%E5%88%A4%E6%96%AD%E6%BF%80%E6%B4%BB%E8%B4%A6%E5%8F%B7%E7%9A%84%E6%BF%80%E6%B4%BB%E7%A0%81%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A1%AE"><span class="octicon octicon-link"></span></a>判断激活账号的激活码是否正确</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">activateValidAsync</span><span class="p">({</span>
+    <span class="nx">passcode</span> <span class="o">:</span> <span class="s1">'passcode'</span><span class="p">,</span>
+    <span class="nx">password</span> <span class="o">:</span> <span class="s1">'password'</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>
+<a name="%E8%A7%A3%E9%99%A4%E7%AC%AC%E4%B8%89%E6%96%B9%E8%B4%A6%E5%8F%B7%E7%9A%84%E7%BB%91%E5%AE%9A" class="anchor" href="#%E8%A7%A3%E9%99%A4%E7%AC%AC%E4%B8%89%E6%96%B9%E8%B4%A6%E5%8F%B7%E7%9A%84%E7%BB%91%E5%AE%9A"><span class="octicon octicon-link"></span></a>解除第三方账号的绑定</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span> <span class="nx">unbindThirdPartyAsync</span><span class="p">({</span>
+    <span class="nx">platform</span> <span class="o">:</span> <span class="s1">'1'</span> <span class="c1">// 1=sina / 2=qq / 3=renren</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>
+<a name="%E9%80%80%E5%87%BA" class="anchor" href="#%E9%80%80%E5%87%BA"><span class="octicon octicon-link"></span></a>退出</h3>
+
+<div class="highlight highlight-JavaScript"><pre><span class="nx">SnapPea</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">logoutAsync</span><span class="p">();</span>
+</pre></div>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/wandoulabs/Account-JavaScriptSDK/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/wandoulabs/Account-JavaScriptSDK/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/wandoulabs/Account-JavaScriptSDK"></a> is maintained by <a href="https://github.com/wandoulabs">wandoulabs</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
