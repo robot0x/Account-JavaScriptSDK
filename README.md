@@ -11,19 +11,27 @@
 依赖
 --------------------------------------
 
-SDK 和 Hook 都依赖 [jQuery](https://github.com/jquery/jquery)（或 [Zepto](https://github.com/madrobby/zepto)）。由于跨文档通讯的需要，Hook 还依赖 [MessengerJS](https://github.com/biqing/MessengerJS)。
+Hook 和 SDK 都依赖 [jQuery](https://github.com/jquery/jquery)（或 [Zepto](https://github.com/madrobby/zepto)）。由于跨文档通讯的需要，Hook 还依赖 [MessengerJS](https://github.com/biqing/MessengerJS)。
 
 其中，Zepto 需要通过定制额外支持 data / deferred / callbacks 模块。定制方法请参考[官方说明](https://github.com/madrobby/zepto)，或者直接使用我们编译好的定制版 `app/javascripts/zepto.js` 。
+
+如何使用
+--------------------------------------
+1. `git clone git@github.com:wandoulabs/Account-JavaScriptSDK.git` ；
+2. `npm install` ；
+3. `bower install` ；
+4. `grunt build` ；
+5. 在页面中引入 `dist/snappea-account-hook.js` 或 `dist/snappea-account-sdk.js` 。
 
 约定
 --------------------------------------
 
-所有异步函数（函数名以 Async 结尾）将返回 $.Deferred 对象。
+所有异步函数（函数名以 `Async` 结尾）将返回 `$.Deferred` 对象。
 
 Hook 用法
 --------------------------------------
 
-### 检查用户登录状态
+#### 检查用户登录状态
 
 ```JavaScript
 SnapPea.AccountHook.checkAsync().then(function (resp) {
@@ -33,7 +41,7 @@ SnapPea.AccountHook.checkAsync().then(function (resp) {
 });
 ```
 
-### 在页面内嵌入豌豆荚账号页面
+#### 在页面内嵌入豌豆荚账号页面
 
 ```JavaScript
 SnapPea.AccountHook.openAsync(name).then(function (resp) {
@@ -52,7 +60,7 @@ SnapPea.AccountHook.openAsync(name).then(function (resp) {
 * password 修改密码
 * logout 退出
 
-### 跳转到豌豆荚账号页面
+#### 跳转到豌豆荚账号页面
 
 ```JavaScript
 SnapPea.AccountHook.redirect(name);
@@ -61,53 +69,85 @@ SnapPea.AccountHook.redirect(name);
 SDK 用法
 --------------------------------------
 
-## Login
+### 登录
+
 ```JavaScript
 SnapPea.Account.loginAsync({
     username : 'username',
     password : 'psw'
 });
 ```
-## Logout
-```JavaScript
-SnapPea.Account.logoutAsync();
-```
-## Registration
+
+### 注册
+
 ```JavaScript
 SnapPea.Account.regAsync({
     username : 'username',
     password : 'psw'
 });
 ```
-## Validate email
+
+### 验证邮箱格式
+
 ```JavaScript
 SnapPea.Account.isEmail(email);
 ```
-## Validaet phone number
+
+### 验证手机号格式
+
 ```JavaScript
 SnapPea.Account.isPhoneNumber(email);
 ```
-## Check whether an username is exist
+
+### 检查用户名是否可用
+
 ```JavaScript
 SnapPea.Account.checkUsernameAsync(username);
 ```
-## Get login status
+
+### 通过第三方账号登录
+```JavaScript
+SnapPea.Account.loginWithThirdParty({
+    platform : 'sina',
+    callback : 'http://www.wandoujia.com/'
+});
+```
+
+### 从本地获取用户登录状态
+
 ```JavaScript
 SnapPea.Account.isLogined();
 ```
-## Get user info
+
+### 从本地获取用户信息
+
 ```JavaScript
 SnapPea.Account.getUserInfo();
 ```
-## Ask server whether an user is logined
+
+### 从服务端获取用户的登录状态和信息
+
 ```JavaScript
 SnapPea.Account.checkUserLoginAsync();
 ```
-## Request server to reset password
+
+### 通过用户名找回密码
+
 ```JavaScript
 SnapPea.Account.findPwdAsync(username);
 ```
-## Reset password
+
+### 判断找回密码的激活码是否正确
+
+```JavaScript
+SnapPea.Account.checkCodeAsync({
+    username : 'username',
+    passcode : 'passcode'
+});
+```
+
+### 重置密码
+
 ```JavaScript
 SnapPea.Account.resetPwdAsync({
     username : 'username',
@@ -115,10 +155,76 @@ SnapPea.Account.resetPwdAsync({
     password : 'password'
 });
 ```
-## Login with thirdpart platform
+
+### 修改密码
+
 ```JavaScript
-SnapPea.Account.loginWithThirdParty({
-    platform : 'weibo',
-    callback : 'http://www.wandoujia.com/'
+SnapPea.Account.modifyPwdAsync({
+    password : 'password',
+    newpassword : 'newpassword'
 });
+```
+
+### 修改昵称
+
+```JavaScript
+SnapPea.Account.updateProfileAsync({
+    nickname : 'nickname'
+});
+```
+
+### 修改头像
+
+```JavaScript
+SnapPea.Account.uploadAvatarAsync({
+    file : e.currentTarget.files[0]
+});
+```
+
+### 判断一键注册修改密码的激活码是否正确
+
+```JavaScript
+SnapPea.Account.checkPasscodeAsync({
+    passcode : 'passcode'
+});
+```
+
+### 一键注册的修改密码
+
+```JavaScript
+SnapPea.Account.modifyPwdByCodeAsync({
+    passcode : 'passcode',
+    password : 'password'
+});
+```
+
+### 激活账号
+
+```JavaScript
+SnapPea.Account.activateAsync({
+    type : 'sms' // or email
+});
+```
+
+### 判断激活账号的激活码是否正确
+
+```JavaScript
+SnapPea.Account.activateValidAsync({
+    passcode : 'passcode',
+    password : 'password'
+});
+```
+
+### 解除第三方账号的绑定
+
+```JavaScript
+SnapPea.Account. unbindThirdPartyAsync({
+    platform : '1' // 1=sina / 2=qq / 3=renren
+});
+```
+
+### 退出
+
+```JavaScript
+SnapPea.Account.logoutAsync();
 ```
