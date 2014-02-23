@@ -1,7 +1,7 @@
 require.config({
     baseUrl: '/base/',
     paths : {
-        Zepto : 'app/javascripts/zepto'
+        Zepto : 'app/javascripts/zepto.min'
     }
 });
 

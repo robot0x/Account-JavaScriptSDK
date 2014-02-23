@@ -172,7 +172,7 @@ module.exports = function (grunt) {
         jshint : {
             test : ['<%= paths.app %>/javascripts/**/*.js'],
             options : {
-                ignores : ['<%= paths.app %>/javascripts/zepto.js']
+                ignores : ['<%= paths.app %>/javascripts/zepto.min.js']
             }
         },
         karma : {
