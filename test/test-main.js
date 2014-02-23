@@ -1,20 +1,11 @@
 require.config({
     baseUrl: '/base/',
     paths : {
-        $ : 'app/components/jquery/jquery',
-        Zepto : 'app/javascripts/zepto'
-    },
-    shim : {
-        $ : {
-            exports : '$'
-        },
-        Zepto : {
-            exports : 'Zepto'
-        }
+        Zepto : 'app/javascripts/zepto.min'
     }
 });
 
-require(['$', 'Zepto'], function ($, Zepto, Q) {
+require(['Zepto'], function ($) {
     require(['test/specs/spec-sdk'], function () {
         window.__karma__.start();
     });
