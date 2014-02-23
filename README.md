@@ -17,13 +17,17 @@ Hook 和 SDK 都依赖 [jQuery](https://github.com/jquery/jquery)（或 [Zepto](
 
 如何使用
 --------------------------------------
-1. 通过 git 或 bower 安装；
+
+1. 通过 git 或 bower 安装
   - `git clone git@github.com:wandoulabs/Account-JavaScriptSDK.git`
   - `bower install wandoulabs/Account-JavaScriptSDK`
-2. `npm install` ；
-3. `bower install` ；
-4. `grunt build` ；
-5. 在页面中引入 `dist/snappea-account-hook.js` 或 `dist/snappea-account-sdk.js` 。
+2. 在页面中引入 `dist/snappea-account-hook.js` 或 `dist/snappea-account-sdk.js`
+
+如果需要手动编译最新代码，请依次执行：
+
+1. `npm install`
+2. `bower install`
+3. `grunt build`
 
 约定
 --------------------------------------
