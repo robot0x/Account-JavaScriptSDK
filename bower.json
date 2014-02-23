@@ -1,9 +1,25 @@
 {
   "name": "WandouLabs-AccountJavaScriptSDK",
   "version": "1.0.1",
+  "description": "JavaScript-SDK for WandouLabs Account System",
+  "homepage": "https://github.com/wandoulabs/Account-JavaScriptSDK",
+  "main": [
+    "dist/snappea-account-hook.js",
+    "dist/snappea-account-sdk.js"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/components",
+    "test",
+    "tests"
+  ],
   "dependencies": {
-    "zeptojs": "~1.1.3",
-    "jquery": "~1.11.0",
     "MessengerJS": "git@github.com:biqing/MessengerJS.git#086d1f9217f90404d237f54b29a9fd9b99f513eb"
+  },
+  "devDependencies": {
+    "jquery": "~1.11.0",
+    "zeptojs": "~1.1.3"
   }
 }
