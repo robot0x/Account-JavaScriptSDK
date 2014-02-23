@@ -26,6 +26,17 @@
         return dist;
     };
 
+    var error = {
+        ajax : {
+            error : -1,
+            msg : '请求失败，请检查网络连接状况。'
+        },
+        missingParameters : {
+            error : -2,
+            msg : '参数不全'
+        }
+    };
+
     var HOST = 'https://account.wandoujia.com',
         HOST_HTTP = 'http://www.wandoujia.com/api/account',
         API_VERSION_4 = '/v4/api',
@@ -71,10 +82,7 @@
         options = options || {};
 
         if (!data.username || !data.password) {
-            deferred.reject({
-                error : -2,
-                msg : '参数不全'
-            });
+            deferred.reject(error.missingParameters);
         } else {
             ajax({
                 type : 'POST',
@@ -99,10 +107,7 @@
                         deferred.reject(xhr.responseJSON);
                     }
 
-                    deferred.reject({
-                        error : -1,
-                        msg : '请求失败，请检查网络连接状况。'
-                    });
+                    deferred.reject(error.ajax);
                 }
             });
         }
@@ -146,10 +151,7 @@
                     deferred.reject(xhr.responseJSON);
                 }
 
-                deferred.reject({
-                    error : -1,
-                    msg : '请求失败，请检查网络连接状况。'
-                });
+                deferred.reject(error.ajax);
             }
         });
 
@@ -163,10 +165,7 @@
         options = options || {};
 
         if (!data.username || (!data.oneKeyRegister && !data.password)) {
-            deferred.reject({
-                error : -2,
-                msg : '参数不全'
-            });
+            deferred.reject(error.missingParameters);
         } else {
             ajax({
                 type : 'POST',
@@ -193,10 +192,7 @@
                         deferred.reject(xhr.responseJSON);
                     }
 
-                    deferred.reject({
-                        error : -1,
-                        msg : '请求失败，请检查网络连接状况。'
-                    });
+                    deferred.reject(error.ajax);
                 }
             });
         }
@@ -210,10 +206,7 @@
         options = options || {};
 
         if (username === undefined) {
-            deferred.reject({
-                error : -2,
-                msg : '参数不全'
-            });
+            deferred.reject(error.missingParameters);
         } else {
             ajax({
                 type : 'POST',
@@ -230,10 +223,7 @@
                         deferred.reject(xhr.responseJSON);
                     }
 
-                    deferred.reject({
-                        error : -1,
-                        msg : '请求失败，请检查网络连接状况。'
-                    });
+                    deferred.reject(error.ajax);
                 }
             });
         }
@@ -280,10 +270,7 @@
         options = options || {};
 
         if (username === undefined) {
-            deferred.reject({
-                error : -2,
-                msg : '参数不全'
-            });
+            deferred.reject(error.missingParameters);
         } else {
             ajax({
                 type : 'POST',
@@ -304,10 +291,7 @@
                         deferred.reject(xhr.responseJSON);
                     }
 
-                    deferred.reject({
-                        error : -1,
-                        msg : '请求失败，请检查网络连接状况。'
-                    });
+                    deferred.reject(error.ajax);
                 }
             });
         }
@@ -323,10 +307,7 @@
 
         if (data.username === undefined ||
                 data.passcode === undefined) {
-            deferred.reject({
-                error : -2,
-                msg : '参数不全'
-            });
+            deferred.reject(error.missingParameters);
         } else {
             ajax({
                 type : 'POST',
@@ -348,10 +329,7 @@
                         deferred.reject(xhr.responseJSON);
                     }
 
-                    deferred.reject({
-                        error : -1,
-                        msg : '请求失败，请检查网络连接状况。'
-                    });
+                    deferred.reject(error.ajax);
                 }
             });
         }
@@ -368,10 +346,7 @@
         if (data.username === undefined ||
                 data.passcode === undefined ||
                 data.password === undefined) {
-            deferred.reject({
-                error : -2,
-                msg : '参数不全'
-            });
+            deferred.reject(error.missingParameters);
         } else {
             ajax({
                 type : 'POST',
@@ -395,10 +370,7 @@
                         deferred.reject(xhr.responseJSON);
                     }
 
-                    deferred.reject({
-                        error : -1,
-                        msg : '请求失败，请检查网络连接状况。'
-                    });
+                    deferred.reject(error.ajax);
                 }
             });
         }
@@ -414,10 +386,7 @@
 
         if (data.password === undefined ||
                 data.newpassword === undefined) {
-            deferred.reject({
-                error : -2,
-                msg : '参数不全'
-            });
+            deferred.reject(error.missingParameters);
         } else {
             ajax({
                 type : 'POST',
@@ -439,10 +408,7 @@
                         deferred.reject(xhr.responseJSON);
                     }
 
-                    deferred.reject({
-                        error : -1,
-                        msg : '请求失败，请检查网络连接状况。'
-                    });
+                    deferred.reject(error.ajax);
                 }
             });
         }
@@ -457,10 +423,7 @@
         options = options || {};
 
         if (data.passcode === undefined) {
-            deferred.reject({
-                error : -2,
-                msg : '参数不全'
-            });
+            deferred.reject(error.missingParameters);
         } else {
             ajax({
                 type : 'POST',
@@ -481,10 +444,7 @@
                         deferred.reject(xhr.responseJSON);
                     }
 
-                    deferred.reject({
-                        error : -1,
-                        msg : '请求失败，请检查网络连接状况。'
-                    });
+                    deferred.reject(error.ajax);
                 }
             });
         }
@@ -500,10 +460,7 @@
 
         if (data.passcode === undefined ||
                 data.password === undefined) {
-            deferred.reject({
-                error : -2,
-                msg : '参数不全'
-            });
+            deferred.reject(error.missingParameters);
         } else {
             ajax({
                 type : 'POST',
@@ -525,10 +482,7 @@
                         deferred.reject(xhr.responseJSON);
                     }
 
-                    deferred.reject({
-                        error : -1,
-                        msg : '请求失败，请检查网络连接状况。'
-                    });
+                    deferred.reject(error.ajax);
                 }
             });
         }
@@ -543,10 +497,7 @@
         options = options || {};
 
         if (data.nickname === undefined) {
-            deferred.reject({
-                error : -2,
-                msg : '参数不全'
-            });
+            deferred.reject(error.missingParameters);
         } else {
             ajax({
                 type : 'POST',
@@ -568,10 +519,7 @@
                         deferred.reject(xhr.responseJSON);
                     }
 
-                    deferred.reject({
-                        error : -1,
-                        msg : '请求失败，请检查网络连接状况。'
-                    });
+                    deferred.reject(error.ajax);
                 }
             });
         }
@@ -586,10 +534,7 @@
         options = options || {};
 
         if (data.type === undefined) {
-            deferred.reject({
-                error : -2,
-                msg : '参数不全'
-            });
+            deferred.reject(error.missingParameters);
         } else {
             ajax({
                 type : 'GET',
@@ -610,10 +555,7 @@
                         deferred.reject(xhr.responseJSON);
                     }
 
-                    deferred.reject({
-                        error : -1,
-                        msg : '请求失败，请检查网络连接状况。'
-                    });
+                    deferred.reject(error.ajax);
                 }
             });
         }
@@ -628,10 +570,7 @@
         options = options || {};
 
         if (data.code === undefined) {
-            deferred.reject({
-                error : -2,
-                msg : '参数不全'
-            });
+            deferred.reject(error.missingParameters);
         } else {
             ajax({
                 type : 'POST',
@@ -653,10 +592,7 @@
                         deferred.reject(xhr.responseJSON);
                     }
 
-                    deferred.reject({
-                        error : -1,
-                        msg : '请求失败，请检查网络连接状况。'
-                    });
+                    deferred.reject(error.ajax);
                 }
             });
         }
@@ -674,10 +610,7 @@
         var formData, f;
 
         if (data.file === undefined) {
-            deferred.reject({
-                error : -2,
-                msg : '参数不全'
-            });
+            deferred.reject(error.missingParameters);
         } else {
             formData = new global.FormData();
             formData.append('file', data.file);
@@ -708,10 +641,7 @@
                         deferred.reject(xhr.responseJSON);
                     }
 
-                    deferred.reject({
-                        error : -1,
-                        msg : '请求失败，请检查网络连接状况。'
-                    });
+                    deferred.reject(error.ajax);
                 }
             });
         }
@@ -734,10 +664,7 @@
 
         if (data.platform === undefined ||
                 platforms[data.platform] === undefined) {
-            deferred.reject({
-                error : -2,
-                msg : '参数不全'
-            });
+            deferred.reject(error.missingParameters);
         } else {
             ajax({
                 type : 'POST',
@@ -758,10 +685,7 @@
                         deferred.reject(xhr.responseJSON);
                     }
 
-                    deferred.reject({
-                        error : -1,
-                        msg : '请求失败，请检查网络连接状况。'
-                    });
+                    deferred.reject(error.ajax);
                 }
             });
         }
@@ -776,10 +700,7 @@
         options = options || {};
 
         if (data.code === undefined) {
-            deferred.reject({
-                error : -2,
-                msg : '参数不全'
-            });
+            deferred.reject(error.missingParameters);
         } else {
             ajax({
                 type : 'POST',
@@ -800,10 +721,7 @@
                         deferred.reject(xhr.responseJSON);
                     }
 
-                    deferred.reject({
-                        error : -1,
-                        msg : '请求失败，请检查网络连接状况。'
-                    });
+                    deferred.reject(error.ajax);
                 }
             });
         }
