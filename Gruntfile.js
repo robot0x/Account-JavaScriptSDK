@@ -234,6 +234,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('server', [
         'clean:server',
+        'jshint:test',
         'compass:server',
         'connect:server',
         'karma:server',
@@ -253,6 +254,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
+        'jshint:test',
         'uglify:dist'
     ]);
 };
