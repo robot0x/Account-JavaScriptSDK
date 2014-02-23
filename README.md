@@ -17,7 +17,9 @@ Hook 和 SDK 都依赖 [jQuery](https://github.com/jquery/jquery)（或 [Zepto](
 
 如何使用
 --------------------------------------
-1. `git clone git@github.com:wandoulabs/Account-JavaScriptSDK.git` ；
+1. 通过 git 或 bower 安装；
+  - `git clone git@github.com:wandoulabs/Account-JavaScriptSDK.git`
+  - `bower install wandoulabs/Account-JavaScriptSDK`
 2. `npm install` ；
 3. `bower install` ；
 4. `grunt build` ；
