@@ -318,11 +318,10 @@
                 break;
 
             case 'done':
-                deferred.resolve(AccountHook.checkAsync().fail(function (resp) {
-                    return resp;
-                }).fin(function () {
-                    $ctn.remove();
-                }));
+                AccountHook.checkAsync().always(function (resp) {
+                    close();
+                    deferred.resolve(resp);
+                });
                 break;
 
             case 'redirect':
