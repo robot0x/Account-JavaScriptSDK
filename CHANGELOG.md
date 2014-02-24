@@ -1,8 +1,8 @@
-<a name="v1.0.0"></a>
-## v1.0.0 (2013-11-15)
+<a name="v1.1.1"></a>
+### v1.1.1 (2014-02-24)
 
 
-#### Features
+#### Bug Fixes
 
-* Refactor project struct with generator-wdj ([183dac5f](https://github.com/wandoulabs/Account-JavaScriptSDK/commit/183dac5f2e526d44b315b2b14b7d7f495e1c7965))
+* Using `deferred.always()` instead of `fin()` ([c24bbe14](https://github.com/wandoulabs/Account-JavaScriptSDK/commit/c24bbe145980b28cdca9e359c2e4ae73e9c47358))
 
