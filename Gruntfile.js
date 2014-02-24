@@ -257,4 +257,25 @@ module.exports = function (grunt) {
         'jshint:test',
         'uglify:dist'
     ]);
+
+    grunt.registerTask('release', [
+        'build',
+        'bump-only:patch',
+        'changelog',
+        'bump-commit'
+    ]);
+
+    grunt.registerTask('release:minor', [
+        'build',
+        'bump-only:minor',
+        'changelog',
+        'bump-commit'
+    ]);
+
+    grunt.registerTask('release:major', [
+        'build',
+        'bump-only:major',
+        'changelog',
+        'bump-commit'
+    ]);
 };
