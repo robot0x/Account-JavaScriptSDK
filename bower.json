@@ -16,7 +16,7 @@
     "tests"
   ],
   "dependencies": {
-    "MessengerJS": "git@github.com:biqing/MessengerJS.git#086d1f9217f90404d237f54b29a9fd9b99f513eb"
+    "MessengerJS": "git@github.com:biqing/MessengerJS.git#d61647320dd1a8f2353deff91f76cb2d92ad2e10"
   },
   "devDependencies": {
     "jquery": "~1.11.0",
