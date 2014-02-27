@@ -1,3 +1,11 @@
+<a name="v1.1.3"></a>
+### v1.1.3 (2014-02-27)
+
+
+#### Bug Fixes
+
+* Cant open `password` view in Windows client ([953cdb22](https://github.com/wandoulabs/Account-JavaScriptSDK/commit/953cdb22721e912fa7b5f2c34531ab5aee0977db))
+
 <a name="v1.1.2"></a>
 ### v1.1.2 (2014-02-25)
 

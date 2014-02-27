@@ -236,30 +236,32 @@
                 break;
             }
 
-            oneRingRequestAsync({
-                url : url
-            }).then(function () {
-                var intervalFunc;
-                var doneFunc = function (resp) {
+            if (!!url) {
+                oneRingRequestAsync({
+                    url : url
+                }).then(function () {
+                    var intervalFunc;
+                    var doneFunc = function (resp) {
+                        clearInterval(intervalCheck);
+                        deferred.resolve(resp);
+                    };
+
+                    if (name !== 'logout') {
+                        intervalFunc = function () {
+                            AccountHook.checkAsync().then(doneFunc);
+                        };
+                    } else {
+                        intervalFunc = function () {
+                            AccountHook.checkAsync().fail(doneFunc);
+                        };
+                    }
+
                     clearInterval(intervalCheck);
-                    deferred.resolve(resp);
-                };
+                    intervalCheck = setInterval(intervalFunc, 500);
+                });
 
-                if (name !== 'logout') {
-                    intervalFunc = function () {
-                        AccountHook.checkAsync().then(doneFunc);
-                    };
-                } else {
-                    intervalFunc = function () {
-                        AccountHook.checkAsync().fail(doneFunc);
-                    };
-                }
-
-                clearInterval(intervalCheck);
-                intervalCheck = setInterval(intervalFunc, 500);
-            });
-
-            return deferred.promise();
+                return deferred.promise();
+            }
         }
 
         url = 'http://www.wandoujia.com/account/' +
