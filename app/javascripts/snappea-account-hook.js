@@ -280,11 +280,6 @@
                     '&' + param.join('&') +
                     '#' + name;
 
-        console.error(url);
-
-        url = url.replace('www.wandoujia.com/account', '127.0.0.1:9999');
-        // url = url.replace('127.0.0.1', '10.211.55.2');
-
         var forceReflow;
         var $body = $('body').addClass('w-account-hook-opened');
         var $ctn = $('<div>').addClass('w-account-hook-backdrop').appendTo($body);
