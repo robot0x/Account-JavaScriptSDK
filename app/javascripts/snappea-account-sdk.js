@@ -68,7 +68,7 @@
         loginWithThirdParty : HOST + '/web/oauth2/{1}/login'
     };
 
-    var USER_INFO;
+    var USER_INFO = {};
     var IS_LOGINED = false;
 
     var Account = {};
