@@ -205,7 +205,7 @@
 
     $('head').append('<style type="text/css">' + STYLE_RULES + '</style>');
 
-    AccountHook.openAsync = function (name) {
+    AccountHook.openAsync = function (name, options) {
         var deferred = new Deferred();
 
         var defaultData = {
@@ -216,6 +216,7 @@
         var url = '';
 
         name = (name && name.toLowerCase()) || 'login';
+        options = options || {};
 
         if (IS_WINDOWS) {
             switch (name) {
@@ -264,11 +265,25 @@
             }
         }
 
+        var param = [];
+
+        for (var o in options) {
+            if (options.hasOwnProperty(o)) {
+                param.push(o + '=' + global.encodeURIComponent(options[o]));
+            }
+        }
+
         url = 'http://www.wandoujia.com/account/' +
                     '?source=web' +
                     '&medium=' + encodeURIComponent(location.host + location.pathname) +
                     '&close=1' +
+                    '&' + param.join('&') +
                     '#' + name;
+
+        console.error(url);
+
+        url = url.replace('www.wandoujia.com/account', '127.0.0.1:9999');
+        // url = url.replace('127.0.0.1', '10.211.55.2');
 
         var forceReflow;
         var $body = $('body').addClass('w-account-hook-opened');
