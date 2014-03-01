@@ -266,8 +266,9 @@
         }
 
         var param = [];
+        var o;
 
-        for (var o in options) {
+        for (o in options) {
             if (options.hasOwnProperty(o)) {
                 param.push(o + '=' + global.encodeURIComponent(options[o]));
             }
