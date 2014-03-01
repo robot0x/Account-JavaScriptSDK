@@ -54,7 +54,10 @@
             });
 
             function demo(name) {
-                SnapPea.AccountHook.openAsync(name).then(function (resp) {
+                SnapPea.AccountHook.openAsync(name, {
+                    lang : 'zh',
+                    medium : 'demo'
+                }).then(function (resp) {
                     if (resp.isLoggedIn) {
                         console.log('Welcome back, %s.', resp.data.nick);
                     } else {
