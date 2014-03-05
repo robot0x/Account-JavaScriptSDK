@@ -11,7 +11,7 @@
 依赖
 --------------------------------------
 
-Hook 和 SDK 都依赖 [jQuery](https://github.com/jquery/jquery)（或 [Zepto](https://github.com/madrobby/zepto)）。由于跨文档通讯的需要，Hook 还依赖 [MessengerJS](https://github.com/biqing/MessengerJS)。
+Hook 和 SDK 都依赖 [jQuery](https://github.com/jquery/jquery)（或 [Zepto](https://github.com/madrobby/zepto)）。
 
 其中，Zepto 需要通过定制额外支持 data / deferred / callbacks 模块。定制方法请参考[官方说明](https://github.com/madrobby/zepto)，或者直接使用我们编译好的定制版 `app/javascripts/zepto.min.js` 。
 
@@ -40,17 +40,19 @@ Hook 用法
 #### 检查用户登录状态
 
 ```JavaScript
-SnapPea.AccountHook.checkAsync().then(function (resp) {
+SnapPea.AccountHook.checkAsync(options).then(function (resp) {
     console.log('Hello, %s!', resp.data.nick); // 已登录
 }).fail(function () {
     console.log('Who are you?'); // 未登录
 });
 ```
 
+传入的参数 `options` 是选填的，类型为 `Object` ，用于附加额外字段到检查用户登录状态的请求中。
+
 #### 在页面内嵌入豌豆荚账号页面
 
 ```JavaScript
-SnapPea.AccountHook.openAsync(name).then(function (resp) {
+SnapPea.AccountHook.openAsync(name, options).then(function (resp) {
     if (resp.isLoggedIn) {
         console.log('Welcome back, %s.', resp.data.nick); // 操作成功后处于登录状态
     } else {
@@ -59,12 +61,14 @@ SnapPea.AccountHook.openAsync(name).then(function (resp) {
 });
 ```
 
-其中，`name` 可为：
-* login 登录
-* register 注册
-* find 找回密码
-* password 修改密码
-* logout 退出
+传入的参数 `name` 是必填的，可为：
+* `login` 登录
+* `register` 注册
+* `find` 找回密码
+* `password` 修改密码
+* `logout` 退出
+
+传入的参数 `options` 是选填的，类型为 `Object` ，用于定制豌豆荚账号页面。
 
 #### 跳转到豌豆荚账号页面
 

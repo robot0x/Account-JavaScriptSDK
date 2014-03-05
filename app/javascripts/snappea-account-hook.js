@@ -205,7 +205,7 @@
 
     $('head').append('<style type="text/css">' + STYLE_RULES + '</style>');
 
-    AccountHook.openAsync = function (name) {
+    AccountHook.openAsync = function (name, options) {
         var deferred = new Deferred();
 
         var defaultData = {
@@ -216,6 +216,7 @@
         var url = '';
 
         name = (name && name.toLowerCase()) || 'login';
+        options = options || {};
 
         if (IS_WINDOWS) {
             switch (name) {
@@ -264,10 +265,20 @@
             }
         }
 
+        var param = [];
+        var o;
+
+        for (o in options) {
+            if (options.hasOwnProperty(o)) {
+                param.push(o + '=' + global.encodeURIComponent(options[o]));
+            }
+        }
+
         url = 'http://www.wandoujia.com/account/' +
                     '?source=web' +
                     '&medium=' + encodeURIComponent(location.host + location.pathname) +
                     '&close=1' +
+                    '&' + param.join('&') +
                     '#' + name;
 
         var forceReflow;
