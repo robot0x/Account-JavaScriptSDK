@@ -1,3 +1,16 @@
+<a name="v1.1.4"></a>
+### v1.1.4 (2014-03-07)
+
+
+#### Bug Fixes
+
+* `Account.getUserInfo()` need initialize ([8518e049](https://github.com/wandoulabs/Account-JavaScriptSDK/commit/8518e049158b938bcaa3e33bc2e016673c53c03b))
+
+
+#### Features
+
+* Support customize account page ([56feeb22](https://github.com/wandoulabs/Account-JavaScriptSDK/commit/56feeb22f9f4599130925839f6843ade454ff4e1))
+
 <a name="v1.1.3"></a>
 ### v1.1.3 (2014-02-27)
 
