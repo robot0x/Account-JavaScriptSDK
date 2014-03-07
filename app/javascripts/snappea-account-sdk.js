@@ -120,7 +120,7 @@
     };
 
     Account.getUserInfo = function () {
-        return USER_INFO;
+        return USER_INFO || {};
     };
 
     Account.logoutAsync = function (options) {

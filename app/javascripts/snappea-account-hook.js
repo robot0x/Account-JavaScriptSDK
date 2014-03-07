@@ -31,7 +31,6 @@
             'right: 0;' +
             'top: 0;' +
             'z-index: 999;' +
-
             '-webkit-transition: opacity .15s linear;' +
             '-moz-transition: opacity .15s linear;' +
             '-o-transition: opacity .15s linear;' +
