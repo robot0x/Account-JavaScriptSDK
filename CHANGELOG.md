@@ -1,3 +1,11 @@
+<a name="v1.1.5"></a>
+### v1.1.5 (2014-06-13)
+
+
+#### Features
+
+* Add param to `modifyPwdByCode` ([f20ccd35](https://github.com/wandoulabs/Account-JavaScriptSDK/commit/f20ccd356bf59cfa52ff1ee0293f8eac06ae661f))
+
 <a name="v1.1.4"></a>
 ### v1.1.4 (2014-03-07)
 
