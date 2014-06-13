@@ -458,7 +458,8 @@
         data = data || {};
         options = options || {};
 
-        if (data.passcode === undefined ||
+        if (data.username === undefined ||
+                data.passcode === undefined ||
                 data.password === undefined) {
             deferred.reject(error.missingParameters);
         } else {
@@ -467,6 +468,7 @@
                 dataType : 'json',
                 url : CONFIG.modifyPwdByCode,
                 data : extend({
+                    username : data.username,
                     passcode : data.passcode,
                     password : data.password
                 }, options),
