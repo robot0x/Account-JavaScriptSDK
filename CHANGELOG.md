@@ -1,3 +1,20 @@
+<a name="v1.1.6"></a>
+### v1.1.6 (2014-07-31)
+
+
+#### Bug Fixes
+
+* Fix test case ([19bd0776](https://github.com/wandoulabs/Account-JavaScriptSDK/commit/19bd077648075aa432000749da8430e6e9cb30bd))
+* Unified the return value ([260c8c57](https://github.com/wandoulabs/Account-JavaScriptSDK/commit/260c8c57f03e65cdbc26e410b5325146f244b5c6))
+* Update user info after modify password ([fd4ea5c8](https://github.com/wandoulabs/Account-JavaScriptSDK/commit/fd4ea5c8e6f9fd8e6b83daef1683975ecb8415e1))
+* Update user info after unbind third party account ([7e7b553b](https://github.com/wandoulabs/Account-JavaScriptSDK/commit/7e7b553b11c6f5f2c13b6c31f0bbcbc41924d3d8))
+* Update `telephoneValidated` after successful activate ([0394101b](https://github.com/wandoulabs/Account-JavaScriptSDK/commit/0394101b34fbf8de76147cdf711862691de0de7e))
+
+
+#### Features
+
+* Get auth info from response headers when cookie update ([c9672deb](https://github.com/wandoulabs/Account-JavaScriptSDK/commit/c9672deb14995827db69b0a300d18fde63cbceb1))
+
 <a name="v1.1.5"></a>
 ### v1.1.5 (2014-06-13)
 
