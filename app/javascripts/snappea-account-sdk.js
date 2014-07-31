@@ -93,8 +93,10 @@
                     password : data.password,
                     seccode : data.seccode || ''
                 }, options),
-                success : function (resp) {
+                success : function (resp, textStatus, jqXHR) {
                     if (resp.error === 0) {
+                        resp.member.auth = jqXHR.getResponseHeader('X-Wdj-Auth');
+
                         IS_LOGINED = true;
                         USER_INFO = resp.member;
                         deferred.resolve(resp.member);
@@ -178,8 +180,10 @@
                     nick : data.nickname || '',
                     seccode : data.seccode || ''
                 }, options),
-                success : function (resp) {
+                success : function (resp, textStatus, jqXHR) {
                     if (resp.error === 0) {
+                        resp.member.auth = jqXHR.getResponseHeader('X-Wdj-Auth');
+
                         IS_LOGINED = true;
                         USER_INFO = resp.member;
                         deferred.resolve(resp.member);
@@ -396,9 +400,12 @@
                     oldpassword : data.password,
                     newpassword : data.newpassword
                 }, options),
-                success : function (resp) {
+                success : function (resp, textStatus, jqXHR) {
                     if (resp.error === 0) {
-                        deferred.resolve(resp);
+                        resp.member.auth = jqXHR.getResponseHeader('X-Wdj-Auth');
+
+                        USER_INFO = resp.member;
+                        deferred.resolve(resp.member);
                     } else {
                         deferred.reject(resp);
                     }
@@ -584,6 +591,7 @@
                 }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
+                        USER_INFO.telephoneValidated = true;
                         deferred.resolve(resp);
                     } else {
                         deferred.reject(resp);
@@ -677,7 +685,8 @@
                 }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
-                        deferred.resolve(resp);
+                        USER_INFO = resp.member;
+                        deferred.resolve(resp.member);
                     } else {
                         deferred.reject(resp);
                     }
@@ -743,6 +752,7 @@
 
     /* `platform` could be one of `weibo`, `qq`, `renren` */
     Account.loginWithThirdParty = function (options) {
+        // TODO: Need simplify
         options = options || {};
 
         options.callback = options.callback || 'http://www.wandoujia.com/';

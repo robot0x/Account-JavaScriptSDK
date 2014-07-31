@@ -95,7 +95,7 @@
                 });
 
                 it('Should not have user info. ', function (done) {
-                    if (Account.getUserInfo() === undefined) {
+                    if (Account.getUserInfo().uid === undefined) {
                         done();
                     } else {
                         done('Should not have user info. ');
