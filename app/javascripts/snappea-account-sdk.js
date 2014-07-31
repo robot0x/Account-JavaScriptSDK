@@ -745,6 +745,7 @@
 
     /* `platform` could be one of `weibo`, `qq`, `renren` */
     Account.loginWithThirdParty = function (options) {
+        // TODO: Need simplify
         options = options || {};
 
         options.callback = options.callback || 'http://www.wandoujia.com/';
