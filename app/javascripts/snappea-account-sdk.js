@@ -93,8 +93,10 @@
                     password : data.password,
                     seccode : data.seccode || ''
                 }, options),
-                success : function (resp) {
+                success : function (resp, textStatus, jqXHR) {
                     if (resp.error === 0) {
+                        resp.member.auth = jqXHR.getResponseHeader('X-Wdj-Auth');
+
                         IS_LOGINED = true;
                         USER_INFO = resp.member;
                         deferred.resolve(resp.member);
@@ -178,8 +180,10 @@
                     nick : data.nickname || '',
                     seccode : data.seccode || ''
                 }, options),
-                success : function (resp) {
+                success : function (resp, textStatus, jqXHR) {
                     if (resp.error === 0) {
+                        resp.member.auth = jqXHR.getResponseHeader('X-Wdj-Auth');
+
                         IS_LOGINED = true;
                         USER_INFO = resp.member;
                         deferred.resolve(resp.member);
@@ -396,8 +400,10 @@
                     oldpassword : data.password,
                     newpassword : data.newpassword
                 }, options),
-                success : function (resp) {
+                success : function (resp, textStatus, jqXHR) {
                     if (resp.error === 0) {
+                        resp.member.auth = jqXHR.getResponseHeader('X-Wdj-Auth');
+
                         USER_INFO = resp.member;
                         deferred.resolve(resp.member);
                     } else {
