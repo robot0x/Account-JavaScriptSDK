@@ -399,7 +399,7 @@
                 success : function (resp) {
                     if (resp.error === 0) {
                         USER_INFO = resp.member;
-                        deferred.resolve(resp);
+                        deferred.resolve(resp.member);
                     } else {
                         deferred.reject(resp);
                     }
@@ -680,7 +680,7 @@
                 success : function (resp) {
                     if (resp.error === 0) {
                         USER_INFO = resp.member;
-                        deferred.resolve(resp);
+                        deferred.resolve(resp.member);
                     } else {
                         deferred.reject(resp);
                     }
