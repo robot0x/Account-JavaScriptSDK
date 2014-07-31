@@ -584,6 +584,7 @@
                 }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
+                        USER_INFO.telephoneValidated = true;
                         deferred.resolve(resp);
                     } else {
                         deferred.reject(resp);
