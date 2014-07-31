@@ -678,6 +678,7 @@
                 }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
+                        USER_INFO = resp.member;
                         deferred.resolve(resp);
                     } else {
                         deferred.reject(resp);
