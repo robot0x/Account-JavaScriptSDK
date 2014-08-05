@@ -1,3 +1,11 @@
+<a name="v1.1.7"></a>
+### v1.1.7 (2014-08-05)
+
+
+#### Features
+
+* Support China MVNO phone number ([ef0b75c0](https://github.com/wandoulabs/Account-JavaScriptSDK/commit/ef0b75c02423d2ba77275335587be6746620d7a7))
+
 <a name="v1.1.6"></a>
 ### v1.1.6 (2014-07-31)
 
