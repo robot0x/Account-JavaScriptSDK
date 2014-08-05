@@ -746,7 +746,7 @@
     };
 
     Account.isPhoneNumber = function (input) {
-        var PHONE_PATTERN = /^1[3458]\d{9}$/;
+        var PHONE_PATTERN = /^1[34578]\d{9}$/;
         return PHONE_PATTERN.test(input);
     };
 
