@@ -1,3 +1,11 @@
+<a name="v1.1.8"></a>
+### v1.1.8 (2014-08-14)
+
+
+#### Features
+
+* New interface `checkUserLoginWithAuthAsync()` ([c36c3512](https://github.com/wandoulabs/Account-JavaScriptSDK/commit/c36c3512c2b126ec8c08a531ad373ab0bc7c8273))
+
 <a name="v1.1.7"></a>
 ### v1.1.7 (2014-08-05)
 
