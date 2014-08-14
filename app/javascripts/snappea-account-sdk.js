@@ -50,6 +50,7 @@
         reg : PREFIX + '/register',
         checkUsername : PREFIX + '/isUsernameExisted',
         checkUserLogin : PREFIX + '/profile',
+        checkUserLoginWithAuth : PREFIX + '/profile_with_auth',
         findPwd : PREFIX + '/findpassword',
         checkCode : PREFIX + '/checkcode',
         resetPwd : PREFIX + '/resetpassword',
@@ -262,6 +263,45 @@
             },
             error : function () {
                 deferred.reject(false);
+            }
+        });
+
+        return deferred.promise();
+    };
+
+    Account.checkUserLoginWithAuthAsync = function (options) {
+        var deferred = new Deferred();
+
+        options = options || {};
+
+        var jsonp = !!options.jsonp;
+        delete options.jsonp;
+
+        ajax({
+            type : 'GET',
+            dataType : jsonp ? 'jsonp' : 'json',
+            url : CONFIG.checkUserLoginWithAuth,
+            data : options,
+            crossDomain: jsonp ? true : undefined,
+            success : function (resp, textStatus, jqXHR) {
+                if (resp.error === 0) {
+                    resp.member.auth = jqXHR.getResponseHeader('X-Wdj-Auth');
+
+                    IS_LOGINED = true;
+                    USER_INFO = resp.member;
+                    deferred.resolve(resp.member);
+                } else {
+                    IS_LOGINED = false;
+                    USER_INFO = undefined;
+                    deferred.reject(resp);
+                }
+            },
+            error : function (xhr) {
+                if (xhr.readyState === 4) {
+                    deferred.reject(xhr.responseJSON);
+                }
+
+                deferred.reject(error.ajax);
             }
         });
 
