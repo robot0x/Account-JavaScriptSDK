@@ -1,6 +1,6 @@
 {
   "name": "WandouLabs-AccountJavaScriptSDK",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "JavaScript-SDK for WandouLabs Account System",
   "homepage": "https://github.com/wandoulabs/Account-JavaScriptSDK",
   "main": [
