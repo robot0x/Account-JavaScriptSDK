@@ -107,7 +107,7 @@
                 },
                 error : function (xhr) {
                     if (xhr.readyState === 4) {
-                        deferred.reject(xhr.responseJSON);
+                        deferred.reject(xhr.responseJSON || {});
                     }
 
                     deferred.reject(error.ajax);
@@ -151,7 +151,7 @@
             },
             error : function (xhr) {
                 if (xhr.readyState === 4) {
-                    deferred.reject(xhr.responseJSON);
+                    deferred.reject(xhr.responseJSON || {});
                 }
 
                 deferred.reject(error.ajax);
@@ -194,7 +194,7 @@
                 },
                 error : function (xhr) {
                     if (xhr.readyState === 4) {
-                        deferred.reject(xhr.responseJSON);
+                        deferred.reject(xhr.responseJSON || {});
                     }
 
                     deferred.reject(error.ajax);
@@ -225,7 +225,7 @@
                 },
                 error : function (xhr) {
                     if (xhr.readyState === 4) {
-                        deferred.reject(xhr.responseJSON);
+                        deferred.reject(xhr.responseJSON || {});
                     }
 
                     deferred.reject(error.ajax);
@@ -298,7 +298,7 @@
             },
             error : function (xhr) {
                 if (xhr.readyState === 4) {
-                    deferred.reject(xhr.responseJSON);
+                    deferred.reject(xhr.responseJSON || {});
                 }
 
                 deferred.reject(error.ajax);
@@ -332,7 +332,7 @@
                 },
                 error : function (xhr) {
                     if (xhr.readyState === 4) {
-                        deferred.reject(xhr.responseJSON);
+                        deferred.reject(xhr.responseJSON || {});
                     }
 
                     deferred.reject(error.ajax);
@@ -370,7 +370,7 @@
                 },
                 error : function (xhr) {
                     if (xhr.readyState === 4) {
-                        deferred.reject(xhr.responseJSON);
+                        deferred.reject(xhr.responseJSON || {});
                     }
 
                     deferred.reject(error.ajax);
@@ -411,7 +411,7 @@
                 },
                 error : function (xhr) {
                     if (xhr.readyState === 4) {
-                        deferred.reject(xhr.responseJSON);
+                        deferred.reject(xhr.responseJSON || {});
                     }
 
                     deferred.reject(error.ajax);
@@ -452,7 +452,7 @@
                 },
                 error : function (xhr) {
                     if (xhr.readyState === 4) {
-                        deferred.reject(xhr.responseJSON);
+                        deferred.reject(xhr.responseJSON || {});
                     }
 
                     deferred.reject(error.ajax);
@@ -488,7 +488,7 @@
                 },
                 error : function (xhr) {
                     if (xhr.readyState === 4) {
-                        deferred.reject(xhr.responseJSON);
+                        deferred.reject(xhr.responseJSON || {});
                     }
 
                     deferred.reject(error.ajax);
@@ -528,7 +528,7 @@
                 },
                 error : function (xhr) {
                     if (xhr.readyState === 4) {
-                        deferred.reject(xhr.responseJSON);
+                        deferred.reject(xhr.responseJSON || {});
                     }
 
                     deferred.reject(error.ajax);
@@ -565,7 +565,7 @@
                 },
                 error : function (xhr) {
                     if (xhr.readyState === 4) {
-                        deferred.reject(xhr.responseJSON);
+                        deferred.reject(xhr.responseJSON || {});
                     }
 
                     deferred.reject(error.ajax);
@@ -601,7 +601,7 @@
                 },
                 error : function (xhr) {
                     if (xhr.readyState === 4) {
-                        deferred.reject(xhr.responseJSON);
+                        deferred.reject(xhr.responseJSON || {});
                     }
 
                     deferred.reject(error.ajax);
@@ -639,7 +639,7 @@
                 },
                 error : function (xhr) {
                     if (xhr.readyState === 4) {
-                        deferred.reject(xhr.responseJSON);
+                        deferred.reject(xhr.responseJSON || {});
                     }
 
                     deferred.reject(error.ajax);
@@ -688,7 +688,7 @@
                 },
                 error : function (xhr) {
                     if (xhr.readyState === 4) {
-                        deferred.reject(xhr.responseJSON);
+                        deferred.reject(xhr.responseJSON || {});
                     }
 
                     deferred.reject(error.ajax);
@@ -733,7 +733,7 @@
                 },
                 error : function (xhr) {
                     if (xhr.readyState === 4) {
-                        deferred.reject(xhr.responseJSON);
+                        deferred.reject(xhr.responseJSON || {});
                     }
 
                     deferred.reject(error.ajax);
@@ -769,7 +769,7 @@
                 },
                 error : function (xhr) {
                     if (xhr.readyState === 4) {
-                        deferred.reject(xhr.responseJSON);
+                        deferred.reject(xhr.responseJSON || {});
                     }
 
                     deferred.reject(error.ajax);
