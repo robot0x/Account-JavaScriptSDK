@@ -1,3 +1,11 @@
+<a name="v1.1.9"></a>
+### v1.1.9 (2014-08-18)
+
+
+#### Bug Fixes
+
+* Return empty object when no `xhr.responseJSON` ([cdfa85c3](https://github.com/wandoulabs/Account-JavaScriptSDK/commit/cdfa85c3f3b8d49a0b73ba729f2407cecab13d40))
+
 <a name="v1.1.8"></a>
 ### v1.1.8 (2014-08-14)
 
