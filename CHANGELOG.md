@@ -1,3 +1,11 @@
+<a name="v1.2.0"></a>
+## v1.2.0 (2015-06-25)
+
+
+#### Features
+
+* Support HTTPS ([eb08648f](https://github.com/wandoulabs/Account-JavaScriptSDK/commit/eb08648fbf4bb331ec30af4e2140d7971e83d586))
+
 <a name="v1.1.9"></a>
 ### v1.1.9 (2014-08-18)
 
