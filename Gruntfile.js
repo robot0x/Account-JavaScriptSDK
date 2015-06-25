@@ -48,6 +48,7 @@ module.exports = function (grunt) {
         },
         connect : {
             options : {
+                protocol: 'https',
                 port : 9999,
                 hostname : '0.0.0.0'
             },
@@ -237,8 +238,8 @@ module.exports = function (grunt) {
         'jshint:test',
         'compass:server',
         'connect:server',
-        'karma:server',
-        'open',
+        // 'karma:server',
+        // 'open',
         'watch'
     ]);
 

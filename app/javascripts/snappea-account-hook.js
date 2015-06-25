@@ -48,11 +48,11 @@
             'position: fixed;' +
             'top: 10%;' +
             'width: 434px;' +
-            '-webkit-transform: translate3d(0, -150%, 0);' +
-            '-moz-transform: translate3d(0, -150%, 0);' +
-            '-ms-transform: translate3d(0, -150%, 0);' +
-            '-o-transform: translate3d(0, -150%, 0);' +
-            'transform: translate3d(0, -150%, 0);' +
+            '-webkit-transform: translate3d(0, -200%, 0);' +
+            '-moz-transform: translate3d(0, -200%, 0);' +
+            '-ms-transform: translate3d(0, -200%, 0);' +
+            '-o-transform: translate3d(0, -200%, 0);' +
+            'transform: translate3d(0, -200%, 0);' +
             '-webkit-transition: height .3s linear, -webkit-transform .3s ease-in-out;' +
             '-moz-transition: height .3s linear, -moz-transform .3s ease-in-out;' +
             '-o-transition: height .3s linear, -o-transform .3s ease-in-out;' +
@@ -273,7 +273,7 @@
             }
         }
 
-        url = 'http://www.wandoujia.com/account/' +
+        url = '//www.wandoujia.com/account/' +
                     '?source=web' +
                     '&medium=' + encodeURIComponent(location.host + location.pathname) +
                     '&close=1' +
@@ -348,7 +348,7 @@
     };
 
     AccountHook.redirect = function (name) {
-        var url = 'http://www.wandoujia.com/account/web.html' +
+        var url = '//www.wandoujia.com/account/web.html' +
                     '?callback=' + encodeURIComponent(location.href) +
                     '#' + name;
 
