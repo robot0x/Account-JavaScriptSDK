@@ -1,3 +1,11 @@
+<a name="v1.2.1"></a>
+### v1.2.1 (2015-09-11)
+
+
+#### Features
+
+* Add account parameter to `activateAsync` ([b3a3f64c](https://github.com/wandoulabs/Account-JavaScriptSDK/commit/b3a3f64c31042883c2a96faf77fe5f569623cf87))
+
 <a name="v1.2.0"></a>
 ## v1.2.0 (2015-06-25)
 
