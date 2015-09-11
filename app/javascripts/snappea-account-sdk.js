@@ -590,7 +590,8 @@
                 dataType : 'json',
                 url : CONFIG.activate,
                 data : extend({
-                    type : data.type
+                    type : data.type,
+                    account : data.account
                 }, options),
                 success : function (resp) {
                     if (resp.error === 0) {
