@@ -3,6 +3,9 @@
     var $ = global.$;
     var ajax = global.$.ajax;
     var Deferred = global.$.Deferred;
+    var SnapPea = global.SnapPea || {};
+    var Utils = SnapPea.Utils;
+    var AliOpen = SnapPea.AliOpen;
 
     /**
      * Configuration
@@ -170,13 +173,18 @@
         checkUserLogin : 'https://account.wandoujia.com/v4/api/profile'
     };
 
-    AccountHook.checkAsync = function (data) {
+    AccountHook.checkAsync = function (data, options) {
         var deferred = new Deferred();
 
         var returnData = {
             isLoggedIn : false,
             data : {}
         };
+
+        options = options || {};
+        if (options && options.from === AliOpen.from.aliOpen) {
+            CONFIG.checkUserLogin = AliOpen.host + '/v4/api/profile';
+        }
 
         ajax({
             type : 'GET',
@@ -188,6 +196,11 @@
                     returnData.isLoggedIn = true;
                     returnData.data = resp.member;
                     deferred.resolve(returnData);
+                } else if(resp.error === 1000004) {
+                    if(resp.redirectInfo) {
+                        returnData.data = resp.redirectInfo;
+                    }
+                    deferred.reject(returnData);
                 } else {
                     deferred.reject(returnData);
                 }
@@ -355,7 +368,6 @@
         location.href = url;
     };
 
-    var SnapPea = global.SnapPea || {};
     SnapPea.AccountHook = AccountHook;
     global.SnapPea = SnapPea;
 }(this));

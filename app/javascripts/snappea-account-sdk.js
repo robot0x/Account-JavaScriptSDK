@@ -37,8 +37,41 @@
         }
     };
 
-    var HOST = 'https://account.wandoujia.com',
-        HOST_HTTP = 'http://www.wandoujia.com/api/account',
+    var PARAM_LIST = (function () {
+        var list = {};
+        var search = window.location.search.substr(1).split('&');
+        var i;
+        var key;
+
+        if (search[0] === '') {
+            return list;
+        }
+
+        for (i = 0; i < search.length; i++) {
+            key = search[i].split('=');
+            list[key[0].toLowerCase()] = decodeURIComponent(key[1]);
+        }
+
+        return list;
+    }());
+
+    var Utils = {};
+
+    var getParam = function (key) {
+        return PARAM_LIST[key.toLowerCase()];
+    };
+    Utils.getParam = getParam;
+
+    var AliOpen = {
+        from: {
+            aliOpen: 'aliopen'
+        },
+        host: '//wdj.account.test.uc.cn', // wdj account 域名
+        mainHost: '//openplatform.dev.uae.uc.cn' // 新开放平台主站域名
+    };
+
+    var HOST = getParam('from') === AliOpen.from.aliOpen ? AliOpen.host : 'https://account.wandoujia.com',
+        HOST_HTTP = getParam('from') === AliOpen.from.aliOpen ? AliOpen.host : 'http://www.wandoujia.com/api/account',
         API_VERSION_4 = '/v4/api',
         USE_HTTP_API = navigator.userAgent.toLowerCase().indexOf('msie') > -1,
         PREFIX = (USE_HTTP_API ? HOST_HTTP : HOST) + API_VERSION_4;
@@ -101,6 +134,8 @@
                         IS_LOGINED = true;
                         USER_INFO = resp.member;
                         deferred.resolve(resp.member);
+                    } else if(resp.error === 1000004) {
+                        deferred.resolve(resp);
                     } else {
                         deferred.reject(resp);
                     }
@@ -841,5 +876,7 @@
 
     var SnapPea = global.SnapPea || {};
     SnapPea.Account = Account;
+    SnapPea.Utils = Utils;
+    SnapPea.AliOpen = AliOpen;
     global.SnapPea = SnapPea;
 }(this));
