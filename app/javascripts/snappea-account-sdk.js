@@ -36,7 +36,6 @@
             msg : '参数不全'
         }
     };
-
     var PARAM_LIST = (function () {
         var list = {};
         var search = window.location.search.substr(1).split('&');
@@ -51,10 +50,8 @@
             key = search[i].split('=');
             list[key[0].toLowerCase()] = decodeURIComponent(key[1]);
         }
-
         return list;
     }());
-
     var Utils = {};
 
     var getParam = function (key) {
@@ -62,14 +59,26 @@
     };
     Utils.getParam = getParam;
 
+    // 测试
+    var ALI_OPEN_HOST_POSTFIX = 'uc.cn'; // 适配阿里开放平台逻辑(后面要修改为可配置)
+    var ALI_OPEN_NAME = 'aliopen';
+    var ALI_OPEN_HOST = '//wdj.account.test.uc.cn';// wdj account 域名
+    var ALI_OPEN_MAIN_HOST = '//openplatform.test2.uae.uc.cn';// 新开放平台主站域名
     var AliOpen = {
         from: {
-            aliOpen: 'aliopen'
+            aliOpen: ALI_OPEN_NAME
         },
-        host: '//wdj.account.test.uc.cn', // wdj account 域名
-        mainHost: '//openplatform.dev.uae.uc.cn' // 新开放平台主站域名
+        host: ALI_OPEN_HOST, // wdj account 域名
+        mainHost: ALI_OPEN_MAIN_HOST, // 新开放平台主站域名
+        postfix: ALI_OPEN_HOST_POSTFIX // 新开放平台主站域名后缀
     };
-
+    if(window.location.href.indexOf(ALI_OPEN_HOST_POSTFIX) > -1){
+        if(window.location.host == 'wdjaccount.open.uc.cn') { // 线上
+            AliOpen.host = 'https://wdjaccountapi.open.uc.cn'; // wdjaccountapi 是 https 的
+            AliOpen.mainHost = '//open.uc.cn';
+        }
+        PARAM_LIST.from = AliOpen.from.aliOpen;
+    }
     var HOST = getParam('from') === AliOpen.from.aliOpen ? AliOpen.host : 'https://account.wandoujia.com',
         HOST_HTTP = getParam('from') === AliOpen.from.aliOpen ? AliOpen.host : 'http://www.wandoujia.com/api/account',
         API_VERSION_4 = '/v4/api',
@@ -385,7 +394,7 @@
         options = options || {};
 
         if (data.username === undefined ||
-                data.passcode === undefined) {
+            data.passcode === undefined) {
             deferred.reject(error.missingParameters);
         } else {
             ajax({
@@ -423,8 +432,8 @@
         options = options || {};
 
         if (data.username === undefined ||
-                data.passcode === undefined ||
-                data.password === undefined) {
+            data.passcode === undefined ||
+            data.password === undefined) {
             deferred.reject(error.missingParameters);
         } else {
             ajax({
@@ -464,7 +473,7 @@
         options = options || {};
 
         if (data.password === undefined ||
-                data.newpassword === undefined) {
+            data.newpassword === undefined) {
             deferred.reject(error.missingParameters);
         } else {
             ajax({
@@ -541,8 +550,8 @@
         options = options || {};
 
         if (data.username === undefined ||
-                data.passcode === undefined ||
-                data.password === undefined) {
+            data.passcode === undefined ||
+            data.password === undefined) {
             deferred.reject(error.missingParameters);
         } else {
             ajax({
@@ -749,7 +758,7 @@
         };
 
         if (data.platform === undefined ||
-                platforms[data.platform] === undefined) {
+            platforms[data.platform] === undefined) {
             deferred.reject(error.missingParameters);
         } else {
             ajax({

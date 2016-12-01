@@ -180,6 +180,9 @@
             isLoggedIn : false,
             data : {}
         };
+        if(window.location.href.indexOf(AliOpen.postfix) > -1){
+            options.from = AliOpen.from.aliOpen;
+        }
 
         options = options || {};
         if (options && options.from === AliOpen.from.aliOpen) {
@@ -200,6 +203,9 @@
                     if(resp.redirectInfo) {
                         returnData.data = resp.redirectInfo;
                     }
+                    deferred.reject(returnData);
+                } else if(resp.error === 1013) { // 未登录
+                    returnData.data.error = resp.error;
                     deferred.reject(returnData);
                 } else {
                     deferred.reject(returnData);
@@ -293,6 +299,14 @@
                     '&' + param.join('&') +
                     '#' + name;
 
+        if (options && options.from === AliOpen.from.aliOpen) {
+            url = '//' + window.location.host +
+                '?source=web' +
+                '&medium=' + encodeURIComponent(location.host + location.pathname) +
+                '&close=1' +
+                '&' + param.join('&') +
+                '#' + name;
+        }
         var forceReflow;
         var $body = $('body').addClass('w-account-hook-opened');
         var $ctn = $('<div>').addClass('w-account-hook-backdrop').appendTo($body);
@@ -343,10 +357,17 @@
                 break;
 
             case 'done':
-                AccountHook.checkAsync().always(function (resp) {
-                    close();
-                    deferred.resolve(resp);
-                });
+                if(window.location.href.indexOf(AliOpen.postfix) > -1) {
+                    AccountHook.checkAsync({}, {from: AliOpen.from.aliOpen}).always(function (resp) {
+                        close();
+                        deferred.resolve(resp);
+                    });
+                } else {
+                    AccountHook.checkAsync().always(function (resp) {
+                        close();
+                        deferred.resolve(resp);
+                    });
+                }
                 break;
 
             case 'redirect':
