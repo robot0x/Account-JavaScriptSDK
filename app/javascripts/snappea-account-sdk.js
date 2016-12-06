@@ -73,7 +73,7 @@
         postfix: ALI_OPEN_HOST_POSTFIX // 新开放平台主站域名后缀
     };
     if(window.location.href.indexOf(ALI_OPEN_HOST_POSTFIX) > -1){
-        if(window.location.host == 'wdjaccount.open.uc.cn') { // 线上
+        if(window.location.host.indexOf('open.uc.cn') > -1) { // 线上
             AliOpen.host = 'https://wdjaccountapi.open.uc.cn'; // wdjaccountapi 是 https 的
             AliOpen.mainHost = '//open.uc.cn';
         }
